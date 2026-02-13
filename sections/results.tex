@@ -1,0 +1,90 @@
+\section{Results}
+Since there are several moving parts in the entire generative model and data pipeline, we individually evaluate the effect of each contribution made in this work, in the following sections
+\subsection{Benchmarking unconditional generative models}
+We first benchmark different off-the shelf unconditional generative models highlighted in \ref{subsec:off_shelf_uncond_gen} with the traditional design representation (with re-parametrization and post-processing). The sample feasibility details for these benchmarked models can be found in the table \ref{tab:model_infeasibility}. It can be observed that TABSYN model has lower total invalid sample fraction than remaining models. Further analyzing the diversity of samples from TABSYN and comparing it against the standard interpolation method SMOTE, it can be observed that the TABSYN model has comparable sample diversity to that of SMOTE. Hence, we choose this model to demonstrate the further advantages of the proposed pipeline components in the next subsection  
+
+\begin{table}[ht]
+\centering
+\caption{\textcolor{red}{[place holder table]} Fraction of invalid generated samples across different generative models. 
+Lower values ($\downarrow$) indicate better performance.}
+\label{tab:model_infeasibility}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} 
+& \textbf{Material Parsing Error $\downarrow$} 
+& \textbf{Simulation Error $\downarrow$} 
+& \textbf{Total Invalid Fraction $\downarrow$} \\
+\midrule
+
+TABSYN   & $0.1346$ & $0.4278$ & $0.5049$ \\
+STaSy    & $0.3304$ & $0.5883$ & $0.7243$ \\
+TabDDPM  & $0.9999$ & $1.0000$ & $1.0000$ \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Precision, coverage, and authenticity scores. 
+Higher values ($\uparrow$) indicate better performance.}
+\label{tab:precision_coverage_authenticity}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} 
+& \textbf{Precision $\uparrow$} 
+& \textbf{Coverage $\uparrow$} 
+& \textbf{Authenticity $\uparrow$} \\
+\midrule
+
+TABSYN & $0.0921$ & $\mathbf{0.5489}$ & $\mathbf{0.5250}$ \\
+SMOTE  & $\mathbf{0.0946}$ & $0.5256$ & $0.5127$ \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{Advantage of proposed parametrization and post-processing engine}
+When the TABSYN model is benchmarked with the reparameterized dataset and compared against the TABSYN model trained with traditional representation, the comparison metrics can be found in figure \ref{fig:bench_feat_eng}. It can be clearly observed that the updated parametrization significantly improves the total feasible sample fraction by 36.6\% and also improves the diversity-and-coverage metrics. Further processing samples through the proposed post-processing engine demonstrates improvements in both the feasibility rate and performance metrics as shown in figure \ref{fig:bench_post_proc}. Further visualizations of samples from TABSYN model with the proposed model pipeline compared against the training data are shown in figure \ref{fig:bench_tabsn} 
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/bench_feature_engineering.png}
+        \caption{Improvements gained through performing feature engineering\textcolor{red}{[place holder figure]}}
+        \label{fig:bench_feat_eng}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/bench_post_proc.png}
+        \caption{Improvements gained through post-processing pipeline \textcolor{red}{[place holder figure]}}
+        \label{fig:bench_post_proc}
+    \end{subfigure}
+    \caption{Improvements through proposed pipeline updates}
+    \label{fig:bench_pipe}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[t]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/train_vs_tabsyn_samp_dist.png}
+        \caption{Sample latent space distribution compared to training dataset\textcolor{red}{[place holder figure]}}
+        \label{fig:bench_tabsyn_dist}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/perf_pareto.png}
+        \caption{Sample performance metrics compared against training dataset pareto front \textcolor{red}{[place holder figure]}}
+        \label{fig:bench_tabsyn_perf}
+    \end{subfigure}
+    \caption{TABSYN model results with the proposed pipeline}
+    \label{fig:bench_tabsn}
+\end{figure}
+
+\subsection{Conditional generative model results}
+

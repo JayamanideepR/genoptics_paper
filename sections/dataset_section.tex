@@ -1,0 +1,169 @@
+\begin{comment}
+### **3. Dataset Construction & Properties**
+
+* **3.2 330k synthetic expansion**
+
+  * Perturbation strategy
+  * Ray-tracing validation pipeline
+  * Performance metric extraction
+  * Statistics: density concentration, spread, multimodality, failure modes
+
+* **3.3 Dataset insights**
+
+  * How synthetic designs differ from patents statistically & physically
+  * Why this dataset enables generative benchmarking
+
+\end{comment}
+
+\section{Dataset}
+
+We introduce a large scale lens assembly dataset compromised of both human curated patent designs and synthetically generated augmented designs. We provide the material and geometric parameter details of the optical systems and also provide the conditions at which the designs need to perform and their performance metrics at those evaluation conditions. This combined dataset is constructed to train large scale generative models and benchmark their performances. The following sub-sections describe the process of construction of these datasets and their characteristics in further detail.
+
+\subsection{Human curated patent dataset}
+
+
+\subsubsection*{\textcolor{red}{Important note}}
+\textcolor{red}{%
+Already requested, on Jan 6, LLs help in putting together this section with following details regarding the patent dataset
+\begin{enumerate}
+    \item Highlight the process of collecting the patent dataset
+    \item Any data points obtained from Zemax and Code-V commercial catalogues? Are we allowed to publish those designs (without IP issues)?
+    \item What is the source of material catalogue provided by LL? Can we publish those material property values (without IP issues)?
+\end{enumerate}
+Chris said that he is working on gathering and putting together this information. Will discuss progress of this in next meeting with LL.
+Below I have a short description of the patent dataset from my understanding 
+}
+
+We present a curated dataset of approx. 1,250 patent optical system designs. For each of these designs, we provide the geometric parameters, realistic material labels, numerical material properties, performance conditions and evaluated metrics, in a table format in csv file. We also provide corresponding CodeV sequence files for convenience. These designs are collected in the following process
+
+\begin{enumerate}
+    \item \textcolor{red}{List out the collection details}
+\end{enumerate}
+
+We make the following assumptions while building this patent dataset and also in the synthetic dataset, to maintain consistency:
+\begin{enumerate}
+    \item Designed for object distance of infinity
+    \item Realistic materials picked from existing catalogues
+    \item Image and object space is of air material
+    \item Image and object surfaces are considered to be straight lines without any curvature
+    \item Aspheric surfaces and grating are not considered
+    \item Number of surfaces in the dataset range from 3 to 17
+    \item A maximum field angle condition is considered as design specification
+    \item Design performance is evaluated at [0,0.3,0.5,0.7,1.0] times the maximum field angle
+    \item Performance evaluated in visible spectrum using fixed wavelengths (F, d, C lines)
+    \item Material between last surface and image plane is air and penultimate material is glass 
+\end{enumerate}
+
+
+Each optical system is represented as a sequence of surfaces with associated geometric and material parameters. Figure \ref{fig:lens_param} illustrates the lens assembly and the parameters used to define the design space. For each surface $j$, the following parameters are collected:
+\begin{enumerate}
+    \item \textbf{Curvature $j$}: The signed radius of curvature of surface $j$
+    \item \textbf{Thickness $j$}: The axial distance between surfaces $j$ and $j+1$
+    \item \textbf{Material $j$}: Label of Optical material immediately following surface $j$
+    \item \textbf{Semi-diameter $j$}: Height of tip of surface $j$ from the optical axis
+    \item \textbf{stop surface index}: Index of the surface designated as aperture stop
+\end{enumerate}
+
+\begin{figure}[ht]
+    \centering
+    % Set a clean publication-friendly size (not too large, not too small)
+    \includegraphics[width=0.85\linewidth]{figures/lens_params_def.png}
+
+    % Improve caption formatting for papers
+    \caption{\small\textbf{Lens system diagram with highlighted parameters.} The figure illustrates a multi-surface lens assembly with key geometric and optical parameters annotated for dataset representation and model evaluation.}
+    \label{fig:lens_param}
+\end{figure}
+
+
+Along with design parameters, each optical system is associated with a set of operating conditions that defined its intended use:
+\begin{enumerate}
+    \item \textbf{Maximum field angle}: The large field angle to be accommodated by the system
+    \item \textbf{Effective focal length (EFL)}: Target effective focal length of the optical system
+    \item \textbf{Entrance pupil diameter (EPD)}: Intended entrance pupil diameter, corresponding to maximum beam diameter at entrance pupil 
+    \item \textbf{Total length of the system}: Axial distance from first surface to the image plane
+\end{enumerate}
+
+To evaluate the optical performance, each design is analyzed at field angles corresponding to \{$0,0.3,0.5,0.7,1.0$\} times the maximum field angle. 
+Some of the performance metrics are normalized by diffraction-limited airy disk radius to allow fair comparison across systems with different specifications. This airy disk radius is defined as:
+\begin{equation}
+r_{\mathrm{airy}} =  \frac{1.22\, \lambda_{\mathrm{ref}} \, \mathrm{EFL}}{\mathrm{EPD}}
+\end{equation}
+The following performance metrics are computed:
+\begin{enumerate}
+    \item \textbf{Normalized RMS (root-mean-square) Spot radius}: Minimum radius of the circle enveloping 67\% rays reaching image plane divided by airy disk radius
+    \item \textbf{Normalized 100\% Spot radius}: Minimum radius of the circle enveloping all the rays reaching image plane divided by airy disk radius
+    \item \textbf{Normalized 50\% Encircled energy radius}: Minimum radius of the circle enveloping 50\% of energy at image plane divided by airy disk radius
+    \item \textbf{Normalized 90\% Encircled energy radius}: Minimum radius of the circle enveloping 90\% of energy at image plane divided by airy disk radius
+    \item \textbf{RMS wavefront aberration}: RMS deviation of the wavefront from an ideal spherical reference wavefront (in units of number of waves) 
+\end{enumerate}
+
+Unless otherwise specified:
+\begin{enumerate}
+    \item All distance measurements are reported in millimeters (mm)
+    \item All angle measurements are reported in degrees
+    \item All wavelengths are specified in nanometers (nm)
+\end{enumerate}
+
+Please refer to the appendix for complete list of column names provided in the csv file and the corresponding definitions
+
+\subsection{Large scale synthetic dataset}
+
+In addition to the human curated patent dataset, we also introduce a large scale synthetic dataset obtained by extrapolating the patent dataset designs. This dataset contains approx 1 million designs. The process in which the samples are collected is as follows:
+
+\begin{enumerate}
+    \item Sample a design from the patent dataset
+    \item Randomly perturb curvature and/or surface thicknesses and/or materials
+    \item Re-evaluate semi-diameters of all surfaces including stop surface
+    \item Re-evaluate the location of image plane as the focal point plane for axial field simulations at reference wavelength
+    \item Discard samples with failures in this evaluation process
+    \item Pass on the successful samples for full scale evaluations in CodeV
+    \item Discard samples with failures or bad performance in these simulations
+    \item Collect samples with successful simulation runs
+\end{enumerate}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures/synth_data_building_pipe.png}
+
+    \caption{A figure showing the pipeline used to build synthetic dataset}
+    \label{fig:synth_data_pipe}
+\end{figure}
+
+Using this process, we constructed a large-scale synthetic dataset comprising approximately one million lens assemblies. The samples in this dataset exhibit diversity in parameter values while maintaining competing performance metrics to that of the patent dataset. This is illustrated in figure \ref{fig:patent_synth_comp}, with the sub-figure \ref{fig:patent_synth_comp_div} highlighting the increased coverage of the synthetic data samples in comparison to the patent designs and sub-figure \ref{fig:patent_synth_comp_perf} highlighting the normalized RMS spot radius and normalized 50\% encircled energy radius performance metrics across patent and synthetic datasets. Statistics of all the performance metrics are highlighted in table \ref{tab:patent_synth_perf} 
+
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/patent_vs_synth_div.png}
+        \caption{Data diversity comparison \textcolor{red}{[place holder figure]}}
+        \label{fig:patent_synth_comp_div}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/patent_vs_synth_perf.png}
+        \caption{Performance metrics comparison \textcolor{red}{[place holder figure]}}
+        \label{fig:patent_synth_comp_perf}
+    \end{subfigure}
+    \caption{Comparison of patented and synthetic dataset charactertistics}
+    \label{fig:patent_synth_comp}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\caption{\textcolor{red}{[place holder table]} Comparison of normalized optical performance metrics between the patent and synthetic datasets. Values are reported as mean $\pm$ standard deviation. Lower values indicate better performance.}
+\label{tab:patent_synth_perf}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Performance Metric} & \textbf{Patent Dataset} & \textbf{Synthetic Dataset} \\
+\midrule
+Mean normalized RMS spot radius       & $0.842 \pm 0.118$ & $0.857 \pm 0.124$ \\
+Mean normalized 100\% spot radius     & $0.913 \pm 0.135$ & $0.928 \pm 0.142$ \\
+Mean normalized 50\% encircled energy & $0.776 \pm 0.097$ & $0.788 \pm 0.102$ \\
+Mean normalized 90\% encircled energy & $0.889 \pm 0.121$ & $0.901 \pm 0.128$ \\
+Mean normalized RMS wavefront error   & $0.889 \pm 0.121$ & $0.901 \pm 0.128$ \\
+\bottomrule
+\end{tabular}
+\end{table}

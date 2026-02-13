@@ -1,0 +1,55 @@
+\begin{comment}
+### **5. Generative Models & Evaluation Framework**
+
+* **5.1 Benchmarked generative models**
+
+  * TABSYN, SMOTE, STaSy, TabDDPM, etc.
+  * Why unconditional generation is evaluated first
+* **5.2 Evaluation metrics**
+
+  * Statistical fidelity metrics (SDMetrics, CorrelationSimilarity, etc.)
+  * Physics-based feasibility metrics (LLESP ray-trace error, material infeasibility)
+  * Combined error metric (1 - (1 - m_e)(1 - r_e))
+  * Failure mode taxonomy (optional but valuable)
+* **5.3 Evaluation pipeline**
+
+  * Dataset → generation → physical validation → filtering → metrics → plots
+  * Keep this **deterministic, reproducible, and code-like**
+
+\end{comment}
+
+\section{Benchmarked unconditional generative models and evaluation framework}
+\textcolor{red}{[Will elaborate this section as per mentioned pointers]}
+
+\subsection{Benchmarked unconditional generative models}\label{subsec:off_shelf_uncond_gen}
+\begin{enumerate}
+	\item Details of the benchmarked generative models (TABSYN, STASY, TABDDPM) 
+\end{enumerate}
+
+\subsection{Evaluation metrics}
+Evaluation metrics for the proposed dataset:
+1. Distribution metrics
+2. Diversity metrics
+3. Performance metrics
+
+Details of the evaluation metrics that will be used for model evaluation
+\begin{enumerate}
+	\item Lower order metrics 
+	\begin{enumerate}
+		\item Kolmogorov-Smirnov Test (KST) and Total Variation Distance (TVD)
+		\item Pairwise column correlation metrics
+	\end{enumerate}
+	\item Higher order metric: ($\alpha$-precision,$\beta$-recall)
+	\item Actual performance metrics of sampled designs 
+	\begin{enumerate}
+		\item Mean normalized Spot radius
+		\item Mean normalized Encircled energy
+		\item Mean normalized RMS wavefront
+	\end{enumerate} 
+\end{enumerate}
+\subsection{Model hyper-parameters}
+\begin{enumerate}
+	\item Details of the model size and other-hyperparameters that is used in the testing
+	\item Details of the benchmark model implemented
+\end{enumerate}
+

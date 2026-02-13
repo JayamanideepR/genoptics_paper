@@ -1,0 +1,49 @@
+\section{Design parametrization and processing pipeline}
+
+An overview of the complete generative model training pipeline is shown in Figure~\ref{fig:model_training_pipeline}.
+\begin{figure}[ht]
+    \centering
+    % Set a clean publication-friendly size (not too large, not too small)
+    \includegraphics[width=0.85\linewidth]{figures/gen_model_training_pipeline.png}
+
+    % Improve caption formatting for papers
+    \caption{A figure showing the pipeline used to build synthetic dataset}
+    \label{fig:model_training_pipeline}
+\end{figure}
+The individual components of this pipeline are described in detail in the following subsections.
+
+\subsection{Parametrization method}\label{subsec:param_meth}
+
+To make the optical design data suitable for generative modeling and to reduce infeasibility in the generated designs, we adopt a modified parametrization of lens assemblies. The representation is designed to handle scale variability across designs, and expose physically relevant features to the generative model.
+
+The specific parametrization modifications are summarized below:
+
+\begin{enumerate}
+    \item \textbf{Material properties}: 
+    
+    Material labels are converted into continuous optical properties by extracting the refractive index ($N_d$) and Abbe number ($V_d$). Additionally, a categorical variable is tracked per each surface to denote whether the subsequent optical medium is air or glass.
+    \item \textbf{Thickness fraction}: 
+    
+    Surface thicknesses are normalized by dividing with the total system length, resulting in thickness fractions rather than absolute distances. This normalization not only reduces scale dependence but also helps in explicitly enforcing total thickness constraint.
+    
+    \item \textbf{Normalized curvature}: 
+    
+    Surface curvatures are scaled by multiplying with total system length. 
+    \item \textbf{Normalized semi-diameters}: 
+    
+    Semi-diameters are normalized by dividing with entrance pupil diameter. Like before, this too is for maintaining consistent numerical ranges across designs of different scales.
+\end{enumerate}
+
+Finally, all the numerical values, except for the thickness fractions, are normalized using quantile normalization before being provided as input to the generative model.
+
+\subsection{Ray tracing based post-processing engine}
+
+Samples from the generative model are first transformed back to the physical parameter space by inverting the normalization and parameterization applied during pre-processing.
+These designs are then processed using a custom ray-tracing-based post-processing pipeline to recover surface semi-diameters and image plane location. This pipeline consists of the following steps:
+ 
+\begin{enumerate}
+    \item \textbf{Initial feasibility filtering}: Designs with invalid material property  specifications are discarded prior to ray tracing.
+    \item \textbf{Final surface curvature tuning}: The target effective focal length is explicitly enforced by adjusting the curvature of the final surface using first-order optical evaluations
+    \item \textbf{Semi-diameters evaluation}: Semi-diameters of all the surfaces are re-evaluated through ray-tracing to maximize ray throughput while avoiding surface intersections.
+    \item \textbf{Final surface thickness tuning}: The thickness of the final surface is adjusted to position the image plane at the median focal location of the traced rays.
+\end{enumerate}
