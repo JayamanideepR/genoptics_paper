@@ -1,56 +1,104 @@
 \section{Results}
-Since there are several moving parts in the entire generative model and data pipeline, we individually evaluate the effect of each contribution made in this work, in the following sections
-\subsection{Benchmarking unconditional generative models}
-We first benchmark different off-the shelf unconditional generative models highlighted in \ref{subsec:off_shelf_uncond_gen} with the traditional design representation (with re-parametrization and post-processing). The sample feasibility details for these benchmarked models can be found in the table \ref{tab:model_infeasibility}. It can be observed that TABSYN model has lower total invalid sample fraction than remaining models. Further analyzing the diversity of samples from TABSYN and comparing it against the standard interpolation method SMOTE, it can be observed that the TABSYN model has comparable sample diversity to that of SMOTE. Hence, we choose this model to demonstrate the further advantages of the proposed pipeline components in the next subsection  
+
+This section is organized as an evidence map for the main paper claims. Final numeric entries will be filled from completed benchmark runs, post-processing reports, and CodeV/LLESP simulation outputs. Until those runs are complete, placeholder tables mark the planned comparison, the required denominator, and the status of each evidence item.
+
+\subsection{Evidence Overview}
+
+Table~\ref{tab:claim_evidence_summary} summarizes how the results are intended to support the paper. The goal is to keep each claim tied to a specific model, dataset variant, metric family, and figure or table, rather than presenting disconnected benchmark numbers.
 
 \begin{table}[ht]
 \centering
-\caption{\textcolor{red}{[place holder table]} Fraction of invalid generated samples across different generative models. 
-Lower values ($\downarrow$) indicate better performance.}
-\label{tab:model_infeasibility}
-\begin{tabular}{lccc}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{\textcolor{red}{[placeholder table]} Claim-to-evidence map for the results section. Status labels distinguish completed, running, and planned evidence.}
+\label{tab:claim_evidence_summary}
+\begin{tabular}{p{0.24\linewidth}p{0.19\linewidth}p{0.22\linewidth}p{0.16\linewidth}p{0.10\linewidth}}
 \toprule
-\textbf{Model} 
-& \textbf{Material Parsing Error $\downarrow$} 
-& \textbf{Simulation Error $\downarrow$} 
-& \textbf{Total Invalid Fraction $\downarrow$} \\
+\textbf{Claim} & \textbf{Primary experiment} & \textbf{Primary metric family} & \textbf{Evidence location} & \textbf{Status} \\
 \midrule
-
-TABSYN   & $0.1346$ & $0.4278$ & $0.5049$ \\
-STaSy    & $0.3304$ & $0.5883$ & $0.7243$ \\
-TabDDPM  & $0.9999$ & $1.0000$ & $1.0000$ \\
-
+Modern tabular generative models provide useful unconditional baselines for lens prescriptions & TabSyn, TabDDPM, STaSy, CoDi, SMOTE-style reference & Pre-CodeV validity, distribution matching, diversity/novelty & Table~\ref{tab:benchmark_model_comparison}, Fig.~\ref{fig:results_benchmark_panel} & \textcolor{red}{pending} \\
+Tuned optics-aware representation improves over untuned representation & Same model and dataset with tuned vs. untuned representations & Pre-CodeV validity, support overlap, duplicate rate, CodeV success when available & Table~\ref{tab:tuned_untuned_results}, Fig.~\ref{fig:results_tuned_panel} & \textcolor{red}{pending} \\
+Synthetic data scale improves learned design-space coverage & Patent-only and patent-plus-synthetic variants & Distribution matching, coverage, novelty, train-match rate & Table~\ref{tab:dataset_scale_results}, Fig.~\ref{fig:results_scale_panel} & \textcolor{red}{pending} \\
+Ray-tracing based post-processing improves usable optical quality & Paired generated rows before and after correction & CodeV success and optical performance metrics & Table~\ref{tab:raytrace_postproc_benefit}, Fig.~\ref{fig:results_raytrace_panel} & \textcolor{red}{pending CodeV} \\
+Optics-native conditional generation can target requested design specifications & Conditional latent diffusion model & Target error, pre-CodeV validity, optical performance & Table~\ref{tab:conditional_generation_results} & \textcolor{red}{planned} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+\subsection{Benchmarking Tabular Generative Models}
+
+We first evaluate off-the-shelf unconditional baselines from Section~\ref{subsec:off_shelf_uncond_gen}. This comparison establishes the benchmark landscape before isolating the effect of tuned representation, dataset scale, or ray-tracing based post-processing.
+
 \begin{table}[ht]
 \centering
-\caption{Precision, coverage, and authenticity scores. 
-Higher values ($\uparrow$) indicate better performance.}
-\label{tab:precision_coverage_authenticity}
-\begin{tabular}{lccc}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\caption{\textcolor{red}{[placeholder table]} Benchmark comparison for unconditional tabular generative models. Performance metrics are excluded from generated columns and evaluated only after CodeV/LLESP simulation returns.}
+\label{tab:benchmark_model_comparison}
+\begin{tabular}{p{0.11\linewidth}p{0.14\linewidth}p{0.10\linewidth}p{0.14\linewidth}p{0.14\linewidth}p{0.15\linewidth}p{0.09\linewidth}}
 \toprule
-\textbf{Model} 
-& \textbf{Precision $\uparrow$} 
-& \textbf{Coverage $\uparrow$} 
-& \textbf{Authenticity $\uparrow$} \\
+\textbf{Model} & \textbf{Dataset / representation} & \textbf{Generated rows} & \textbf{Pre-CodeV validity $\uparrow$} & \textbf{Distribution match $\uparrow$} & \textbf{Diversity / novelty $\uparrow$} & \textbf{Status} \\
 \midrule
-
-TABSYN & $0.0921$ & $\mathbf{0.5489}$ & $\mathbf{0.5250}$ \\
-SMOTE  & $\mathbf{0.0946}$ & $0.5256$ & $0.5127$ \\
-
+TabSyn & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{running} \\
+TabDDPM & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{planned} \\
+STaSy & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{planned} \\
+CoDi & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{planned} \\
+SMOTE-style reference & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{planned} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+\subsection{Effect Of Tuned Optical Representation}
 
-\subsection{Advantage of proposed parametrization and post-processing engine}
-When the TABSYN model is benchmarked with the reparameterized dataset and compared against the TABSYN model trained with traditional representation, the comparison metrics can be found in figure \ref{fig:bench_feat_eng}. It can be clearly observed that the updated parametrization significantly improves the total feasible sample fraction by 36.6\% and also improves the diversity-and-coverage metrics. Further processing samples through the proposed post-processing engine demonstrates improvements in both the feasibility rate and performance metrics as shown in figure \ref{fig:bench_post_proc}. Further visualizations of samples from TABSYN model with the proposed model pipeline compared against the training data are shown in figure \ref{fig:bench_tabsn} 
+This ablation compares tuned and untuned versions of the same underlying dataset and model. It is separate from the optics-native tokenization claim in Section~6: here, the question is whether a better model-facing tabular parameterization improves generic generative baselines.
 
 \begin{table}[ht]
 \centering
-\footnotesize
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\caption{\textcolor{red}{[placeholder table]} Tuned versus untuned representation ablation. Rows should use matched train/test splits and the same generated-sample denominator.}
+\label{tab:tuned_untuned_results}
+\begin{tabular}{p{0.10\linewidth}p{0.13\linewidth}p{0.12\linewidth}p{0.10\linewidth}p{0.14\linewidth}p{0.14\linewidth}p{0.15\linewidth}}
+\toprule
+\textbf{Model} & \textbf{Dataset} & \textbf{Representation} & \textbf{Generated rows} & \textbf{Pre-CodeV validity $\uparrow$} & \textbf{Distribution match $\uparrow$} & \textbf{Novelty / duplicate check} \\
+\midrule
+TabSyn & \textcolor{red}{--} & Untuned & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} \\
+TabSyn & \textcolor{red}{--} & Tuned & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} \\
+TabDDPM & \textcolor{red}{--} & Untuned & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} \\
+TabDDPM & \textcolor{red}{--} & Tuned & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Effect Of Dataset Scale}
+
+The dataset-scale study compares patent-only training against patent-plus-synthetic variants. This experiment is intended to test whether synthetic expansion improves coverage of the held-out optical design space without increasing memorization or invalid-sample rates.
+
+\begin{table}[ht]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\caption{\textcolor{red}{[placeholder table]} Dataset-scale comparison. The final table should use parent-patent-safe splits and nested synthetic subsets.}
+\label{tab:dataset_scale_results}
+\begin{tabular}{p{0.18\linewidth}p{0.10\linewidth}p{0.12\linewidth}p{0.10\linewidth}p{0.14\linewidth}p{0.14\linewidth}p{0.09\linewidth}}
+\toprule
+\textbf{Training data} & \textbf{Model} & \textbf{Representation} & \textbf{Generated rows} & \textbf{Coverage $\uparrow$} & \textbf{Train-match rate $\downarrow$} & \textbf{Status} \\
+\midrule
+Patent only & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{pending} \\
+Patent + synthetic 250k & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{running} \\
+Patent + synthetic 500k & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{pending} \\
+Patent + synthetic full & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{pending} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Ray-Tracing Based Post-Processing Benefit}
+
+The ray-tracing post-processing comparison is evaluated on paired generated samples. Main-text results focus on before/after optical quality; detailed attrition counts for repair attempts, failures, and CodeV/LLESP readiness can be moved to the appendix.
+
+\begin{table}[ht]
+\centering
+\scriptsize
 \setlength{\tabcolsep}{3pt}
 \caption{\textcolor{red}{[placeholder table]} Paired before/after comparison for ray-tracing based post-processing. Metrics are evaluated on generated samples for which both the uncorrected and corrected prescriptions produce comparable CodeV/LLESP outputs.}
 \label{tab:raytrace_postproc_benefit}
@@ -66,43 +114,59 @@ TabSyn tuned 250k & \textcolor{red}{--} & Axial nominal performance $\uparrow$ &
 \end{tabular}
 \end{table}
 
+\subsection{Planned Conditional Optics-Native Model Results}
+
+The conditional model is evaluated separately from the unconditional tabular benchmarks. Its primary question is whether optics-aware tokenization and conditional latent diffusion can generate prescriptions that satisfy requested design specifications while remaining valid after post-processing and simulation.
+
+\begin{table}[ht]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{\textcolor{red}{[placeholder table]} Conditional generation results for the optics-native latent diffusion model. Conditional tabular baselines are not claimed unless they are explicitly run.}
+\label{tab:conditional_generation_results}
+\begin{tabular}{p{0.20\linewidth}p{0.16\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.10\linewidth}}
+\toprule
+\textbf{Condition setting} & \textbf{Target error $\downarrow$} & \textbf{Pre-CodeV validity $\uparrow$} & \textbf{CodeV success $\uparrow$} & \textbf{Optical performance} & \textbf{Status} \\
+\midrule
+EFL target & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{planned} \\
+EPD target & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{planned} \\
+Max field target & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{planned} \\
+Joint condition & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{planned} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/bench_feature_engineering.png}
-        \caption{Improvements gained through performing feature engineering\textcolor{red}{[place holder figure]}}
-        \label{fig:bench_feat_eng}
+        \caption{\textcolor{red}{[placeholder]} Benchmark model comparison.}
+        \label{fig:results_benchmark_panel}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/train_vs_tabsyn_samp_dist.png}
+        \caption{\textcolor{red}{[placeholder]} Tuned versus untuned representation.}
+        \label{fig:results_tuned_panel}
+    \end{subfigure}
+    \vspace{0.6em}
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/perf_pareto.png}
+        \caption{\textcolor{red}{[placeholder]} Dataset-scale effects.}
+        \label{fig:results_scale_panel}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/bench_post_proc.png}
-        \caption{Improvements gained through post-processing pipeline \textcolor{red}{[place holder figure]}}
-        \label{fig:bench_post_proc}
+        \caption{\textcolor{red}{[placeholder]} Ray-tracing post-processing benefit.}
+        \label{fig:results_raytrace_panel}
     \end{subfigure}
-    \caption{Improvements through proposed pipeline updates}
-    \label{fig:bench_pipe}
+    \caption{\textcolor{red}{[placeholder figure]} Results dashboard. Final panels will summarize benchmark performance, tuned versus untuned representation, dataset-scale effects, and ray-tracing based post-processing benefit.}
+    \label{fig:results_dashboard}
 \end{figure}
 
-\begin{figure}[ht]
-    \centering
-    \begin{subfigure}[t]{0.45\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/train_vs_tabsyn_samp_dist.png}
-        \caption{Sample latent space distribution compared to training dataset\textcolor{red}{[place holder figure]}}
-        \label{fig:bench_tabsyn_dist}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/perf_pareto.png}
-        \caption{Sample performance metrics compared against training dataset pareto front \textcolor{red}{[place holder figure]}}
-        \label{fig:bench_tabsyn_perf}
-    \end{subfigure}
-    \caption{TABSYN model results with the proposed pipeline}
-    \label{fig:bench_tabsn}
-\end{figure}
-
-\subsection{Conditional generative model results}
-
+Final paper results will replace these placeholders with completed benchmark metrics, generated-sample denominators, full post-processing reports, and CodeV/LLESP optical-performance summaries.
