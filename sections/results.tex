@@ -48,6 +48,24 @@ SMOTE  & $\mathbf{0.0946}$ & $0.5256$ & $0.5127$ \\
 \subsection{Advantage of proposed parametrization and post-processing engine}
 When the TABSYN model is benchmarked with the reparameterized dataset and compared against the TABSYN model trained with traditional representation, the comparison metrics can be found in figure \ref{fig:bench_feat_eng}. It can be clearly observed that the updated parametrization significantly improves the total feasible sample fraction by 36.6\% and also improves the diversity-and-coverage metrics. Further processing samples through the proposed post-processing engine demonstrates improvements in both the feasibility rate and performance metrics as shown in figure \ref{fig:bench_post_proc}. Further visualizations of samples from TABSYN model with the proposed model pipeline compared against the training data are shown in figure \ref{fig:bench_tabsn} 
 
+\begin{table}[ht]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\caption{\textcolor{red}{[placeholder table]} Paired before/after comparison for ray-tracing based post-processing. Metrics are evaluated on generated samples for which both the uncorrected and corrected prescriptions produce comparable CodeV/LLESP outputs.}
+\label{tab:raytrace_postproc_benefit}
+\begin{tabular}{p{0.16\linewidth}p{0.10\linewidth}p{0.22\linewidth}p{0.10\linewidth}p{0.10\linewidth}p{0.10\linewidth}}
+\toprule
+\textbf{Experiment} & \textbf{Paired rows} & \textbf{Metric} & \textbf{Before} & \textbf{After} & \textbf{Change} \\
+\midrule
+TabSyn tuned 250k & \textcolor{red}{--} & CodeV success rate $\uparrow$ & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} \\
+TabSyn tuned 250k & \textcolor{red}{--} & SPO67 $\downarrow$ & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} \\
+TabSyn tuned 250k & \textcolor{red}{--} & EE50 $\uparrow$ & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} \\
+TabSyn tuned 250k & \textcolor{red}{--} & Axial nominal performance $\uparrow$ & \textcolor{red}{--} & \textcolor{red}{--} & \textcolor{red}{--} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.48\linewidth}
