@@ -1,3 +1,5 @@
 outDir/*
 archive/*
 notes/
+analysis/
+figures/generated_analysis_artifacts/
