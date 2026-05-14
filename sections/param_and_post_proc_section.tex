@@ -1,49 +1,71 @@
-\section{Design parametrization and processing pipeline}
+\section{Design Parameterization and Processing Pipeline}
 
-An overview of the complete generative model training pipeline is shown in Figure~\ref{fig:model_training_pipeline}.
+Figure~\ref{fig:model_training_pipeline} summarizes the processing path used to move from canonical optical prescriptions to model-facing training tables and back to simulation-ready generated designs. The key design choice is to keep a single canonical prescription table as the dataset reference, then derive representation-specific tables for generative modeling. This separates optical data definition from model-specific formatting choices such as normalization, imputation, and file layout.
+
 \begin{figure}[ht]
     \centering
-    % Set a clean publication-friendly size (not too large, not too small)
     \includegraphics[width=0.85\linewidth]{figures/gen_model_training_pipeline.png}
-
-    % Improve caption formatting for papers
-    \caption{A figure showing the pipeline used to build synthetic dataset}
+    \caption{\textbf{Model-facing data and post-processing pipeline.} Canonical patent-derived and synthetic prescriptions are converted into untuned and tuned model-facing representations, processed by model-specific training code, inverted after generation, optionally corrected using ray tracing, and prepared for CodeV/LLESP evaluation.}
     \label{fig:model_training_pipeline}
 \end{figure}
-The individual components of this pipeline are described in detail in the following subsections.
 
-\subsection{Parametrization method}\label{subsec:param_meth}
+\subsection{Canonical Table and Model-Facing Representations}
 
-To make the optical design data suitable for generative modeling and to reduce infeasibility in the generated designs, we adopt a modified parametrization of lens assemblies. The representation is designed to handle scale variability across designs, and expose physically relevant features to the generative model.
+The canonical table stores each optical prescription in the common tabular schema introduced in the dataset section and detailed in Appendix~\ref{app:dataset_details}: surface geometry, material assignment, topology, design conditions, field and wavelength setup, optical-performance annotations, and provenance. Model-facing data are derived from this canonical table after separating prescription and design-condition variables from provenance columns, filtering flags, and optical-performance columns. The generative models are therefore trained on optical prescriptions and design conditions, not on the measured performance values that are reserved for evaluation.
 
-The specific parametrization modifications are summarized below:
+We use two representation families. The \emph{untuned} representation keeps prescription variables close to their canonical physical form and serves as the direct tabular baseline. The \emph{tuned} representation applies optics-aware transformations intended to reduce scale variation and expose structure that is implicit in the raw table. Table~\ref{tab:tuned_untuned_representation} summarizes the current distinction.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{\textbf{Untuned and tuned model-facing representations.} Both representations are derived from the same canonical rows and preserve the same row order and split labels.}
+\label{tab:tuned_untuned_representation}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lll}
+\toprule
+\textbf{Quantity} & \textbf{Untuned representation} & \textbf{Tuned representation} \\
+\midrule
+Material & Material labels converted to $N_d$, $V_d$, and categorical air indicators & Same $N_d$, $V_d$, and air-indicator representation \\
+Surface curvature/radius & Canonical physical surface variables in original scale & Signed curvature scaled by total system length \\
+Inter-surface thickness & Physical thickness values in millimeters & Valid inter-surface thickness fractions plus explicit system-length and image-gap terms \\
+Semi-diameter & Physical semi-diameter values in millimeters & Semi-diameter normalized by entrance pupil diameter \\
+Aperture stop & Raw stop surface index treated as categorical topology & Stop index normalized by surface count and treated as numeric topology \\
+Inactive surface slots & Structural missing values outside the active surface count & Same structural missingness policy \\
+Generated-sample inverse & Reapplies export defaults and structural masks to physical-scale samples & Inverts thickness, curvature, semi-diameter, and stop transforms before export \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+For both representations, the material labels used for CodeV/LLESP export are reconstructed after generation from the generated material variables. If a surface is marked as air, the air indicator takes priority over generated $N_d$ and $V_d$ values. Otherwise, generated material properties are projected to the nearest available catalog material. This keeps material generation continuous during modeling while returning to discrete material labels for optical simulation.
+
+\subsection{Variable Surface Count and Structural Missingness}
+
+Lens prescriptions have variable surface count, but the tabular benchmark models require a fixed column set. We therefore reserve surface-indexed columns up to the maximum supported surface count and use structural missing values for inactive surface slots. These missing values are not ordinary data gaps: they indicate that the corresponding surface does not exist for that design. During preprocessing, missing values inside active surface slots are treated as data-quality errors, while missing values outside the active surface count are preserved as structural padding. During post-processing, generated samples are re-masked using their generated surface count so that inactive surface slots remain empty before export.
+
+The common representation layer also preserves row identity and split information, and writes provenance and performance information into sidecar artifacts rather than mixing them into the model-facing feature matrix. This makes the model-facing inputs and split assignments auditable without asking the generative model to learn source-folder, lineage, or performance-metric fields.
+
+\subsection{Model-Specific Formatting and Normalization}
+
+The common representation layer stops before model-specific numerical formatting. This is important for fair benchmarking: TabSyn, TabDDPM, STaSy, CoDi, and other baselines can use the normalization, imputation, and mixed-type encodings required by their own training code, while starting from the same untuned or tuned optical representation. For example, quantile normalization is not part of the common representation definition; it is applied only when required by a particular benchmark implementation. This separation prevents model-specific preprocessing from being mistaken for an optical representation change.
+
+\subsection{Generated-Sample Inverse Processing}
+
+Generated samples are mapped back to canonical-style prescription tables before simulation. The inverse processor applies the paired inverse of the representation transform, restores deterministic field and wavelength defaults used by the canonical schema, reconstructs material labels from generated material variables, and re-applies the structural surface mask implied by the generated surface count. For generated rows, provenance sidecars from the training data are not copied row-by-row; only deterministic schema defaults and values inferable from the generated prescription are restored. This distinction is necessary because a generated batch does not share the row identity of the original training table.
+
+\subsection{Optional Ray-Tracing-Based Post-Processing}
+
+After inverse processing, generated prescriptions can be passed through an optional ray-tracing-based correction layer before CodeV/LLESP evaluation. This layer is intended to make local optical corrections to the generated prescription rather than to define the training representation. In the current pipeline, the correction attempts the following stages:
 
 \begin{enumerate}
-    \item \textbf{Material properties}:
-
-    Material labels are converted into continuous optical properties by extracting the refractive index ($N_d$) and Abbe number ($V_d$). Additionally, a categorical variable is tracked per each surface to denote whether the subsequent optical medium is air or glass.
-    \item \textbf{Thickness fraction}:
-
-    Surface thicknesses are normalized by dividing with the total system length, resulting in thickness fractions rather than absolute distances. This normalization not only reduces scale dependence but also helps in explicitly enforcing total thickness constraint.
-
-    \item \textbf{Normalized curvature}:
-
-    Surface curvatures are scaled by multiplying with total system length.
-    \item \textbf{Normalized semi-diameters}:
-
-    Semi-diameters are normalized by dividing with entrance pupil diameter. Like before, this too is for maintaining consistent numerical ranges across designs of different scales.
+    \item \textbf{Material and geometry precheck}: verify that active surfaces have valid material and geometry information before ray tracing is attempted.
+    \item \textbf{Final-surface curvature tuning}: adjust the final active surface curvature to better match the generated target effective focal length using first-order ray-tracing estimates.
+    \item \textbf{Semi-diameter evaluation}: recompute active-surface semi-diameters from traced rays while checking for geometric inconsistencies.
+    \item \textbf{Image-plane placement}: adjust the final image gap using the traced focal location.
 \end{enumerate}
 
-Finally, all the numerical values, except for the thickness fractions, are normalized using quantile normalization before being provided as input to the generative model.
+The correction is applied stage by stage: a successful earlier correction can be retained even if a later correction is not available for a particular sample. Stage outcomes are recorded so that evaluation can compare generated prescriptions before and after ray-tracing correction using a common denominator.
 
-\subsection{Ray tracing based post-processing engine}
+\subsection{CodeV/LLESP Preparation}
 
-Samples from the generative model are first transformed back to the physical parameter space by inverting the normalization and parameterization applied during pre-processing.
-These designs are then processed using a custom ray-tracing-based post-processing pipeline to recover surface semi-diameters and image plane location. This pipeline consists of the following steps:
-
-\begin{enumerate}
-    \item \textbf{Initial feasibility filtering}: Designs with invalid material property  specifications are discarded prior to ray tracing.
-    \item \textbf{Final surface curvature tuning}: The target effective focal length is explicitly enforced by adjusting the curvature of the final surface using first-order optical evaluations
-    \item \textbf{Semi-diameters evaluation}: Semi-diameters of all the surfaces are re-evaluated through ray-tracing to maximize ray throughput while avoiding surface intersections.
-    \item \textbf{Final surface thickness tuning}: The thickness of the final surface is adjusted to position the image plane at the median focal location of the traced rays.
-\end{enumerate}
+The final post-processed table is prepared as a CodeV/LLESP-ready prescription table with canonical field, wavelength, material, surface, and image-plane columns. Sequence-file generation and CodeV execution are handled by the downstream simulation pipeline. This keeps the generative-model pipeline responsible for producing simulation-ready prescription tables, while the optical simulation pipeline remains responsible for generating sequence files, running CodeV, and returning optical-performance results.
