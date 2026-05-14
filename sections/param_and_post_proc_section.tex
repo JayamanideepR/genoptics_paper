@@ -19,18 +19,18 @@ To make the optical design data suitable for generative modeling and to reduce i
 The specific parametrization modifications are summarized below:
 
 \begin{enumerate}
-    \item \textbf{Material properties}: 
-    
+    \item \textbf{Material properties}:
+
     Material labels are converted into continuous optical properties by extracting the refractive index ($N_d$) and Abbe number ($V_d$). Additionally, a categorical variable is tracked per each surface to denote whether the subsequent optical medium is air or glass.
-    \item \textbf{Thickness fraction}: 
-    
+    \item \textbf{Thickness fraction}:
+
     Surface thicknesses are normalized by dividing with the total system length, resulting in thickness fractions rather than absolute distances. This normalization not only reduces scale dependence but also helps in explicitly enforcing total thickness constraint.
-    
-    \item \textbf{Normalized curvature}: 
-    
-    Surface curvatures are scaled by multiplying with total system length. 
-    \item \textbf{Normalized semi-diameters}: 
-    
+
+    \item \textbf{Normalized curvature}:
+
+    Surface curvatures are scaled by multiplying with total system length.
+    \item \textbf{Normalized semi-diameters}:
+
     Semi-diameters are normalized by dividing with entrance pupil diameter. Like before, this too is for maintaining consistent numerical ranges across designs of different scales.
 \end{enumerate}
 
@@ -40,7 +40,7 @@ Finally, all the numerical values, except for the thickness fractions, are norma
 
 Samples from the generative model are first transformed back to the physical parameter space by inverting the normalization and parameterization applied during pre-processing.
 These designs are then processed using a custom ray-tracing-based post-processing pipeline to recover surface semi-diameters and image plane location. This pipeline consists of the following steps:
- 
+
 \begin{enumerate}
     \item \textbf{Initial feasibility filtering}: Designs with invalid material property  specifications are discarded prior to ray tracing.
     \item \textbf{Final surface curvature tuning}: The target effective focal length is explicitly enforced by adjusting the curvature of the final surface using first-order optical evaluations
