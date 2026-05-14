@@ -42,94 +42,106 @@ Unless otherwise stated, each entry starts from a batch of 10,000 generated samp
 
 Table~\ref{tab:benchmark_model_comparison} summarizes the current unconditional baseline results on the tuned representation. The benchmark set includes a SMOTE-style interpolation reference and three learned tabular generative baselines with returned CodeV outputs. The main observation is that the benchmark behavior is highly model-dependent: SMOTE-style interpolation remains easy to simulate, STaSy and TabSyn produce substantial numbers of usable designs on synthetic-expanded datasets, and TabDDPM produces almost no CodeV-successful prescriptions in the current runs.
 
-\begin{samepage}
 \begin{center}
+\begin{minipage}{0.98\linewidth}
+\centering
 \scriptsize
 \setlength{\tabcolsep}{5pt}
-\captionof{table}{Simulation-verified feasible sample fraction for current NRTE-processed tuned baseline runs. Values are percentages of 10,000 generated samples. A dash indicates that the corresponding returned run is not available in the current result set.}
+\captionof{table}{Benchmark comparison for current NRTE-processed tuned baseline runs. A dash indicates that the corresponding returned run is not available in the current result set.}
 \label{tab:benchmark_model_comparison}
 \begin{tabular}{lrrrr}
 \toprule
-\textbf{Model} & \textbf{Patent only} & \textbf{Patent+synth 250k} & \textbf{Patent+synth 500k} & \textbf{Patent+synth full} \\
+\textbf{Model} & \multicolumn{4}{c}{\textbf{Simulation-verified feasible sample fraction $\uparrow$ (\%)}} \\
+\cmidrule(lr){2-5}
+ & \textbf{Patent only} & \textbf{Patent+synth 250k} & \textbf{Patent+synth 500k} & \textbf{Patent+synth full} \\
 \midrule
-SMOTE-style reference & 81.4\% & 98.4\% & 98.4\% & 98.5\% \\
-STaSy & 1.7\% & 58.5\% & 63.4\% & 65.1\% \\
-TabDDPM & 0.0\% & 0.0\% & 0.0\% & -- \\
-TabSyn & 0.6\% & 77.5\% & 76.0\% & 67.2\% \\
+SMOTE-style reference & 81.4 & 98.4 & 98.4 & 98.5 \\
+STaSy & 1.7 & 58.5 & 63.4 & 65.1 \\
+TabDDPM & 0.0 & 0.0 & 0.0 & -- \\
+TabSyn & 0.6 & 77.5 & 76.0 & 67.2 \\
 \bottomrule
 \end{tabular}
+\end{minipage}
 \end{center}
-\end{samepage}
 
 \subsection{Effect Of Tuned Optical Representation}
 
 The tuned representation is most important for learned generative models. Table~\ref{tab:tuned_untuned_results} compares tuned and untuned versions using matched dataset variants and the same 10,000-sample denominator. For TabSyn, the tuned representation improves the simulation-verified feasible sample fraction by 26.6 percentage points on the 250k synthetic-expanded dataset, 13.0 points on 500k, and 32.5 points on the full synthetic-expanded dataset. SMOTE is less sensitive to the representation, which is expected because it interpolates directly between existing samples rather than learning the same high-dimensional generative distribution.
 
-\begin{samepage}
 \begin{center}
+\begin{minipage}{0.98\linewidth}
+\centering
 \scriptsize
 \setlength{\tabcolsep}{5pt}
-\captionof{table}{Tuned versus untuned representation comparison on NRTE-processed runs. Values are percentages of 10,000 generated samples; deltas are tuned minus untuned in percentage points.}
+\captionof{table}{Tuned versus untuned representation comparison on NRTE-processed runs. Deltas are tuned minus untuned in percentage points.}
 \label{tab:tuned_untuned_results}
 \begin{tabular}{llrrr}
 \toprule
-\textbf{Dataset} & \textbf{Model} & \textbf{Tuned} & \textbf{Untuned} & \textbf{Delta} \\
+\textbf{Dataset} & \textbf{Model} & \multicolumn{2}{c}{\textbf{Feasible fraction $\uparrow$ (\%)}} & \textbf{$\Delta$ feasible $\uparrow$ (pp)} \\
+\cmidrule(lr){3-4}
+ & & \textbf{Tuned} & \textbf{Untuned} & \textbf{Tuned--untuned} \\
 \midrule
-Patent only & SMOTE & 81.4\% & 47.7\% & +33.7 \\
-Patent only & TabSyn & 0.6\% & 0.5\% & +0.1 \\
-Patent+synth 250k & SMOTE & 98.4\% & 98.1\% & +0.4 \\
-Patent+synth 250k & TabSyn & 77.5\% & 50.9\% & +26.6 \\
-Patent+synth 500k & SMOTE & 98.4\% & 98.2\% & +0.2 \\
-Patent+synth 500k & TabSyn & 76.0\% & 63.0\% & +13.0 \\
-Patent+synth full & SMOTE & 98.5\% & 98.3\% & +0.2 \\
-Patent+synth full & TabSyn & 67.2\% & 34.7\% & +32.5 \\
+Patent only & SMOTE & 81.4 & 47.7 & +33.7 \\
+Patent only & TabSyn & 0.6 & 0.5 & +0.1 \\
+Patent+synth 250k & SMOTE & 98.4 & 98.1 & +0.4 \\
+Patent+synth 250k & TabSyn & 77.5 & 50.9 & +26.6 \\
+Patent+synth 500k & SMOTE & 98.4 & 98.2 & +0.2 \\
+Patent+synth 500k & TabSyn & 76.0 & 63.0 & +13.0 \\
+Patent+synth full & SMOTE & 98.5 & 98.3 & +0.2 \\
+Patent+synth full & TabSyn & 67.2 & 34.7 & +32.5 \\
 \bottomrule
 \end{tabular}
+\end{minipage}
 \end{center}
-\end{samepage}
 
 \subsection{Effect Of Synthetic Dataset Scale}
 
 The dataset-scale result should not be read as a monotonic scaling law. The current TabSyn runs show a clear separation between patent-only training and patent-plus-synthetic training, but the 250k, 500k, and full synthetic-expanded variants do not improve monotonically. This is still a useful result: synthetic expansion moves TabSyn from near-zero feasible yield on patent-only training to a 67--78\% simulation-verified feasible sample fraction in the tuned representation, while also revealing that model selection and training configuration matter at larger synthetic scales.
 
-\begin{samepage}
 \begin{center}
+\begin{minipage}{0.98\linewidth}
+\centering
 \scriptsize
 \setlength{\tabcolsep}{6pt}
-\captionof{table}{TabSyn dataset-scale comparison. Values are simulation-verified feasible sample percentages from 10,000 generated samples after NRTE post-processing.}
+\captionof{table}{TabSyn dataset-scale comparison after NRTE post-processing.}
 \label{tab:dataset_scale_results}
 \begin{tabular}{lrrrr}
 \toprule
-\textbf{Representation} & \textbf{Patent only} & \textbf{Patent+synth 250k} & \textbf{Patent+synth 500k} & \textbf{Patent+synth full} \\
+\textbf{Representation} & \multicolumn{4}{c}{\textbf{Simulation-verified feasible sample fraction $\uparrow$ (\%)}} \\
+\cmidrule(lr){2-5}
+ & \textbf{Patent only} & \textbf{Patent+synth 250k} & \textbf{Patent+synth 500k} & \textbf{Patent+synth full} \\
 \midrule
-Tuned & 0.6\% & 77.5\% & 76.0\% & 67.2\% \\
-Untuned & 0.5\% & 50.9\% & 63.0\% & 34.7\% \\
+Tuned & 0.6 & 77.5 & 76.0 & 67.2 \\
+Untuned & 0.5 & 50.9 & 63.0 & 34.7 \\
 \bottomrule
 \end{tabular}
+\end{minipage}
 \end{center}
-\end{samepage}
 
 \subsection{Ray-Tracing Based Post-Processing Benefit}
 
 The ray-tracing based post-processing layer is evaluated as an optional correction before CodeV/LLESP preparation. Table~\ref{tab:raytrace_postproc_benefit} shows that this step increases the end-to-end feasible yield for TabSyn tuned generations across all three synthetic-expanded dataset variants. The improvement is 11.0, 12.8, and 16.0 percentage points for 250k, 500k, and full synthetic-expanded training respectively.
 
-\begin{samepage}
 \begin{center}
+\begin{minipage}{0.98\linewidth}
+\centering
 \scriptsize
 \setlength{\tabcolsep}{6pt}
-\captionof{table}{Effect of ray-tracing based post-processing on TabSyn tuned generated samples. Values are simulation-verified feasible sample percentages from 10,000 generated samples; deltas are NRTE minus no-NRTE in percentage points.}
+\captionof{table}{Effect of ray-tracing based post-processing on TabSyn tuned generated samples. Deltas are NRTE minus no-NRTE in percentage points.}
 \label{tab:raytrace_postproc_benefit}
 \begin{tabular}{lrrr}
 \toprule
-\textbf{Dataset} & \textbf{No NRTE} & \textbf{NRTE} & \textbf{Delta} \\
+\textbf{Dataset} & \multicolumn{2}{c}{\textbf{Feasible fraction $\uparrow$ (\%)}} & \textbf{$\Delta$ feasible $\uparrow$ (pp)} \\
+\cmidrule(lr){2-3}
+ & \textbf{No NRTE} & \textbf{NRTE} & \textbf{NRTE--no NRTE} \\
 \midrule
-Patent+synth 250k & 66.5\% & 77.5\% & +11.0 \\
-Patent+synth 500k & 63.2\% & 76.0\% & +12.8 \\
-Patent+synth full & 51.1\% & 67.2\% & +16.0 \\
+Patent+synth 250k & 66.5 & 77.5 & +11.0 \\
+Patent+synth 500k & 63.2 & 76.0 & +12.8 \\
+Patent+synth full & 51.1 & 67.2 & +16.0 \\
 \bottomrule
 \end{tabular}
+\end{minipage}
 \end{center}
-\end{samepage}
 
 The returned optical metric summaries show the same qualitative direction. Figure~\ref{fig:results_nrte_metric_delta_current} and Table~\ref{tab:raytrace_metric_delta} report aggregate median improvements, computed as no-NRTE median minus NRTE median, so positive values indicate lower error-like metric values after ray-tracing post-processing. These current metric-family values are aggregate comparisons across returned samples; final paper-ready before/after optical-performance claims should use paired common-row deltas.
 
@@ -143,11 +155,13 @@ The returned optical metric summaries show the same qualitative direction. Figur
 \begin{center}
 \scriptsize
 \setlength{\tabcolsep}{5pt}
-\captionof{table}{Aggregate median metric improvement after ray-tracing based post-processing. Values are no-NRTE median minus NRTE median; positive values indicate lower error-like metric values after correction.}
+\captionof{table}{Aggregate median metric reduction after ray-tracing based post-processing. Values are no-NRTE median minus NRTE median; positive values indicate improvement because the listed optical metrics are lower-better.}
 \label{tab:raytrace_metric_delta}
 \begin{tabular}{lrrrrr}
 \toprule
-\textbf{Dataset} & \textbf{EE50} & \textbf{EE90} & \textbf{SPO67} & \textbf{SPO100} & \textbf{Nominal perf.} \\
+\textbf{Dataset} & \multicolumn{5}{c}{\textbf{Median reduction after NRTE $\uparrow$}} \\
+\cmidrule(lr){2-6}
+ & \textbf{EE50 $\downarrow$} & \textbf{EE90 $\downarrow$} & \textbf{SPO67 $\downarrow$} & \textbf{SPO100 $\downarrow$} & \textbf{Nominal perf. $\downarrow$} \\
 \midrule
 Patent+synth 250k & 0.023 & 0.026 & 0.914 & 1.466 & 11.614 \\
 Patent+synth 500k & 0.020 & 0.025 & 1.037 & 1.712 & 11.944 \\
