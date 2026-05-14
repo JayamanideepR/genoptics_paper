@@ -10,6 +10,23 @@ For each model family, experiments are organized across the dataset variants in 
 
 \begin{table}[t]
 \centering
+\small
+\caption{\textbf{Dataset variants and parent-safe splits.} Train, validation, and test counts include both patent-derived and synthetic rows.}
+\label{tab:dataset_variants_splits}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Variant} & \textbf{Train rows} & \textbf{Val rows} & \textbf{Test rows} & \textbf{Total rows} \\
+\midrule
+Patent-only & 1,003 & 125 & 125 & 1,253 \\
+Patent+synth-250k & 251,003 & 111,111 & 112,642 & 474,756 \\
+Patent+synth-500k & 501,003 & 111,111 & 112,642 & 724,756 \\
+Patent+synth-full & 902,580 & 111,111 & 112,642 & 1,126,333 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
 \footnotesize
 \caption{\textcolor{red}{[placeholder table]} \textbf{Benchmark training protocol.} This table will be filled with the final model list, dataset variants, representation settings, and sampling counts used in the benchmark runs.}
 \label{tab:benchmark_protocol}

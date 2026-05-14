@@ -1,46 +1,23 @@
 \section{Dataset}
 
-We construct a large-scale lens prescription dataset for generative modeling by combining a curated patent-derived reference set with a synthetic expansion generated from perturbations of those reference designs. Each row contains geometric prescription parameters, material information, design conditions, optical performance metrics, and provenance fields that allow generated benchmark datasets to be traced back to their source design family. The dataset is used in four variants: patent-only, patent plus 250k synthetic training samples, patent plus 500k synthetic training samples, and the full patent-plus-synthetic set. The 250k and 500k names refer to the number of synthetic training rows; all variants additionally include the fixed patent rows and the fixed synthetic validation/test rows.
+We construct a large-scale optical prescription dataset for generative modeling by combining patent-derived lens designs with synthetic designs generated through controlled perturbation and post-processing of those patents. Each design is retained in two linked forms: an individual CodeV sequence artifact for optical simulation and a common tabular prescription row for data analysis and downstream model training. The tabular representation stores the design parameters, design conditions, material assignments, optical-performance annotations, and provenance fields needed to connect each row back to its source design. The patent-derived designs provide realistic reference families across surface counts, optical configurations, apertures, field angles, and material choices, while the synthetic expansion increases coverage around those families in the same tabular prescription format. The remainder of this section describes these dataset components, assumptions, and construction steps in more detail.
 
 \subsection{Patent-Derived Reference Designs}
 
-The reference set contains 1,253 patent-derived optical system designs. For each design, we store the lens prescription in tabular form together with material labels, numerical material properties, operating conditions, and evaluated optical metrics. The corresponding CodeV sequence files are retained as reference source artifacts.
+The collected patent-derived corpus contains 2,572 optical system designs formalized from patent records. These designs provide the source pool for the modeling-ready patent subset and for the later synthetic expansion. For each design, the available prescription data are represented in tabular form with surface geometry, material labels, operating conditions, and evaluated optical metrics. The corresponding CodeV sequence files are retained as reference source artifacts.
 
-\subsubsection*{\textcolor{red}{Important note for LL follow-up}}
 {\color{red}
-LL input is still needed to finalize this section with the following details:
-\begin{enumerate}
-    \item the process used to collect and curate the patent-derived dataset;
-    \item whether any designs were obtained from Zemax or CodeV commercial catalogues, and whether those designs can be published without IP issues;
-    \item the source of the material catalogue provided by LL, and whether the material property values can be published without IP issues.
-\end{enumerate}
-Chris is working on gathering this information. Will discuss with Chris about this section to add required further details 
+Note: Chris provided write-up on the patent dataset curation process. Working on going through it and adding any relevant details here.
 }
 
-To keep the reference and synthetic datasets consistent, the current dataset assumes:
+Each optical system is represented as a sequence of surfaces with associated geometric and material parameters. Figure \ref{fig:lens_param} illustrates the lens assembly and the parameters used to define the design space. For each active surface $j$, the table records:
 \begin{enumerate}
-    \item Designed for object distance of infinity
-    \item Realistic materials picked from existing catalogues
-    \item Image and object space is of air material
-    \item Image and object surfaces are considered to be flat/planar surfaces without any curvature
-    \item Aspheric surfaces and gratings are not considered
-    \item Number of surfaces in the dataset range from 3 to 17
-    \item A maximum field angle condition is used as a design specification
-    \item Design performance is evaluated at [0,0.3,0.5,0.7,1.0] times the maximum field angle
-    \item Field angles are represented in the meridional/y-field direction, with x-field angle entries set to zero
-    \item Performance is evaluated in the visible spectrum using fixed wavelengths (F, d, C lines)
-    \item Material between last surface and image plane is air and penultimate material is glass 
+    \item \textbf{Radius of curvature $R_j$}: signed radius of curvature of surface $j$;
+    \item \textbf{Thickness $t_j$}: axial distance between surfaces $j$ and $j+1$;
+    \item \textbf{Material $j$}: optical material immediately following surface $j$;
+    \item \textbf{Semi-diameter $j$}: radial aperture height of surface $j$;
+    \item \textbf{Aperture stop index}: index of the surface designated as the aperture stop.
 \end{enumerate}
-
-Each optical system is represented as a sequence of surfaces with associated geometric and material parameters. Figure \ref{fig:lens_param} illustrates the lens assembly and the parameters used to define the design space. For each surface $j$, the dataset records:
-\begin{enumerate}
-    \item \textbf{Radius of curvature $R_j$}: The signed radius of curvature of surface $j$
-    \item \textbf{Thickness $j$}: The axial distance between surfaces $j$ and $j+1$
-    \item \textbf{Material $j$}: Label of Optical material immediately following surface $j$
-    \item \textbf{Semi-diameter $j$}: Height of tip of surface $j$ from the optical axis
-    \item \textbf{stop surface index}: Index of the surface designated as aperture stop
-\end{enumerate}
-The full released tables also contain object/image-surface fields, field and wavelength specifications, optical performance metrics, provenance columns, perturbation-lineage fields, filtering flags, and split labels; the complete column schema is provided in the appendix.
 
 \begin{figure}[ht]
     \centering
@@ -57,22 +34,45 @@ Along with design parameters, each optical system is associated with operating c
     \item \textbf{Total length}: axial distance from the first surface to the image plane.
 \end{enumerate}
 
-To evaluate optical performance, each design is analyzed at field angles corresponding to $\{0, 0.3, 0.5, 0.7, 1.0\}$ times the maximum field angle. Some performance metrics are normalized by the diffraction-limited Airy disk radius to allow comparison across systems with different specifications:
-\begin{equation}
-r_{\mathrm{airy}} =  \frac{1.22\, \lambda_{\mathrm{ref}} \, \mathrm{EFL}}{\mathrm{EPD}}.
-\end{equation}
-The dataset records normalized spot-size metrics, encircled-energy metrics, and axial-field nominal performance metrics. Unless otherwise specified, distances are reported in millimeters, angles in degrees, and wavelengths in nanometers.
+For the collected patent-derived corpus, field specifications follow the values reported in the source patent descriptions. The dataset records three groups of optical-performance annotations:
+\begin{enumerate}
+    \item \textbf{Spot-size metrics}: field-dependent spot-size measures such as SPO67 and SPO100;
+    \item \textbf{Encircled-energy metrics}: field-dependent energy-concentration measures such as EE50 and EE90;
+    \item \textbf{Axial nominal performance}: A measure of on-axis Root Mean Square (RMS) wavefront error.
+\end{enumerate}
+Unless otherwise specified, distances are reported in millimeters, angles in degrees, and wavelengths in nanometers.
+
+\subsection{Patent Dataset Shortlisting}
+
+To formulate a standardized starting point for generative modeling and synthetic dataset generation, we select and process designs from the collected patent corpus according to the following standardization and filtering criteria:
+\begin{enumerate}
+    \item Designs are specified for object distance of infinity.
+    \item Materials are selected from existing optical material catalogues.
+    \item Object and image spaces are air.
+    \item Object and image surfaces are represented as flat/planar surfaces without curvature.
+    \item Aspheric surfaces and gratings are not considered.
+    \item The number of surfaces ranges from 3 to 17.
+    \item A maximum field angle is used as a design specification.
+    \item Design performance is evaluated at $\{0, 0.3, 0.5, 0.7, 1.0\}$ times the maximum field angle.
+    \item Field angles are represented in the meridional/y-field direction, with x-field angle entries set to zero.
+    \item Performance is evaluated in the visible spectrum using fixed wavelengths (F, d, C lines).
+    \item The material between the last surface and image plane is air, and the penultimate material is glass.
+\end{enumerate}
+
+Applying these criteria gives a canonical patent subset of 1,253 designs selected from the 2,572 collected patent-derived designs. The retained rows keep the same tabular optical-prescription schema as the original patent dataset: non-applicable or structurally irrelevant cells are left empty, while fields affected by the standardization criteria are updated to the canonical form used for synthetic generation and modeling.\\
+{\color{red}Detailed shortlisting counts from the collected patent corpus to the canonical patent subset need to be added after the source audit is finalized.}
 
 \subsection{Synthetic Expansion}
 
-The synthetic dataset is generated by perturbing the patent-derived reference designs and re-evaluating the resulting candidate prescriptions. At a high level, the synthetic construction process is:
+The synthetic dataset is generated from the canonical patent subset using perturbations that preserve the tabular prescription format described above. This expansion is intended to increase the number and coverage of available optical prescriptions while keeping each synthetic row traceable to a realistic patent-derived design family. At a high level, the synthetic construction process is:
 \begin{enumerate}
-    \item sample a parent design from the patent-derived reference set;
+    \item sample a parent design from the canonical patent subset;
     \item perturb curvature, thickness, material, or combinations of these quantities;
     \item re-evaluate semi-diameters and image-plane placement using the optical evaluation pipeline;
     \item discard rows that fail the generation or simulation checks;
     \item retain successful rows with full lineage back to the parent design and perturbation source.
 \end{enumerate}
+Figure~\ref{fig:synth_data_pipe} summarizes this synthetic dataset construction workflow.
 
 \begin{figure}[ht]
     \centering
@@ -81,32 +81,9 @@ The synthetic dataset is generated by perturbing the patent-derived reference de
     \label{fig:synth_data_pipe}
 \end{figure}
 
-After canonical filtering, the current dataset contains 1,126,333 rows: 1,253 patent-derived rows and 1,125,080 synthetic rows. All dataset variants are derived from this same canonical table. The filtering pass started from 1,126,448 rows and rejected 115 rows, all due to infinity-like tokens in tolerance-sensitivity columns; all other canonical filters removed zero rows in the current pass.
+The resulting canonical dataset contains 1,126,333 rows: 1,253 patent-derived rows and 1,125,080 synthetic rows. The synthetic rows are retained in the same tabular prescription format as the patent-derived rows and are generated through curvature, thickness, material, and combined perturbation families. Provenance fields are retained so that synthetic rows can be traced back to their parent patent designs and perturbation sources.
 
-Splits are assigned at the parent-patent-family level so that a patent seed and its synthetic children do not cross train, validation, and test sets; the current audit reports zero leaking parent families for all variants. The patent-derived rows are split into 1,003 training rows, 125 validation rows, and 125 test rows in every variant. Table \ref{tab:dataset_variants_splits} reports the actual train/validation/test row counts used by each dataset variant. The 250k and 500k variant names refer to the number of synthetic rows in the training split.
-
-\begin{table}[t]
-\centering
-\small
-\caption{\textbf{Dataset variants and parent-safe splits.} Train, validation, and test counts include both patent-derived and synthetic rows.}
-\label{tab:dataset_variants_splits}
-\begin{tabular}{lrrrr}
-\toprule
-\textbf{Variant} & \textbf{Train rows} & \textbf{Val rows} & \textbf{Test rows} & \textbf{Total rows} \\
-\midrule
-Patent-only & 1,003 & 125 & 125 & 1,253 \\
-Patent+synth-250k & 251,003 & 111,111 & 112,642 & 474,756 \\
-Patent+synth-500k & 501,003 & 111,111 & 112,642 & 724,756 \\
-Patent+synth-full & 902,580 & 111,111 & 112,642 & 1,126,333 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Synthetic rows preserve source folder, source row, parent patent family, perturbation lineage, and sequence-file provenance outside the model-facing feature matrix. The split procedure also enforces training coverage of categorical topology variables such as surface count, stop index, and active material/air indicators.
-
-\subsection{Dataset Characteristics}
-
-The synthetic expansion is intended to increase coverage around the patent-derived design families while preserving traceability to the parent design and perturbation source. Figure \ref{fig:patent_synth_comp} shows visual comparisons between the patent-derived and synthetic distributions, including topology-aware diversity and optical-performance distributions. Table \ref{tab:patent_synth_characteristics} is a planned summary table for the final dataset-characterization numbers that will support the claim that the synthetic expansion increases design-space coverage while remaining tied to realistic optical-design families.
+Figure \ref{fig:patent_synth_comp} summarizes patent-derived and synthetic dataset characteristics. Additional surface-count, condition-range, and perturbation-lineage figures are provided in Appendix~\ref{app:dataset_details}.
 
 \begin{figure}[t]
     \centering

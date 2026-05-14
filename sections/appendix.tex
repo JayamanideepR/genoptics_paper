@@ -1,1 +1,139 @@
-\section{appendix}
+\appendix
+
+\section{Dataset Details}
+\label{app:dataset_details}
+
+This appendix records the dataset construction details that are too dense for the main dataset section. The numbers in this section are computed from the canonical dataset artifacts used for the manuscript dataset variants.
+
+\subsection{Canonical Splits}
+
+Splits are assigned by patent parent family before creating the dataset-size variants. This prevents a patent seed and its synthetic children from appearing in different train/validation/test partitions. Table~\ref{tab:canonical_split_source_breakdown} reports the full canonical source counts before the 250k and 500k training subsets are drawn.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{\textbf{Canonical split source breakdown.} Validation and test synthetic rows are fixed across the 250k, 500k, and full patent-plus-synthetic variants.}
+\label{tab:canonical_split_source_breakdown}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Split} & \textbf{Patent rows} & \textbf{Synthetic rows} & \textbf{Total rows} \\
+\midrule
+Train & 1,003 & 901,577 & 902,580 \\
+Validation & 125 & 110,986 & 111,111 \\
+Test & 125 & 112,517 & 112,642 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Traceability Fields}
+
+The released canonical tables retain provenance fields outside the model-facing feature matrices. Table~\ref{tab:traceability_fields} lists the main fields used to trace rows back to source folders, source rows, parent patent designs, sequence files, and perturbation lineage.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{\textbf{Traceability fields retained in the canonical dataset.}}
+\label{tab:traceability_fields}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{ll}
+\toprule
+\textbf{Field group} & \textbf{Representative columns} \\
+\midrule
+Dataset row identity & \texttt{dataset\_row\_id}, \texttt{source\_type}, \texttt{split} \\
+Source file identity & \texttt{source\_folder}, \texttt{source\_row\_id}, \texttt{source\_regen\_csv}, \texttt{source\_submitted\_csv} \\
+Sequence-file identity & \texttt{Seq File}, \texttt{source\_seq\_file\_index}, \texttt{source\_seq\_file\_basename} \\
+Patent parent lineage & \texttt{parent\_patent\_id}, \texttt{parent\_patent\_row\_id}, \texttt{parent\_patent\_seq\_file\_basename} \\
+Perturbation lineage & \texttt{perturb\_seed}, \texttt{perturb\_method}, \texttt{perturb\_used\_curvature}, \texttt{perturb\_used\_thickness}, \texttt{perturb\_used\_material} \\
+Canonical filtering & \texttt{passes\_common\_filters}, \texttt{rejection\_reasons}, \texttt{filter\_drop\_*} columns \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{Topology and Design-Condition Coverage}
+
+Figure~\ref{fig:appendix_surface_count_distribution} compares the surface-count distributions for patent-derived and synthetic rows. The synthetic expansion preserves the broad topology range of the patent-derived reference set while increasing the number of samples available within each surface-count group.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\linewidth]{figures/dataset_surface_count_distribution.pdf}
+\caption{\textbf{Surface-count distribution.} Both patent-derived and synthetic rows span 3--17 surfaces, with median surface count 11.}
+\label{fig:appendix_surface_count_distribution}
+\end{figure}
+
+Figure~\ref{fig:appendix_condition_distributions} summarizes key design-condition distributions. EFL and EPD are shown on logarithmic axes because the dataset contains both compact and long-focal-length optical systems.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/dataset_design_condition_distributions.pdf}
+\caption{\textbf{Design-condition distributions.} The synthetic expansion broadly tracks the patent-derived EFL, EPD, and maximum-field-angle ranges.}
+\label{fig:appendix_condition_distributions}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{\textbf{Additional patent-derived versus synthetic summary statistics.} Percentile ranges report the 5th--95th percentile interval.}
+\label{tab:appendix_dataset_characteristics}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrrr}
+\toprule
+\textbf{Source} & \textbf{EPD 5--95\% (mm)} & \textbf{Image gap 5--95\% (mm)} & \textbf{Min. lens sep. 5--95\% (mm)} & \textbf{Synthetic folders} & \textbf{Parents without synthetic children} \\
+\midrule
+Patent-derived & 0.2--71.4 & 1.0--316.4 & 0.002--3.501 & -- & -- \\
+Synthetic & 0.2--60.7 & 1.0--325.9 & 0.002--3.500 & 131 & 2 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{Synthetic Perturbation Lineage}
+
+Table~\ref{tab:perturbation_method_counts} summarizes the recovered perturbation-method labels for synthetic rows. These lineage labels are not model inputs by default; they are retained for auditing, split analysis, and post-hoc stratification.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{\textbf{Synthetic perturbation-method counts.}}
+\label{tab:perturbation_method_counts}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Perturbation method} & \textbf{Rows} & \textbf{Fraction} \\
+\midrule
+Thickness & 226,846 & 20.2\% \\
+Curvature & 185,299 & 16.5\% \\
+Thickness + curvature & 179,298 & 15.9\% \\
+Material & 140,534 & 12.5\% \\
+Thickness + material & 133,733 & 11.9\% \\
+Curvature + material & 129,943 & 11.5\% \\
+Thickness + curvature + material & 129,427 & 11.5\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Column Groups}
+
+Table~\ref{tab:canonical_column_groups} summarizes the major column groups in the canonical table. Model-facing tuned and untuned representations are produced from this canonical table by separating prescription/design-condition variables from provenance, filtering, and optical-performance fields.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{\textbf{Canonical dataset column groups.}}
+\label{tab:canonical_column_groups}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{ll}
+\toprule
+\textbf{Group} & \textbf{Examples and role} \\
+\midrule
+Surface geometry & \texttt{sXX\_00} curvature/radius fields, \texttt{sXX\_01} thickness fields, \texttt{sXX\_cir\_00} semi-diameter fields \\
+Surface material & \texttt{sXX\_02} material labels; model-specific tuned representations convert labels to material-property variables \\
+Topology & \texttt{surfcount}, \texttt{sto}, \texttt{isintstop}, active-surface structural masks \\
+Design conditions & \texttt{efl}, \texttt{epd}, maximum field angle from \texttt{fldy\_04}, field/wavelength count columns \\
+Field and wavelength specification & \texttt{fldx\_*}, \texttt{fldy\_*}, \texttt{xan\_*}, \texttt{yan\_*}, \texttt{wl00\_*}, \texttt{wtw00\_*} \\
+Optical performance & \texttt{spo67\_*}, \texttt{spo100\_*}, \texttt{ee50\_*}, \texttt{ee90\_*}, \texttt{nomperf\_*} \\
+Sensitivity and validity & \texttt{perfsens\_*}, \texttt{tolsens\_*}, \texttt{!error}, filter flags \\
+Provenance and lineage & Source-folder, source-row, parent-patent, perturbation, sequence-file, and split columns \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
