@@ -143,30 +143,40 @@ Patent+synth full & 51.1 & 67.2 & +16.0 \\
 \end{minipage}
 \end{center}
 
-The returned optical metric summaries show the same qualitative direction. Figure~\ref{fig:results_nrte_metric_delta_current} and Table~\ref{tab:raytrace_metric_delta} report aggregate median improvements, computed as no-NRTE median minus NRTE median, so positive values indicate lower error-like metric values after ray-tracing post-processing. These current metric-family values are aggregate comparisons across returned samples; final paper-ready before/after optical-performance claims should use paired common-row deltas.
+The returned optical metric summaries show the same qualitative direction. Figure~\ref{fig:results_nrte_metric_delta_current} and Table~\ref{tab:raytrace_metric_delta} report paired common-row relative improvements at raw metric quantiles. For each percentile $p$, the reported value is $100$ times the no-NRTE raw metric $Q_p$ minus the NRTE raw metric $Q_p$, divided by the no-NRTE raw metric $Q_p$. Positive values indicate lower error-like metric values after ray-tracing post-processing. These quantiles are computed only on rows that were submitted in both branches and returned successfully in both CodeV runs.
 
-\begin{samepage}
 \begin{center}
     \includegraphics[width=\linewidth]{figures/results_nrte_metric_delta_current.pdf}
-    \captionof{figure}{Aggregate median optical-metric improvements after ray-tracing based post-processing. Positive values indicate lower metric values after NRTE. The axial nominal-performance metric is plotted separately because its numerical scale is larger than the field-spread metrics.}
+    \captionof{figure}{Paired relative optical-metric improvements at raw metric quantiles after ray-tracing based post-processing. Within each dataset/metric group, the five markers from left to right show Q10, Q25, Q50, Q75, and Q90 of the raw metric-value distribution, plotted as percentage reduction from the no-NRTE quantile to the NRTE quantile. Positive values indicate lower metric values after NRTE.}
     \label{fig:results_nrte_metric_delta_current}
 \end{center}
 
 \begin{center}
 \scriptsize
-\setlength{\tabcolsep}{5pt}
-\captionof{table}{Aggregate median metric reduction after ray-tracing based post-processing. Values are no-NRTE median minus NRTE median; positive values indicate improvement because the listed optical metrics are lower-better.}
+\setlength{\tabcolsep}{3pt}
+\captionof{table}{Paired common-row relative improvements at raw metric quantiles after ray-tracing based post-processing. Each entry is $100 \times (Q_p^{\mathrm{no\ NRTE}} - Q_p^{\mathrm{NRTE}}) / Q_p^{\mathrm{no\ NRTE}}$; positive values indicate improvement because the listed optical metrics are lower-better.}
 \label{tab:raytrace_metric_delta}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{llrrrrr}
 \toprule
-\textbf{Dataset} & \multicolumn{5}{c}{\textbf{Median reduction after NRTE $\uparrow$}} \\
-\cmidrule(lr){2-6}
- & \textbf{EE50 $\downarrow$} & \textbf{EE90 $\downarrow$} & \textbf{SPO67 $\downarrow$} & \textbf{SPO100 $\downarrow$} & \textbf{Nominal perf. $\downarrow$} \\
+\textbf{Dataset} & \textbf{Metric} & \multicolumn{5}{c}{\textbf{Relative metric quantile improvement $\uparrow$ (\%)}} \\
+\cmidrule(lr){3-7}
+ & & \textbf{Q10} & \textbf{Q25} & \textbf{Q50} & \textbf{Q75} & \textbf{Q90} \\
 \midrule
-Patent+synth 250k & 0.023 & 0.026 & 0.914 & 1.466 & 11.614 \\
-Patent+synth 500k & 0.020 & 0.025 & 1.037 & 1.712 & 11.944 \\
-Patent+synth full & 0.018 & 0.019 & 1.053 & 1.697 & 10.660 \\
+Patent+synth 250k & EE50 & 81.8 & 81.2 & 32.3 & 25.2 & 30.6 \\
+Patent+synth 250k & EE90 & 69.7 & 66.2 & 27.0 & 21.8 & 26.3 \\
+Patent+synth 250k & SPO67 & 82.3 & 84.2 & 87.1 & 85.8 & 85.1 \\
+Patent+synth 250k & SPO100 & 76.0 & 76.4 & 81.7 & 77.9 & 77.1 \\
+Patent+synth 250k & Nominal perf. & 90.2 & 91.6 & 89.7 & 78.8 & 68.2 \\
+Patent+synth 500k & EE50 & 84.2 & 82.8 & 30.1 & 22.9 & 28.0 \\
+Patent+synth 500k & EE90 & 73.3 & 67.7 & 25.4 & 19.4 & 24.5 \\
+Patent+synth 500k & SPO67 & 85.0 & 86.3 & 87.5 & 88.0 & 86.9 \\
+Patent+synth 500k & SPO100 & 78.4 & 80.1 & 81.8 & 81.6 & 80.0 \\
+Patent+synth 500k & Nominal perf. & 90.8 & 92.3 & 88.7 & 80.6 & 72.1 \\
+Patent+synth full & EE50 & 82.9 & 80.1 & 32.0 & 25.2 & 30.1 \\
+Patent+synth full & EE90 & 71.2 & 64.4 & 24.5 & 21.8 & 25.7 \\
+Patent+synth full & SPO67 & 84.6 & 85.6 & 88.2 & 87.6 & 85.4 \\
+Patent+synth full & SPO100 & 77.9 & 78.6 & 83.1 & 80.7 & 77.8 \\
+Patent+synth full & Nominal perf. & 91.3 & 92.3 & 90.1 & 80.0 & 71.2 \\
 \bottomrule
 \end{tabular}
 \end{center}
-\end{samepage}
