@@ -1,6 +1,6 @@
 \section{Benchmark Models And Evaluation Framework}
 
-This section defines the benchmark protocol used to evaluate whether optical prescription data can be modeled by modern generative methods and whether optics-aware processing improves generated design quality. We first evaluate unconditional generation because it isolates distribution learning: the model must generate plausible lens prescriptions and design specifications without being given a target condition at sampling time. Conditional target satisfaction is treated separately for the proposed conditional model.
+This section defines the benchmark protocol used to evaluate whether optical prescription data can be modeled by modern generative methods and whether optics-aware processing improves generated design quality. We evaluate unconditional generation because it isolates distribution learning: the model must generate plausible lens prescriptions and design specifications without being given a target condition at sampling time.
 
 \subsection{Benchmark Models}\label{subsec:off_shelf_uncond_gen}
 
@@ -47,7 +47,7 @@ Patent+synth-full & 902,580 & 111,111 & 112,642 & 1,126,333 \\
 
 Evaluation is separated into stages so that local generated-prescription quality is not conflated with CodeV/LLESP simulation outcomes. Before CodeV results are available, generated samples can be evaluated for table validity, material validity, geometric plausibility, distribution matching, diversity, novelty, and LLESP-readiness after deterministic post-processing. After CodeV/LLESP result files return, the same samples can be evaluated for simulation error rate and optical performance metrics.
 
-For unconditional generation, design conditions such as EFL, EPD, and maximum field angle are treated as generated design specifications. Their distributions are compared against reference data, but they are not treated as target-satisfaction metrics because no requested target is supplied to the unconditional model at sampling time. For conditional generation, target satisfaction becomes a separate metric family.
+For unconditional generation, design conditions such as EFL, EPD, and maximum field angle are treated as generated design specifications. Their distributions are compared against reference data, but they are not treated as target-satisfaction metrics because no requested target is supplied to the model at sampling time.
 
 \subsection{Metric Families}
 
@@ -56,7 +56,7 @@ Table~\ref{tab:evaluation_metric_groups} summarizes the metric families used to 
 \begin{table}[t]
 \centering
 \footnotesize
-\caption{\textbf{Evaluation metric groups.} Metrics are separated by evaluation stage so that generated-prescription validity, distributional fidelity, simulation robustness, optical performance, ray-tracing post-processing benefit, and conditional target satisfaction are evaluated without conflating distinct failure modes.}
+\caption{\textbf{Evaluation metric groups.} Metrics are separated by evaluation stage so that generated-prescription validity, distributional fidelity, simulation robustness, optical performance, and ray-tracing post-processing benefit are evaluated without conflating distinct failure modes.}
 \label{tab:evaluation_metric_groups}
 \begin{tabular}{>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}}
 \toprule
@@ -69,7 +69,6 @@ Prescription validity & Active-surface masks, material no-match rate, geometric 
 CodeV/LLESP outcomes & Submitted rows, returned rows, \texttt{!error} rate, and simulation success/failure categories & CodeV-dependent & Simulation robustness of generated prescriptions \\
 Optical performance & SPO67, SPO100, EE50, EE90, and axial nominal performance across evaluated fields & CodeV-dependent & Optical quality after simulation \\
 Ray-tracing correction benefit & Paired NRTE/no-NRTE feasible fraction and optical-performance changes & CodeV-dependent paired ablation & Effect of physics-based post-processing \\
-Conditional target satisfaction & EFL, EPD, and field-condition error relative to requested targets & Conditional model & Target-directed generation accuracy \\
 \bottomrule
 \end{tabular}
 \end{table}
