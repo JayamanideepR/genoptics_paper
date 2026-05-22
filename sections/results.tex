@@ -1,94 +1,58 @@
 \section{Results}
 
-This section reports the current returned CodeV/LLESP evidence for four questions: whether generic tabular generative models are usable optics baselines, whether the tuned optical representation improves over the untuned representation, whether synthetic expansion improves over patent-only training, and whether ray-tracing based post-processing improves generated prescriptions. Log-whitened material-parameterization results are excluded from this version of the paper.
+This section evaluates how generated tabular lens rows become usable optical prescriptions. Unless otherwise stated, each result starts from 10,000 generated samples. We report the \emph{simulation-verified feasible sample fraction}: the percentage of generated samples that pass post-processing and CodeV/LLESP preparation and then return from CodeV without an error. This denominator is stricter than a success rate on submitted samples because it also counts samples rejected before simulation. Log-whitened material-parameterization results and CoDi runs are excluded from the main results in this version.
 
-Unless otherwise stated, each entry starts from a batch of 10,000 generated samples. We report the \emph{simulation-verified feasible sample fraction}: the percentage of generated samples that pass the post-processing and CodeV/LLESP preparation layer and then return from CodeV without an error. This denominator is stricter than a success rate on submitted samples because it also counts samples rejected before simulation.
+\subsection{Synthetic-Expanded Training Data Improves Feasible Generation}
+\label{sec:results_synthetic_expansion}
 
-\begin{figure}[t]
-    \centering
-    \captionsetup[subfigure]{font=footnotesize,justification=centering,singlelinecheck=false}
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/results_baseline_feasible_fraction.pdf}
-        \caption{Baseline comparison.}
-        \label{fig:results_baseline_feasible_fraction}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/results_tuned_vs_untuned_feasible_fraction.pdf}
-        \caption{Tuned versus untuned.}
-        \label{fig:results_tuned_vs_untuned_feasible_fraction}
-    \end{subfigure}
-    \vspace{0.4em}
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/results_dataset_scale_feasible_fraction.pdf}
-        \caption{Dataset scale.}
-        \label{fig:results_dataset_scale_feasible_fraction}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/results_nrte_feasible_fraction.pdf}
-        \caption{Ray-tracing post-processing.}
-        \label{fig:results_nrte_feasible_fraction}
-    \end{subfigure}
-    \caption{Simulation-verified feasible sample fraction across the four main result axes. All panels report the percentage of 10,000 generated samples that pass post-processing and CodeV/LLESP preparation and return from CodeV without error. Synthetic expansion substantially improves over patent-only training, while the returned TabSyn trend is not monotonic across synthetic subset sizes.}
-    \label{fig:results_success_dashboard_current}
-\end{figure}
-
-\subsection{Benchmarking Tabular Generative Models}
-
-Table~\ref{tab:benchmark_model_comparison} summarizes the current unconditional baseline results on the tuned representation. The benchmark set includes a SMOTE-style interpolation reference and three learned tabular generative baselines with returned CodeV outputs. The main observation is that the benchmark behavior is highly model-dependent: SMOTE-style interpolation remains easy to simulate, STaSy and TabSyn produce substantial numbers of usable designs on synthetic-expanded datasets, and TabDDPM produces almost no CodeV-successful prescriptions in the current runs.
+The first experiment asks whether the synthetic-expanded training set improves usable generation under the final pipeline. To isolate this effect, the representation is fixed to the tuned parameterization, NRTE post-processing is enabled, and each model is compared between patent-only training and the patent-plus-synthetic 250k training variant. Model hyperparameters are held fixed within each model family; the intended variable in this subsection is the training data source, not model size, representation, or post-processing.
 
 \begin{center}
 \begin{minipage}{0.98\linewidth}
 \centering
-\scriptsize
-\setlength{\tabcolsep}{5pt}
-\captionof{table}{Benchmark comparison for current NRTE-processed tuned baseline runs. A dash indicates that the corresponding returned run is not available in the current result set.}
-\label{tab:benchmark_model_comparison}
-\begin{tabular}{lrrrr}
+\footnotesize
+\captionof{table}{\textbf{Patent-only versus patent-plus-synthetic 250k feasible generation.} Deltas are absolute percentage-point changes from patent-only to 250k training. The dominant remaining failure mode is computed on the 250k run using mutually exclusive failure categories.}
+\label{tab:section_6_1_synthetic_expansion_summary}
+\begin{tabular}{lrrrl}
 \toprule
-\textbf{Model} & \multicolumn{4}{c}{\textbf{Simulation-verified feasible sample fraction $\uparrow$ (\%)}} \\
-\cmidrule(lr){2-5}
- & \textbf{Patent only} & \textbf{Patent+synth 250k} & \textbf{Patent+synth 500k} & \textbf{Patent+synth full} \\
+\textbf{Model} & \multicolumn{2}{c}{\textbf{Feasible fraction $\uparrow$ (\%)}} & \textbf{$\Delta$ feasible} & \textbf{Dominant 250k failure} \\
+\cmidrule(lr){2-3}
+ & \textbf{Patent only} & \textbf{Patent+synth 250k} & \textbf{(pp)} & \\
 \midrule
-SMOTE-style reference & 81.4 & 98.4 & 98.4 & 98.5 \\
-STaSy & 1.7 & 58.5 & 63.4 & 65.1 \\
-TabDDPM & 0.0 & 0.0 & 0.0 & -- \\
-TabSyn & 0.6 & 77.5 & 76.0 & 67.2 \\
+SMOTE-style reference & 81.40 & 98.43 & +17.03 & CodeV error \\
+STaSy & 1.70 & 58.53 & +56.83 & Material only \\
+TabDDPM & 0.00 & 0.00 & +0.00 & Material + geometry \\
+TabSyn & 0.57 & 77.48 & +76.91 & Material only \\
 \bottomrule
 \end{tabular}
 \end{minipage}
 \end{center}
 
+Table~\ref{tab:section_6_1_synthetic_expansion_summary} shows the feasible fraction for the four matched model families. The synthetic-expanded 250k dataset substantially increases the end-to-end feasible fraction for the learned tabular generators that can use the added data. TabSyn increases from 0.57\% feasible samples under patent-only training to 77.48\% under patent-plus-synthetic 250k training, and STaSy increases from 1.70\% to 58.53\%. The SMOTE-style reference is already highly feasible on patent-only training, but still increases from 81.40\% to 98.43\%. TabDDPM remains at 0.00\% feasible samples in both settings, showing that the benefit of synthetic-expanded training is not automatic across all tabular generators.
+
+These results support two conclusions. First, the synthetic-expanded dataset is useful because the patent-only set is too small for several learned generators to produce simulation-ready prescriptions at meaningful rates. Second, feasibility must be measured after the optical reconstruction and simulation-readiness pipeline. A generator can produce rows that look tabularly valid while still failing material reconstruction, geometric consistency checks, or CodeV execution. The mutually exclusive failure-mode breakdown in Appendix~\ref{app:section_6_1_failure_breakdown} shows that the 250k runs reduce the large material-plus-geometry failure mass seen in the patent-only learned-model runs, but the remaining failure modes differ by generator: material-only failures dominate for STaSy and TabSyn, CodeV errors dominate the small residual failure rate for SMOTE, and TabDDPM remains dominated by coupled material and geometry failures.
+
 \subsection{Effect Of Tuned Optical Representation}
 
-The tuned representation is most important for learned generative models. Table~\ref{tab:tuned_untuned_results} compares tuned and untuned versions using matched dataset variants and the same 10,000-sample denominator. For TabSyn, the tuned representation improves the simulation-verified feasible sample fraction by 26.6 percentage points on the 250k synthetic-expanded dataset, 13.0 points on 500k, and 32.5 points on the full synthetic-expanded dataset. SMOTE is less sensitive to the representation, which is expected because it interpolates directly between existing samples rather than learning the same high-dimensional generative distribution.
+The second experiment isolates the effect of the model-facing representation. The dataset is fixed to patent-plus-synthetic 250k, NRTE post-processing is enabled, and the comparison is restricted to model families with matched tuned and untuned returned runs. This keeps the intended variable as the optical representation rather than dataset size or post-processing.
+
+Table~\ref{tab:tuned_untuned_results} shows that the tuned representation has little effect on the SMOTE-style reference but a large effect on TabSyn. For SMOTE, both representations submit nearly all generated rows to CodeV/LLESP and return nearly all submitted rows successfully, giving only a 0.36 percentage-point feasible-yield change. For TabSyn, the tuned and untuned branches submit nearly the same fraction of rows, 85.77\% versus 86.06\%, but their CodeV success rates among submitted rows differ sharply: 90.33\% for tuned versus 59.12\% for untuned. The resulting simulation-verified feasible fraction increases from 50.88\% to 77.48\%, a 26.60 percentage-point gain. This indicates that the tuned representation primarily improves the quality of reconstructed optical prescriptions that reach simulation, not merely the number of rows that pass the pre-CodeV gate.
 
 \begin{center}
 \begin{minipage}{0.98\linewidth}
 \centering
 \scriptsize
-\setlength{\tabcolsep}{5pt}
-\captionof{table}{Tuned versus untuned representation comparison on NRTE-processed runs. Deltas are tuned minus untuned in percentage points.}
+\setlength{\tabcolsep}{3pt}
+\captionof{table}{\textbf{Tuned versus untuned representation comparison on patent-plus-synthetic 250k runs.} All entries use NRTE post-processing and the same 10,000-sample denominator. Deltas are tuned minus untuned in percentage points.}
 \label{tab:tuned_untuned_results}
-\begin{tabular}{llrrr}
+\begin{tabular}{lrrrrrrr}
 \toprule
-\textbf{Dataset} & \textbf{Model} & \multicolumn{2}{c}{\textbf{Feasible fraction $\uparrow$ (\%)}} & \textbf{$\Delta$ feasible $\uparrow$ (pp)} \\
-\cmidrule(lr){3-4}
- & & \textbf{Tuned} & \textbf{Untuned} & \textbf{Tuned--untuned} \\
+\textbf{Model} & \multicolumn{2}{c}{\textbf{CodeV input accepted (\%)}} & \multicolumn{2}{c}{\textbf{Success on submitted (\%)}} & \multicolumn{2}{c}{\textbf{Feasible fraction $\uparrow$ (\%)}} & \textbf{$\Delta$ feasible} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+ & \textbf{Tuned} & \textbf{Untuned} & \textbf{Tuned} & \textbf{Untuned} & \textbf{Tuned} & \textbf{Untuned} & \textbf{(pp)} \\
 \midrule
-Patent only & SMOTE & 81.4 & 47.7 & +33.7 \\
-Patent only & TabSyn & 0.6 & 0.5 & +0.1 \\
-Patent+synth 250k & SMOTE & 98.4 & 98.1 & +0.4 \\
-Patent+synth 250k & TabSyn & 77.5 & 50.9 & +26.6 \\
-Patent+synth 500k & SMOTE & 98.4 & 98.2 & +0.2 \\
-Patent+synth 500k & TabSyn & 76.0 & 63.0 & +13.0 \\
-Patent+synth full & SMOTE & 98.5 & 98.3 & +0.2 \\
-Patent+synth full & TabSyn & 67.2 & 34.7 & +32.5 \\
+SMOTE-style reference & 99.76 & 99.82 & 98.67 & 98.25 & 98.43 & 98.07 & +0.36 \\
+TabSyn & 85.77 & 86.06 & 90.33 & 59.12 & 77.48 & 50.88 & +26.60 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
