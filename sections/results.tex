@@ -85,15 +85,18 @@ Patent+synth full & 67.15 & 32.85 & 15.75 & 0.00 & 4.59 & 12.51 \\
 \end{center}
 
 \subsection{Ray-Tracing Based Post-Processing Benefit}
+\label{sec:results_raytrace_postproc}
 
-The ray-tracing based post-processing layer is evaluated as an optional correction before CodeV/LLESP preparation. Table~\ref{tab:raytrace_postproc_benefit} shows that this step increases the end-to-end feasible yield for TabSyn tuned generations across all three synthetic-expanded dataset variants. The improvement is 11.0, 12.8, and 16.0 percentage points for 250k, 500k, and full synthetic-expanded training respectively.
+The final ablation evaluates the optional ray-tracing based post-processing layer. The generator, representation, and training data are fixed to TabSyn with the tuned representation on the patent-plus-synthetic 250k training variant. The only intended variable is whether generated prescriptions pass directly to CodeV/LLESP preparation or first pass through NRTE.
+
+NRTE increases the end-to-end feasible yield from 66.52\% to 77.48\%, a gain of 10.96 percentage points under the same 10{,}000-sample denominator (Table~\ref{tab:raytrace_postproc_benefit}). This shows that the deterministic correction layer adds simulation-verified usable designs without retraining the generator.
 
 \begin{center}
 \begin{minipage}{0.98\linewidth}
 \centering
-\scriptsize
+\footnotesize
 \setlength{\tabcolsep}{6pt}
-\captionof{table}{Effect of ray-tracing based post-processing on TabSyn tuned generated samples. Deltas are NRTE minus no-NRTE in percentage points.}
+\captionof{table}{\textbf{Effect of ray-tracing based post-processing on TabSyn tuned 250k generated samples.} Delta is NRTE minus no-NRTE in percentage points, with the same 10{,}000-sample denominator used for both branches.}
 \label{tab:raytrace_postproc_benefit}
 \begin{tabular}{lrrr}
 \toprule
@@ -101,48 +104,39 @@ The ray-tracing based post-processing layer is evaluated as an optional correcti
 \cmidrule(lr){2-3}
  & \textbf{No NRTE} & \textbf{NRTE} & \textbf{NRTE--no NRTE} \\
 \midrule
-Patent+synth 250k & 66.5 & 77.5 & +11.0 \\
-Patent+synth 500k & 63.2 & 76.0 & +12.8 \\
-Patent+synth full & 51.1 & 67.2 & +16.0 \\
+Patent+synth 250k & 66.52 & 77.48 & +10.96 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
 \end{center}
 
-The returned optical metric summaries show the same qualitative direction. Figure~\ref{fig:results_nrte_metric_delta_current} and Table~\ref{tab:raytrace_metric_delta} report paired common-row relative improvements at raw metric quantiles. For each percentile $p$, the reported value is $100$ times the no-NRTE raw metric $Q_p$ minus the NRTE raw metric $Q_p$, divided by the no-NRTE raw metric $Q_p$. Positive values indicate lower error-like metric values after ray-tracing post-processing. These quantiles are computed only on rows that were submitted in both branches and returned successfully in both CodeV runs.
+Feasibility alone does not show whether the correction damages optical quality. Figure~\ref{fig:results_nrte_metric_improvement_distribution_250k} therefore compares paired optical metrics on common rows that were submitted in both branches and returned successfully in both CodeV runs. The plotted value is $\log_{10}(\mathrm{no\ NRTE}/\mathrm{NRTE})$ for each field-metric observation; positive values indicate lower metric values after NRTE. Spot-size and encircled-energy metrics are normalized by the corresponding Airy diameter before comparison, while the nominal performance metric is left in its returned units. This paired comparison is a within-sample post-processing diagnostic rather than a ranking of unrelated generated designs.
 
 \begin{center}
-    \includegraphics[width=\linewidth]{figures/results_nrte_metric_delta_current.pdf}
-    \captionof{figure}{Paired relative optical-metric improvements at raw metric quantiles after ray-tracing based post-processing. Within each dataset/metric group, the five markers from left to right show Q10, Q25, Q50, Q75, and Q90 of the raw metric-value distribution, plotted as percentage reduction from the no-NRTE quantile to the NRTE quantile. Positive values indicate lower metric values after NRTE.}
-    \label{fig:results_nrte_metric_delta_current}
+    \includegraphics[width=\linewidth]{../../../code/optics_data_modder_2/results/figures/paper_section_6_4_paired_metric_improvements_250k_20260522/section_6_4_paired_metric_improvement_violin_250k.pdf}
+    \captionof{figure}{\textbf{Paired optical-metric improvement distributions after NRTE for TabSyn tuned 250k generations.} Each distribution pools the five evaluated field positions over common rows that succeeded in both CodeV/LLESP branches. Positive values indicate lower metric values after NRTE. SPO67, SPO100, EE50, and EE90 are normalized by the Airy diameter; nominal performance is not Airy-normalized.}
+    \label{fig:results_nrte_metric_improvement_distribution_250k}
 \end{center}
 
+Table~\ref{tab:raytrace_postproc_quality_250k} reports the corresponding median values and paired improvement fractions. NRTE reduces the median normalized SPO67 from 168.24 to 22.95, normalized SPO100 from 285.18 to 57.59, and nominal performance from 11.76 to 2.73. The median reductions for EE50 and EE90 are smaller but remain positive, and 73.2--75.9\% of valid field-metric observations improve. Field-resolved median reductions are provided in Appendix~\ref{app:raytrace_metric_delta_details}.
+
 \begin{center}
+\begin{minipage}{0.98\linewidth}
+\centering
 \scriptsize
-\setlength{\tabcolsep}{3pt}
-\captionof{table}{Paired common-row relative improvements at raw metric quantiles after ray-tracing based post-processing. Each entry is $100 \times (Q_p^{\mathrm{no\ NRTE}} - Q_p^{\mathrm{NRTE}}) / Q_p^{\mathrm{no\ NRTE}}$; positive values indicate improvement because the listed optical metrics are lower-better.}
-\label{tab:raytrace_metric_delta}
-\begin{tabular}{llrrrrr}
+\setlength{\tabcolsep}{4pt}
+\captionof{table}{\textbf{Paired optical-quality summary for TabSyn tuned 250k samples with and without NRTE.} $N$ is the number of valid paired field-metric observations after requiring common rows, successful CodeV/LLESP returns in both branches, and positive finite metric values. Percent reduction is $100 \times (\mathrm{no\ NRTE} - \mathrm{NRTE})/\mathrm{no\ NRTE}$ computed per paired observation and then summarized by the median.}
+\label{tab:raytrace_postproc_quality_250k}
+\begin{tabular}{lrrrrr}
 \toprule
-\textbf{Dataset} & \textbf{Metric} & \multicolumn{5}{c}{\textbf{Relative metric quantile improvement $\uparrow$ (\%)}} \\
-\cmidrule(lr){3-7}
- & & \textbf{Q10} & \textbf{Q25} & \textbf{Q50} & \textbf{Q75} & \textbf{Q90} \\
+\textbf{Metric} & \textbf{$N$} & \textbf{Median no NRTE} & \textbf{Median NRTE} & \textbf{Median reduction $\uparrow$ (\%)} & \textbf{Improved rows $\uparrow$ (\%)} \\
 \midrule
-Patent+synth 250k & EE50 & 81.8 & 81.2 & 32.3 & 25.2 & 30.6 \\
-Patent+synth 250k & EE90 & 69.7 & 66.2 & 27.0 & 21.8 & 26.3 \\
-Patent+synth 250k & SPO67 & 82.3 & 84.2 & 87.1 & 85.8 & 85.1 \\
-Patent+synth 250k & SPO100 & 76.0 & 76.4 & 81.7 & 77.9 & 77.1 \\
-Patent+synth 250k & Nominal perf. & 90.2 & 91.6 & 89.7 & 78.8 & 68.2 \\
-Patent+synth 500k & EE50 & 84.2 & 82.8 & 30.1 & 22.9 & 28.0 \\
-Patent+synth 500k & EE90 & 73.3 & 67.7 & 25.4 & 19.4 & 24.5 \\
-Patent+synth 500k & SPO67 & 85.0 & 86.3 & 87.5 & 88.0 & 86.9 \\
-Patent+synth 500k & SPO100 & 78.4 & 80.1 & 81.8 & 81.6 & 80.0 \\
-Patent+synth 500k & Nominal perf. & 90.8 & 92.3 & 88.7 & 80.6 & 72.1 \\
-Patent+synth full & EE50 & 82.9 & 80.1 & 32.0 & 25.2 & 30.1 \\
-Patent+synth full & EE90 & 71.2 & 64.4 & 24.5 & 21.8 & 25.7 \\
-Patent+synth full & SPO67 & 84.6 & 85.6 & 88.2 & 87.6 & 85.4 \\
-Patent+synth full & SPO100 & 77.9 & 78.6 & 83.1 & 80.7 & 77.8 \\
-Patent+synth full & Nominal perf. & 91.3 & 92.3 & 90.1 & 80.0 & 71.2 \\
+SPO67 / Airy diameter & 30{,}415 & 168.24 & 22.95 & 81.1 & 89.7 \\
+SPO100 / Airy diameter & 30{,}415 & 285.18 & 57.59 & 71.8 & 85.5 \\
+EE50 / Airy diameter & 30{,}412 & 15.64 & 11.50 & 31.0 & 75.9 \\
+EE90 / Airy diameter & 30{,}408 & 22.37 & 20.08 & 23.8 & 73.2 \\
+Nominal performance & 31{,}776 & 11.76 & 2.73 & 70.9 & 81.6 \\
 \bottomrule
 \end{tabular}
+\end{minipage}
 \end{center}

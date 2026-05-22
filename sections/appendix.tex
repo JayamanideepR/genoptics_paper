@@ -158,9 +158,21 @@ Provenance and lineage & Source-folder, source-row, parent-patent, perturbation,
 
 The main Section~\ref{sec:results_synthetic_expansion} reports feasible sample fractions for patent-only and patent-plus-synthetic 250k training under the tuned + NRTE pipeline. Figure~\ref{fig:appendix_section_6_1_failure_breakdown} provides the corresponding mutually exclusive outcome breakdown. The outcome categories are computed over the same 10,000 generated rows per model/dataset run. Material-only, material+geometry, geometry-only, and CodeV-error categories are mutually exclusive failure categories; the feasible fraction is the residual set of rows that pass the preparation pipeline and return successfully from CodeV.
 
-\begin{figure}[htbp]
+\begin{center}
 \centering
 \includegraphics[width=\linewidth]{figures/section_6_1_synthetic_expansion_20260522/section_6_1_appendix_infeasibility_row_venn_by_dataset.pdf}
-\caption{\textbf{Failure-mode composition for Section~\ref{sec:results_synthetic_expansion}.} Values are percentages of the 10,000 generated rows for each model/dataset run. Overlapping material and geometry circles show the material-only, material+geometry, and geometry-only failure categories; separate circles show CodeV errors and total failure. Circle areas use the same scale in both dataset panels.}
+\captionof{figure}{\textbf{Failure-mode composition for Section~\ref{sec:results_synthetic_expansion}.} Values are percentages of the 10,000 generated rows for each model/dataset run. Overlapping material and geometry circles show the material-only, material+geometry, and geometry-only failure categories; separate circles show CodeV errors and total failure. Circle areas use the same scale in both dataset panels.}
 \label{fig:appendix_section_6_1_failure_breakdown}
+\end{center}
+
+\subsection{Ray-Tracing Post-Processing Metric Details}
+\label{app:raytrace_metric_delta_details}
+
+Figure~\ref{fig:appendix_raytrace_field_metric_heatmap} provides the field-resolved view behind the paired metric-improvement summary in Section~\ref{sec:results_raytrace_postproc}. The comparison is restricted to paired common rows that were submitted in both NRTE and no-NRTE branches and returned successfully in both CodeV/LLESP runs. The spot-size and encircled-energy metrics are normalized by Airy diameter before computing paired reductions; nominal performance is left in its returned units.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\linewidth]{../../../code/optics_data_modder_2/results/figures/paper_section_6_4_paired_metric_improvements_250k_20260522/section_6_4_paired_metric_improvement_heatmap_250k.pdf}
+\caption{\textbf{Field-resolved median paired metric reductions after NRTE for TabSyn tuned 250k generations.} Each cell reports the median value of $100 \times (\mathrm{no\ NRTE} - \mathrm{NRTE})/\mathrm{no\ NRTE}$ over valid paired observations for the corresponding metric and field. Positive values indicate lower metric values after NRTE.}
+\label{fig:appendix_raytrace_field_metric_heatmap}
 \end{figure}
