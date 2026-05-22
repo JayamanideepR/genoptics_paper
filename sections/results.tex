@@ -60,23 +60,25 @@ TabSyn & 85.77 & 86.06 & 90.33 & 59.12 & 77.48 & 50.88 & +26.60 \\
 
 \subsection{Effect Of Synthetic Dataset Scale}
 
-The dataset-scale result should not be read as a monotonic scaling law. The current TabSyn runs show a clear separation between patent-only training and patent-plus-synthetic training, but the 250k, 500k, and full synthetic-expanded variants do not improve monotonically. This is still a useful result: synthetic expansion moves TabSyn from near-zero feasible yield on patent-only training to a 67--78\% simulation-verified feasible sample fraction in the tuned representation, while also revealing that model selection and training configuration matter at larger synthetic scales.
+To isolate dataset scale from the representation ablation, Table~\ref{tab:dataset_scale_results} fixes the generator to TabSyn, the parameterization to the tuned representation, and the post-processing branch to NRTE. Since the paper-level question is how dataset scale changes the final usable sample population, the table reports the end-to-end feasible yield and a mutually exclusive breakdown of infeasible rows rather than intermediate pipeline gates.
+
+The patent-only row is retained only as the low-data anchor. The main dataset effect is the transition from patent-only to patent-plus-synthetic training, where the feasible yield rises from 0.57\% to 77.48\%. Beyond 250k synthetic-expanded training rows, however, this fixed TabSyn configuration does not improve monotonically: the 500k run is comparable to 250k, while the full-dataset run falls to 67.15\%. The full-dataset run has higher material-only, material-plus-geometry, and CodeV-error fractions than the 250k run, so the drop is visible directly in the final infeasibility composition. Thus, the million-scale dataset is best interpreted as a released scaling endpoint and resource for higher-capacity or retuned models, not as a guarantee that the same off-the-shelf TabSyn configuration will be optimal at the largest scale.
 
 \begin{center}
 \begin{minipage}{0.98\linewidth}
 \centering
 \scriptsize
-\setlength{\tabcolsep}{6pt}
-\captionof{table}{TabSyn dataset-scale comparison after NRTE post-processing.}
+\setlength{\tabcolsep}{4.5pt}
+\captionof{table}{Dataset-scale comparison for TabSyn with tuned representation and NRTE post-processing. Percentages are computed over 10{,}000 generated rows. Infeasibility categories are mutually exclusive and sum to the any-infeasible column.}
 \label{tab:dataset_scale_results}
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrrrrrr}
 \toprule
-\textbf{Representation} & \multicolumn{4}{c}{\textbf{Simulation-verified feasible sample fraction $\uparrow$ (\%)}} \\
-\cmidrule(lr){2-5}
- & \textbf{Patent only} & \textbf{Patent+synth 250k} & \textbf{Patent+synth 500k} & \textbf{Patent+synth full} \\
+\textbf{Training data} & \shortstack{\textbf{Feasible}\\\textbf{yield $\uparrow$}} & \shortstack{\textbf{Any}\\\textbf{infeasible $\downarrow$}} & \shortstack{\textbf{Material}\\\textbf{only $\downarrow$}} & \shortstack{\textbf{Geometry}\\\textbf{only $\downarrow$}} & \shortstack{\textbf{Material}\\\textbf{+ geom. $\downarrow$}} & \shortstack{\textbf{CodeV}\\\textbf{error $\downarrow$}} \\
 \midrule
-Tuned & 0.6 & 77.5 & 76.0 & 67.2 \\
-Untuned & 0.5 & 50.9 & 63.0 & 34.7 \\
+Patent only & 0.57 & 99.43 & 35.00 & 0.01 & 59.72 & 4.70 \\
+Patent+synth 250k & 77.48 & 22.52 & 11.75 & 0.00 & 2.48 & 8.29 \\
+Patent+synth 500k & 75.97 & 24.03 & 11.22 & 0.00 & 2.76 & 10.05 \\
+Patent+synth full & 67.15 & 32.85 & 15.75 & 0.00 & 4.59 & 12.51 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
