@@ -11,16 +11,16 @@ For each model family, experiments are organized across the dataset variants in 
 \begin{table}[t]
 \centering
 \small
-\caption{\textbf{Dataset variants and parent-safe splits.} Train, validation, and test counts include both patent-derived and synthetic rows.}
+\caption{\textbf{Dataset variants used for benchmark training and evaluation.} Training counts report the rows provided to benchmark-model training, and test counts report the held-out rows used for evaluation. Counts include both patent-derived and synthetic rows.}
 \label{tab:dataset_variants_splits}
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrrr}
 \toprule
-\textbf{Variant} & \textbf{Train rows} & \textbf{Val rows} & \textbf{Test rows} & \textbf{Total rows} \\
+\textbf{Variant} & \textbf{Training rows} & \textbf{Held-out test rows} & \textbf{Total rows} \\
 \midrule
-Patent-only & 1,003 & 125 & 125 & 1,253 \\
-Patent+synth-250k & 251,003 & 111,111 & 112,642 & 474,756 \\
-Patent+synth-500k & 501,003 & 111,111 & 112,642 & 724,756 \\
-Patent+synth-full & 902,580 & 111,111 & 112,642 & 1,126,333 \\
+Patent-only & 1,128 & 125 & 1,253 \\
+Patent+synth-250k & 362,114 & 112,642 & 474,756 \\
+Patent+synth-500k & 612,114 & 112,642 & 724,756 \\
+Patent+synth-full & 1,013,691 & 112,642 & 1,126,333 \\
 \bottomrule
 \end{tabular}
 \end{table}

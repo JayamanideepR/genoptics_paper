@@ -5,22 +5,25 @@
 
 This appendix records the dataset construction details that are too dense for the main dataset section. The numbers in this section are computed from the canonical dataset artifacts used for the manuscript dataset variants.
 
-\subsection{Canonical Splits}
+\subsection{Benchmark Split Source Counts}
 
-Splits are assigned by patent parent family before creating the dataset-size variants. This prevents a patent seed and its synthetic children from appearing in different train/validation/test partitions. Table~\ref{tab:canonical_split_source_breakdown} reports the full canonical source counts before the 250k and 500k training subsets are drawn.
+Splits are assigned by patent parent family before creating the dataset-size variants. This prevents a patent seed and its synthetic children from appearing across both model-training and held-out evaluation partitions. Table~\ref{tab:canonical_split_source_breakdown} reports the source breakdown for the benchmark training rows and held-out test rows used in the experiments.
 
 \begin{table}[htbp]
 \centering
-\small
-\caption{\textbf{Canonical split source breakdown.} Validation and test synthetic rows are fixed across the 250k, 500k, and full patent-plus-synthetic variants.}
+\footnotesize
+\caption{\textbf{Benchmark split source breakdown.} Training rows are the rows provided to benchmark-model training, and held-out test rows are fixed across the 250k, 500k, and full patent-plus-synthetic variants.}
 \label{tab:canonical_split_source_breakdown}
-\begin{tabular}{lrrr}
+\begin{tabular}{lrrrrrr}
 \toprule
-\textbf{Split} & \textbf{Patent rows} & \textbf{Synthetic rows} & \textbf{Total rows} \\
+\textbf{Variant} & \multicolumn{3}{c}{\textbf{Training rows}} & \multicolumn{3}{c}{\textbf{Held-out test rows}} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+ & \textbf{Patent} & \textbf{Synthetic} & \textbf{Total} & \textbf{Patent} & \textbf{Synthetic} & \textbf{Total} \\
 \midrule
-Train & 1,003 & 901,577 & 902,580 \\
-Validation & 125 & 110,986 & 111,111 \\
-Test & 125 & 112,517 & 112,642 \\
+Patent-only & 1,128 & 0 & 1,128 & 125 & 0 & 125 \\
+Patent+synth-250k & 1,128 & 360,986 & 362,114 & 125 & 112,517 & 112,642 \\
+Patent+synth-500k & 1,128 & 610,986 & 612,114 & 125 & 112,517 & 112,642 \\
+Patent+synth-full & 1,128 & 1,012,563 & 1,013,691 & 125 & 112,517 & 112,642 \\
 \bottomrule
 \end{tabular}
 \end{table}
