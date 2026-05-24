@@ -62,8 +62,8 @@ Table~\ref{tab:evaluation_metric_groups} summarizes the metric families used to 
 \toprule
 \textbf{Metric family} & \textbf{Primary quantities} & \textbf{Stage} & \textbf{Claim supported} \\
 \midrule
-Prescription distribution & Marginal statistics, pairwise correlations, $\alpha$-precision/$\beta$-recall over prescription and design-condition variables & Pre-CodeV & Fidelity to reference design distributions \\
-Diversity and novelty & Generated-to-train nearest-neighbor distance, generated-to-generated nearest-neighbor distance, test-to-generated coverage within surface-count groups & Pre-CodeV & Non-memorization, non-collapse, and held-out coverage \\
+Prescription distribution & Surface-count distribution distance, active numerical marginal KS, active \texttt{isair} marginal error, and pairwise correlation error within surface-count groups & Pre-CodeV & Fidelity to reference design distributions \\
+Novelty / train proximity & Same-surface-count DCR excess relative to the expected train-closer probability from train/test support sizes & Pre-CodeV & Train-proximity check after correcting for split-size imbalance \\
 Duplicate and leakage checks & Exact or rounded duplicate rates, generated rows matching training rows, and parent-family split checks & Pre-CodeV & Defensible separation between training data and generated samples \\
 Prescription validity & Active-surface masks, material no-match rate, geometric intersections, semi-diameter sanity, and LLESP-readiness & Post-processing / pre-CodeV & Fraction of generated prescriptions usable before simulation \\
 CodeV/LLESP outcomes & Submitted rows, returned rows, \texttt{!error} rate, and simulation success/failure categories & CodeV-dependent & Simulation robustness of generated prescriptions \\
@@ -73,4 +73,4 @@ Ray-tracing correction benefit & Paired NRTE/no-NRTE feasible fraction and optic
 \end{tabular}
 \end{table}
 
-For diversity and novelty, the immediate metric pass compares samples within the same surface-count group using robust-scaled prescription-space distances. This avoids treating padded inactive surface slots as ordinary features. A topology-aware cross-surface-count distance can be used as a stronger analysis when finalized, but the same-surface-count nearest-neighbor metrics provide a simpler first-pass memorization and coverage check.
+For novelty and train-proximity diagnostics, nearest-neighbor comparisons are restricted to the same surface-count group. This avoids treating padded inactive surface slots as ordinary features and is equivalent to assigning cross-surface-count pairs a larger topology-aware distance than any same-surface-count pair. The reported DCR excess subtracts the expected train-closer probability implied by the same-surface-count train/test support sizes, so it is not interpreted against a fixed 50\% baseline unless the train and test supports are equal.

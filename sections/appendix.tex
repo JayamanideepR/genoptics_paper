@@ -168,11 +168,39 @@ The main Section~\ref{sec:results_synthetic_expansion} reports feasible sample f
 \subsection{Ray-Tracing Post-Processing Metric Details}
 \label{app:raytrace_metric_delta_details}
 
-Figure~\ref{fig:appendix_raytrace_field_metric_heatmap} provides the field-resolved view behind the paired metric-improvement summary in Section~\ref{sec:results_raytrace_postproc}. The comparison is restricted to paired common rows that were submitted in both NRTE and no-NRTE branches and returned successfully in both CodeV/LLESP runs. The spot-size and encircled-energy metrics are normalized by Airy diameter before computing paired reductions; nominal performance is left in its returned units.
+Section~\ref{sec:results_raytrace_postproc} reports the controlled no-NRTE versus NRTE ablation using the paired heatmap and aggregate summary table. This appendix provides the distribution-shape diagnostics behind that result. All distributions use the TabSyn tuned patent-plus-synthetic 250k run. The no-NRTE branch has 6{,}652 feasible rows and the NRTE branch has 7{,}748 feasible rows out of the same 10{,}000 generated-row denominator. SPO and encircled-energy metrics are normalized by Airy diameter; nominal performance is left in its returned units.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.92\linewidth]{../../../code/optics_data_modder_2/results/figures/paper_section_6_4_paired_metric_improvements_250k_20260522/section_6_4_paired_metric_improvement_heatmap_250k.pdf}
-\caption{\textbf{Field-resolved median paired metric reductions after NRTE for TabSyn tuned 250k generations.} Each cell reports the median value of $100 \times (\mathrm{no\ NRTE} - \mathrm{NRTE})/\mathrm{no\ NRTE}$ over valid paired observations for the corresponding metric and field. Positive values indicate lower metric values after NRTE.}
-\label{fig:appendix_raytrace_field_metric_heatmap}
+\includegraphics[width=\linewidth]{../../../code/optics_data_modder_2/results/figures/paper_section_6_4_nrte_ablation_and_training_quality_250k_20260524/section_6_4_tabsyn_no_nrte_vs_nrte_pdf_overlay_250k.pdf}
+\caption{\textbf{Optical-performance distributions for feasible TabSyn samples with and without NRTE.} Each panel compares no-NRTE and NRTE feasible rows for one metric-field pair. Values are plotted on a $\log_{10}$ scale, and lower values indicate better optical performance.}
+\label{fig:appendix_raytrace_no_nrte_vs_nrte_distributions}
 \end{figure}
+
+Figure~\ref{fig:appendix_raytrace_training_reference_distribution} compares the final NRTE feasible samples with the model training reference. This diagnostic is used only to calibrate whether the final feasible samples occupy the broad training-performance regime; it is not an optimization claim that generated designs outperform the training data.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{../../../code/optics_data_modder_2/results/figures/paper_section_6_4_nrte_ablation_and_training_quality_250k_20260524/section_6_4_training_reference_vs_tabsyn_nrte_pdf_overlay_250k.pdf}
+\caption{\textbf{Training-reference and final NRTE feasible-sample optical-performance distributions.} The training reference contains the 362{,}114 train+validation rows from the patent-plus-synthetic 250k dataset. The generated distribution contains the 7{,}748 feasible TabSyn + NRTE rows. Values are plotted on a $\log_{10}$ scale, and lower values indicate better optical performance.}
+\label{fig:appendix_raytrace_training_reference_distribution}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\caption{\textbf{Calibration of final NRTE feasible samples against the 250k training-reference performance distribution.} Percentages pool the five evaluated fields for each metric. The training reference is the train+validation split of the patent-plus-synthetic 250k dataset.}
+\label{tab:appendix_raytrace_training_reference_calibration}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Metric} & \textbf{Sample median train percentile} & \textbf{Sample $\leq$ train median} & \textbf{Sample in train 5--95\%} & \textbf{Sample $>$ train 95\%} \\
+\midrule
+SPO67 / Airy diameter & 57.2 & 43.9 & 86.7 & 11.0 \\
+SPO100 / Airy diameter & 57.9 & 43.5 & 86.6 & 11.1 \\
+EE50 / Airy diameter & 55.7 & 44.7 & 93.6 & 2.9 \\
+EE90 / Airy diameter & 54.5 & 44.6 & 93.5 & 2.9 \\
+Nominal performance & 57.6 & 44.2 & 88.1 & 9.9 \\
+\bottomrule
+\end{tabular}
+\end{table}
