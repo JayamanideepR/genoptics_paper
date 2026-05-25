@@ -51,8 +51,10 @@ For unconditional generation, design conditions such as EFL, EPD, and maximum fi
 
 \subsection{Metric Families}
 
-Table~\ref{tab:evaluation_metric_groups} summarizes the metric families used to support the benchmark claims. Distribution and diversity metrics are computed on prescription and design-condition columns, excluding optical performance columns such as spot size and encircled-energy metrics. Optical performance is evaluated only after ray tracing or CodeV/LLESP simulation has produced valid result files; detailed post-processing attrition counts can be reported in the appendix if needed.
+Distribution and diversity metrics are computed on prescription and design-condition columns, excluding optical performance columns such as spot size and encircled-energy metrics. Optical performance is evaluated only after ray tracing or CodeV/LLESP simulation has produced valid result files; detailed post-processing attrition counts can be reported in the appendix if needed.
 
+% Internal planning table retained for reference but omitted from the rendered paper.
+\begin{comment}
 \begin{table}[t]
 \centering
 \footnotesize
@@ -72,5 +74,6 @@ Ray-tracing correction benefit & Paired NRTE/no-NRTE feasible fraction and optic
 \bottomrule
 \end{tabular}
 \end{table}
+\end{comment}
 
 For novelty and train-proximity diagnostics, nearest-neighbor comparisons are restricted to the same surface-count group. This avoids treating padded inactive surface slots as ordinary features and is equivalent to assigning cross-surface-count pairs a larger topology-aware distance than any same-surface-count pair. The reported DCR excess subtracts the expected train-closer probability implied by the same-surface-count train/test support sizes, so it is not interpreted against a fixed 50\% baseline unless the train and test supports are equal.
