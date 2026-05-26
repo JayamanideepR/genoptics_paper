@@ -189,18 +189,18 @@ Figure~\ref{fig:appendix_raytrace_training_reference_distribution} compares the 
 \begin{table}[htbp]
 \centering
 \scriptsize
-\setlength{\tabcolsep}{5pt}
+\setlength{\tabcolsep}{3pt}
 \caption{\textbf{Calibration of final NRTE feasible samples against the 250k training-reference performance distribution.} Percentages pool the five evaluated fields for each metric. The training reference is the train+validation split of the patent-plus-synthetic 250k dataset.}
 \label{tab:appendix_raytrace_training_reference_calibration}
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrrrrr}
 \toprule
-\textbf{Metric} & \textbf{Sample median train percentile} & \textbf{Sample $\leq$ train median} & \textbf{Sample in train 5--95\%} & \textbf{Sample $>$ train 95\%} \\
+\textbf{Metric} & \shortstack{\textbf{Sample median}\\\textbf{train percentile}} & \shortstack{\textbf{Sample $\leq$}\\\textbf{train median}} & \shortstack{\textbf{Sample in train}\\\textbf{0--5\%}} & \shortstack{\textbf{Sample in train}\\\textbf{5--95\%}} & \shortstack{\textbf{Sample $>$}\\\textbf{train 95\%}} \\
 \midrule
-SPO67 / Airy diameter & 57.2 & 43.9 & 86.7 & 11.0 \\
-SPO100 / Airy diameter & 57.9 & 43.5 & 86.6 & 11.1 \\
-EE50 / Airy diameter & 55.7 & 44.7 & 93.6 & 2.9 \\
-EE90 / Airy diameter & 54.5 & 44.6 & 93.5 & 2.9 \\
-Nominal performance & 57.6 & 44.2 & 88.1 & 9.9 \\
+SPO67 / Airy diameter & 57.2 & 43.9 & 2.3 & 86.7 & 11.0 \\
+SPO100 / Airy diameter & 57.9 & 43.5 & 2.3 & 86.6 & 11.1 \\
+EE50 / Airy diameter & 55.7 & 44.7 & 3.5 & 93.6 & 2.9 \\
+EE90 / Airy diameter & 54.5 & 44.6 & 3.7 & 93.5 & 2.9 \\
+Nominal performance & 57.6 & 44.2 & 1.9 & 88.1 & 9.9 \\
 \bottomrule
 \end{tabular}
 \end{table}

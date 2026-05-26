@@ -41,6 +41,8 @@ Feasible yield is the primary optics-facing metric, but it does not by itself sh
 \label{tab:section_6_1_all_sample_diagnostics}
 \begin{tabular}{lrrrrrr}
 \toprule
+\textbf{Metric family} & \textbf{Feasibility} & \multicolumn{4}{c}{\textbf{Distribution matching}} & \shortstack{\textbf{Novelty /}\\\textbf{train proximity}} \\
+\cmidrule(lr){2-2}\cmidrule(lr){3-6}\cmidrule(lr){7-7}
 \textbf{Model} & \shortstack{\textbf{Feasible}\\\textbf{(\%) $\uparrow$}} & \shortstack{\textbf{Surf.}\\\textbf{TVD $\downarrow$}} & \shortstack{\textbf{Numeric}\\\textbf{KS $\downarrow$}} & \shortstack{\textbf{\texttt{isair}}\\\textbf{error $\downarrow$}} & \shortstack{\textbf{Pairwise}\\\textbf{error $\downarrow$}} & \shortstack{\textbf{DCR}\\\textbf{excess $\downarrow$}} \\
 \midrule
 SMOTE-style reference & 98.43 & 0.002 & 0.037 & 0.007 & 0.026 & 0.226 \\
@@ -108,7 +110,7 @@ Patent+synth full & 67.15 & 32.85 & 15.75 & 0.00 & 4.59 & 12.51 \\
 \end{minipage}
 \end{center}
 
-\subsection{Ray-Tracing Based Post-Processing Benefit}
+\subsection{Physics Based Post-Processing Benefit}
 \label{sec:results_raytrace_postproc}
 
 The final ablation evaluates the optional ray-tracing based post-processing layer. The generator, representation, and training data are fixed to TabSyn with the tuned representation on the patent-plus-synthetic 250k training variant. The only intended variable is whether generated prescriptions pass directly to CodeV/LLESP preparation or first pass through NRTE.
@@ -120,7 +122,7 @@ NRTE increases the end-to-end feasible yield from 66.52\% to 77.48\%, a gain of 
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
-\captionof{table}{\textbf{Effect of ray-tracing based post-processing on TabSyn tuned 250k generated samples.} Both branches use the same 10{,}000 generated-row denominator. Success among submitted is computed only over rows that passed preparation and were submitted to CodeV/LLESP.}
+\captionof{table}{\textbf{Effect of physics based post-processing on TabSyn tuned 250k generated samples.} Both branches use the same 10{,}000 generated-row denominator. Success among submitted is computed only over rows that passed preparation and were submitted to CodeV/LLESP.}
 \label{tab:raytrace_postproc_benefit}
 \begin{tabular}{lrrrrr}
 \toprule
