@@ -156,51 +156,33 @@ Provenance and lineage & Source-folder, source-row, parent-patent, perturbation,
 \subsection{Synthetic-Expansion Failure-Mode Breakdown}
 \label{app:section_6_1_failure_breakdown}
 
-The main Section~\ref{sec:results_synthetic_expansion} reports feasible sample fractions for patent-only and patent-plus-synthetic 250k training under the tuned + NRTE pipeline. Figure~\ref{fig:appendix_section_6_1_failure_breakdown} provides the corresponding mutually exclusive outcome breakdown. The outcome categories are computed over the same 10,000 generated rows per model/dataset run. Material-only, material+geometry, geometry-only, and CodeV-error categories are mutually exclusive failure categories; the feasible fraction is the residual set of rows that pass the preparation pipeline and return successfully from CodeV.
-
-\begin{center}
-\centering
-\includegraphics[width=\linewidth]{figures/section_6_1_synthetic_expansion_20260522/section_6_1_appendix_infeasibility_row_venn_by_dataset.pdf}
-\captionof{figure}{\textbf{Failure-mode composition for Section~\ref{sec:results_synthetic_expansion}.} Values are percentages of the 10,000 generated rows for each model/dataset run. Overlapping material and geometry circles show the material-only, material+geometry, and geometry-only failure categories; separate circles show CodeV errors and total failure. Circle areas use the same scale in both dataset panels.}
-\label{fig:appendix_section_6_1_failure_breakdown}
-\end{center}
-
-\subsection{Ray-Tracing Post-Processing Metric Details}
-\label{app:raytrace_metric_delta_details}
-
-Section~\ref{sec:results_raytrace_postproc} reports the controlled no-NRTE versus NRTE ablation using the paired heatmap and aggregate summary table. This appendix provides the distribution-shape diagnostics behind that result. All distributions use the TabSyn tuned patent-plus-synthetic 250k run. The no-NRTE branch has 6{,}652 feasible rows and the NRTE branch has 7{,}748 feasible rows out of the same 10{,}000 generated-row denominator. SPO and encircled-energy metrics are normalized by Airy diameter; nominal performance is left in its returned units.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{figures/section_6_4_nrte_ablation_and_training_quality_250k_20260524/section_6_4_tabsyn_no_nrte_vs_nrte_pdf_overlay_250k.pdf}
-\caption{\textbf{Optical-performance distributions for feasible TabSyn samples with and without NRTE.} Each panel compares no-NRTE and NRTE feasible rows for one metric-field pair. Values are plotted on a $\log_{10}$ scale, and lower values indicate better optical performance.}
-\label{fig:appendix_raytrace_no_nrte_vs_nrte_distributions}
-\end{figure}
-
-Figure~\ref{fig:appendix_raytrace_training_reference_distribution} compares the final NRTE feasible samples with the model training reference. This diagnostic is used only to calibrate whether the final feasible samples occupy the broad training-performance regime; it is not an optimization claim that generated designs outperform the training data.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{figures/section_6_4_nrte_ablation_and_training_quality_250k_20260524/section_6_4_training_reference_vs_tabsyn_nrte_pdf_overlay_250k.pdf}
-\caption{\textbf{Training-reference and final NRTE feasible-sample optical-performance distributions.} The training reference contains the 362{,}114 train+validation rows from the patent-plus-synthetic 250k dataset. The generated distribution contains the 7{,}748 feasible TabSyn + NRTE rows. Values are plotted on a $\log_{10}$ scale, and lower values indicate better optical performance.}
-\label{fig:appendix_raytrace_training_reference_distribution}
-\end{figure}
+The main Section~\ref{sec:results_synthetic_expansion} reports feasible sample fractions for patent-only and patent-plus-synthetic 250k training under the tuned + NRTE pipeline. Table~\ref{tab:appendix_section_6_1_failure_breakdown} provides the corresponding mutually exclusive failure-mode breakdown. The outcome categories are computed over the same 10{,}000 generated rows per model/dataset/seed run and then averaged across the four sampling seeds. Material-only, material+geometry, geometry-only, and CodeV-error categories are mutually exclusive failure categories; the feasible fraction is the residual set of rows that pass the preparation pipeline and return successfully from CodeV.
 
 \begin{table}[htbp]
 \centering
 \scriptsize
-\setlength{\tabcolsep}{3pt}
-\caption{\textbf{Calibration of final NRTE feasible samples against the 250k training-reference performance distribution.} Percentages pool the five evaluated fields for each metric. The training reference is the train+validation split of the patent-plus-synthetic 250k dataset.}
-\label{tab:appendix_raytrace_training_reference_calibration}
-\begin{tabular}{lrrrrr}
+\setlength{\tabcolsep}{4pt}
+\caption{\textbf{Failure-mode composition for Section~\ref{sec:results_synthetic_expansion}.} Values are mean percentages of generated rows across four sampling seeds. The feasible fraction is omitted because it is reported in Table~\ref{tab:section_6_1_synthetic_expansion_summary}.}
+\label{tab:appendix_section_6_1_failure_breakdown}
+\begin{tabular}{llrrrr}
 \toprule
-\textbf{Metric} & \shortstack{\textbf{Sample median}\\\textbf{train percentile}} & \shortstack{\textbf{Sample $\leq$}\\\textbf{train median}} & \shortstack{\textbf{Sample in train}\\\textbf{0--5\%}} & \shortstack{\textbf{Sample in train}\\\textbf{5--95\%}} & \shortstack{\textbf{Sample $>$}\\\textbf{train 95\%}} \\
+\textbf{Model} & \textbf{Training data} & \shortstack{\textbf{Material}\\\textbf{only}} & \shortstack{\textbf{Geometry}\\\textbf{only}} & \shortstack{\textbf{Material}\\\textbf{+ geometry}} & \shortstack{\textbf{CodeV}\\\textbf{error}} \\
 \midrule
-SPO67 / Airy diameter & 57.2 & 43.9 & 2.3 & 86.7 & 11.0 \\
-SPO100 / Airy diameter & 57.9 & 43.5 & 2.3 & 86.6 & 11.1 \\
-EE50 / Airy diameter & 55.7 & 44.7 & 3.5 & 93.6 & 2.9 \\
-EE90 / Airy diameter & 54.5 & 44.6 & 3.7 & 93.5 & 2.9 \\
-Nominal performance & 57.6 & 44.2 & 1.9 & 88.1 & 9.9 \\
+CoDi & Patent only & 0.03 & 0.38 & 10.41 & 82.09 \\
+CoDi & Patent+synth 250k & 1.85 & 0.01 & 1.17 & 40.00 \\
+SMOTE-style reference & Patent only & 0.00 & 0.00 & 0.00 & 13.15 \\
+SMOTE-style reference & Patent+synth 250k & 0.18 & 0.00 & 0.00 & 1.66 \\
+STaSy & Patent only & 2.33 & 0.57 & 28.37 & 68.20 \\
+STaSy & Patent+synth 250k & 5.34 & 0.04 & 11.36 & 21.41 \\
+TabDDPM & Patent only & 16.09 & 1.72 & 55.38 & 26.13 \\
+TabDDPM & Patent+synth 250k & 99.96 & 0.00 & 0.03 & 0.01 \\
+TabSyn & Patent only & 0.97 & 0.04 & 1.62 & 70.80 \\
+TabSyn & Patent+synth 250k & 1.03 & 0.01 & 0.29 & 14.08 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{Ray-Tracing Post-Processing Metric Details}
+\label{app:raytrace_metric_delta_details}
+
+Section~\ref{sec:results_raytrace_postproc} reports the controlled no-NRTE versus NRTE ablation using the seed-averaged paired heatmap and aggregate summary table. All distributions use the TabSyn tuned patent-plus-synthetic 250k run. Across the four sampling seeds, the no-NRTE branch has 6{,}741 \ensuremath{\pm} 58 feasible rows and the NRTE branch has 8{,}461 \ensuremath{\pm} 71 feasible rows out of the same 10{,}000 generated-row denominator. SPO and encircled-energy metrics are normalized by Airy diameter; nominal performance is left in its returned units. The distribution-overlay and training-reference calibration figures from the earlier single-seed diagnostic are intentionally not included here because they have not yet been regenerated for the seed0--seed3 returned-result report.

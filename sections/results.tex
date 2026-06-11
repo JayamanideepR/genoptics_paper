@@ -1,6 +1,12 @@
 \section{Results}
 
-This section evaluates how generated tabular lens rows become usable optical prescriptions. Unless otherwise stated, each result starts from 10,000 generated samples. We report the \emph{simulation-verified feasible sample fraction}: the percentage of generated samples that pass post-processing and CodeV/LLESP preparation and then return from CodeV without an error. This denominator is stricter than a success rate on submitted samples because it also counts samples rejected before simulation. Log-whitened material-parameterization results and CoDi runs are excluded from the main results in this version.
+This section evaluates how generated tabular lens rows become usable optical prescriptions. Unless otherwise stated, each run starts from 10,000 generated samples, and repeated-run values are reported as mean \ensuremath{\pm} sample standard deviation across four sampling seeds. These are sampling seeds from fixed trained-model configurations, not independent retraining seeds. We report the \emph{simulation-verified feasible sample fraction}: the percentage of generated samples that pass post-processing and CodeV/LLESP preparation and then return from CodeV without an error. This denominator is stricter than a success rate on submitted samples because it also counts samples rejected before simulation.
+
+\begin{center}
+    \includegraphics[width=0.98\linewidth]{figures/results_seeded_v3_success_dashboard_20260611.pdf}
+    \captionof{figure}{\textbf{Seed-averaged feasible-yield summary for the main result questions.} Error bars show sample standard deviation across four sampling seeds. Panel A compares patent-only and patent-plus-synthetic 250k training. Panel B compares tuned and untuned 250k representations. Panel C compares TabSyn tuned + NRTE across dataset sizes. Panel D compares TabSyn tuned 250k with and without NRTE.}
+    \label{fig:results_seeded_v3_success_dashboard}
+\end{center}
 
 \subsection{Synthetic-Expanded Training Data Improves Feasible Generation}
 \label{sec:results_synthetic_expansion}
@@ -11,7 +17,7 @@ The first experiment asks whether the synthetic-expanded training set improves u
 \begin{minipage}{0.98\linewidth}
 \centering
 \footnotesize
-\captionof{table}{\textbf{Patent-only versus patent-plus-synthetic 250k feasible generation.} Deltas are absolute percentage-point changes from patent-only to 250k training. The dominant remaining failure mode is computed on the 250k run using mutually exclusive failure categories.}
+\captionof{table}{\textbf{Patent-only versus patent-plus-synthetic 250k feasible generation.} Values are mean \ensuremath{\pm} sample standard deviation across four sampling seeds. Deltas are absolute percentage-point changes from patent-only to 250k training. The dominant remaining failure mode is computed on the 250k runs using mutually exclusive failure categories.}
 \label{tab:section_6_1_synthetic_expansion_summary}
 \begin{tabular}{lrrrl}
 \toprule
@@ -19,16 +25,17 @@ The first experiment asks whether the synthetic-expanded training set improves u
 \cmidrule(lr){2-3}
  & \textbf{Patent only} & \textbf{Patent+synth 250k} & \textbf{(pp)} & \\
 \midrule
-SMOTE-style reference & 81.40 & 98.43 & +17.03 & CodeV error \\
-STaSy & 1.70 & 58.53 & +56.83 & Material only \\
-TabDDPM & 0.00 & 0.00 & +0.00 & Material + geometry \\
-TabSyn & 0.57 & 77.48 & +76.91 & Material only \\
+\textbf{TabSyn} & \textbf{26.57 \ensuremath{\pm} 0.26} & \textbf{84.61 \ensuremath{\pm} 0.71} & \textbf{+58.03 \ensuremath{\pm} 0.94} & \textbf{CodeV error} \\
+CoDi & 7.09 \ensuremath{\pm} 0.16 & 56.96 \ensuremath{\pm} 0.88 & +49.87 \ensuremath{\pm} 0.78 & CodeV error \\
+STaSy & 0.54 \ensuremath{\pm} 0.08 & 61.84 \ensuremath{\pm} 0.52 & +61.30 \ensuremath{\pm} 0.53 & CodeV error \\
+TabDDPM & 0.68 \ensuremath{\pm} 0.06 & 0.01 \ensuremath{\pm} 0.01 & -0.67 \ensuremath{\pm} 0.06 & Material only \\
+SMOTE-style reference & 86.84 \ensuremath{\pm} 0.43 & 98.16 \ensuremath{\pm} 0.20 & +11.31 \ensuremath{\pm} 0.56 & CodeV error \\
 \bottomrule
 \end{tabular}
 \end{minipage}
 \end{center}
 
-Table~\ref{tab:section_6_1_synthetic_expansion_summary} shows the feasible fraction for the four matched model families. The synthetic-expanded 250k dataset substantially increases the end-to-end feasible fraction for the learned tabular generators that can use the added data. TabSyn increases from 0.57\% feasible samples under patent-only training to 77.48\% under patent-plus-synthetic 250k training, and STaSy increases from 1.70\% to 58.53\%. The SMOTE-style reference is already highly feasible on patent-only training, but still increases from 81.40\% to 98.43\%. TabDDPM remains at 0.00\% feasible samples in both settings, showing that the benefit of synthetic-expanded training is not automatic across all tabular generators.
+Table~\ref{tab:section_6_1_synthetic_expansion_summary} shows the feasible fraction for the matched model families. The synthetic-expanded 250k dataset substantially increases the end-to-end feasible fraction for the learned tabular generators that can use the added data. TabSyn increases from 26.57\% feasible samples under patent-only training to 84.61\% under patent-plus-synthetic 250k training, STaSy increases from 0.54\% to 61.84\%, and CoDi increases from 7.09\% to 56.96\%. The SMOTE-style reference is already highly feasible on patent-only training, but still increases from 86.84\% to 98.16\%. TabDDPM remains near zero under patent-plus-synthetic training, showing that the benefit of synthetic-expanded training is not automatic across all tabular generators.
 
 Feasible yield is the primary optics-facing metric, but it does not by itself show whether the generated rows match the model-facing training distribution. Table~\ref{tab:section_6_1_all_sample_diagnostics} therefore combines the 250k feasible fraction with all-row statistical and novelty diagnostics computed directly in the tuned representation before optical reconstruction, NRTE, and CodeV/LLESP filtering. Surface-count total variation distance measures topology-frequency mismatch. Numeric marginal KS, \texttt{isair} marginal error, and pairwise dependency error are computed within active surface-count groups and then aggregated with training-reference row weights. DCR excess measures same-surface-count train proximity after correcting for the train/test support ratio.
 
@@ -37,39 +44,40 @@ Feasible yield is the primary optics-facing metric, but it does not by itself sh
 \centering
 \scriptsize
 \setlength{\tabcolsep}{3pt}
-\captionof{table}{\textbf{All-sample statistical and feasibility diagnostics for patent-plus-synthetic 250k tuned generations.} Feasible fraction is the downstream tuned + NRTE simulation-verified feasible percentage from 10{,}000 generated rows. Distribution metrics are computed on all generated rows in tuned model-facing space using the model training reference (\texttt{train}+\texttt{val}, 362{,}114 rows) and reference-row-weighted aggregation. DCR excess is the observed same-surface-count train-closer fraction minus the expected value from same-surface-count train/test support; lower values indicate less train-proximal generation after correcting for split-size imbalance.}
+\captionof{table}{\textbf{All-sample statistical and feasibility diagnostics for patent-plus-synthetic 250k tuned generations.} Values are mean \ensuremath{\pm} sample standard deviation across four sampling seeds. Feasible fraction is the downstream tuned + NRTE simulation-verified feasible percentage from 10{,}000 generated rows per seed. Distribution metrics are computed on all generated rows in tuned model-facing space using the model training reference (\texttt{train}+\texttt{val}, 362{,}114 rows) and reference-row-weighted aggregation. DCR excess is the observed same-surface-count train-closer fraction minus the expected value from same-surface-count train/test support; lower values indicate less train-proximal generation after correcting for split-size imbalance.}
 \label{tab:section_6_1_all_sample_diagnostics}
 \begin{tabular}{lrrrrrr}
 \toprule
-\textbf{Metric family} & \textbf{Feasibility} & \multicolumn{4}{c}{\textbf{Distribution matching}} & \shortstack{\textbf{Novelty /}\\\textbf{train proximity}} \\
+\textbf{Metric family} & \textbf{Feasibility} & \multicolumn{4}{c}{\textbf{Distribution matching}} & \shortstack{\textbf{Novelty /}} \\
 \cmidrule(lr){2-2}\cmidrule(lr){3-6}\cmidrule(lr){7-7}
 \textbf{Model} & \shortstack{\textbf{Feasible}\\\textbf{(\%) $\uparrow$}} & \shortstack{\textbf{Surf.}\\\textbf{TVD $\downarrow$}} & \shortstack{\textbf{Numeric}\\\textbf{KS $\downarrow$}} & \shortstack{\textbf{\texttt{isair}}\\\textbf{error $\downarrow$}} & \shortstack{\textbf{Pairwise}\\\textbf{error $\downarrow$}} & \shortstack{\textbf{DCR}\\\textbf{excess $\downarrow$}} \\
 \midrule
-SMOTE-style reference & 98.43 & 0.002 & 0.037 & 0.007 & 0.026 & 0.226 \\
-STaSy & 58.53 & 0.207 & 0.136 & 0.073 & 0.096 & 0.170 \\
-TabDDPM & 0.00 & 0.003 & 0.509 & 0.193 & 0.203 & 0.096 \\
-TabSyn & 77.48 & 0.015 & 0.065 & 0.015 & 0.052 & 0.194 \\
+\textbf{TabSyn} & \textbf{84.61 \ensuremath{\pm} 0.71} & \textbf{0.056 \ensuremath{\pm} 0.005} & \textbf{0.169 \ensuremath{\pm} 0.000} & \textbf{0.032 \ensuremath{\pm} 0.002} & \textbf{0.067 \ensuremath{\pm} 0.001} & \textbf{0.180 \ensuremath{\pm} 0.004} \\
+CoDi & 56.96 \ensuremath{\pm} 0.88 & 0.233 \ensuremath{\pm} 0.003 & 0.332 \ensuremath{\pm} 0.000 & 0.127 \ensuremath{\pm} 0.004 & 0.127 \ensuremath{\pm} 0.005 & 0.168 \ensuremath{\pm} 0.004 \\
+STaSy & 61.84 \ensuremath{\pm} 0.52 & 0.408 \ensuremath{\pm} 0.004 & 0.324 \ensuremath{\pm} 0.001 & 0.165 \ensuremath{\pm} 0.005 & 0.128 \ensuremath{\pm} 0.001 & 0.106 \ensuremath{\pm} 0.002 \\
+TabDDPM & 0.01 \ensuremath{\pm} 0.01 & 0.988 \ensuremath{\pm} 0.000 & 0.891 \ensuremath{\pm} 0.013 & 0.249 \ensuremath{\pm} 0.018 & 0.416 \ensuremath{\pm} 0.027 & 0.203 \ensuremath{\pm} 0.000 \\
+SMOTE-style reference & 98.16 \ensuremath{\pm} 0.20 & 0.060 \ensuremath{\pm} 0.002 & 0.150 \ensuremath{\pm} 0.002 & 0.026 \ensuremath{\pm} 0.002 & 0.053 \ensuremath{\pm} 0.001 & 0.226 \ensuremath{\pm} 0.001 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
 \end{center}
 
-SMOTE is included here as an interpolation reference rather than as a learned generative model. Its high feasible fraction and low distribution errors are expected because samples are constructed locally from existing prescriptions, and its DCR excess is the largest, consistent with strong train proximity. Among the learned generators, TabSyn gives the best operating point: it is close to the interpolation reference on surface-count, numeric marginal, \texttt{isair}, and pairwise diagnostics while also producing 77.48\% feasible samples. STaSy produces a sizable feasible set but has larger surface-count and active-parameter mismatch. TabDDPM shows why matching topology frequency alone is insufficient: its surface-count TVD is low, but its active numeric, \texttt{isair}, and pairwise errors are large and its feasible fraction is 0.00\%. Its lower DCR excess should not be interpreted as a stronger novelty result because only 4{,}216 of 10{,}000 generated rows had complete active variables for the same-surface-count DCR calculation.
+SMOTE is included here as an interpolation reference rather than as a learned generative model. Its high feasible fraction and low distribution errors are expected because samples are constructed locally from existing prescriptions, and its DCR excess is the largest, consistent with strong train proximity. Among the learned generators, TabSyn gives the best operating point: it has the highest feasible fraction and the lowest surface-count, numeric, \texttt{isair}, and pairwise errors among the learned models. STaSy produces a sizable feasible set but has larger surface-count and active-parameter mismatch. CoDi is now included in the benchmark and produces many feasible rows, but its distribution diagnostics are weaker than TabSyn's under this setup. TabDDPM shows why benchmark adaptation matters: its active numeric, \texttt{isair}, and pairwise errors are large and its feasible fraction remains near zero.
 
-Together, Tables~\ref{tab:section_6_1_synthetic_expansion_summary} and~\ref{tab:section_6_1_all_sample_diagnostics} support two conclusions. First, the synthetic-expanded dataset is useful because the patent-only set is too small for several learned generators to produce simulation-ready prescriptions at meaningful rates, while the 250k setting gives TabSyn and STaSy sizable feasible sets. Second, feasibility must still be measured after the optical reconstruction and simulation-readiness pipeline. A generator can produce rows that look tabularly plausible while still failing material reconstruction, geometric consistency checks, or CodeV execution. The mutually exclusive failure-mode breakdown in Appendix~\ref{app:section_6_1_failure_breakdown} shows that the 250k runs reduce the large material-plus-geometry failure mass seen in the patent-only learned-model runs, but the remaining failure modes differ by generator: material-only failures dominate for STaSy and TabSyn, CodeV errors dominate the small residual failure rate for SMOTE, and TabDDPM remains dominated by coupled material and geometry failures.
+Together, Tables~\ref{tab:section_6_1_synthetic_expansion_summary} and~\ref{tab:section_6_1_all_sample_diagnostics} support two conclusions. First, synthetic-expanded training strongly improves feasible generation for TabSyn, STaSy, and CoDi, while TabDDPM remains a failure case under the same benchmark pipeline. Second, feasibility must still be measured after optical reconstruction and simulation-readiness checks. A generator can produce rows that look tabularly plausible while still failing material reconstruction, geometric consistency checks, or CodeV execution. The mutually exclusive failure-mode breakdown in Appendix~\ref{app:section_6_1_failure_breakdown} shows that the 250k runs reduce the large failure mass seen in patent-only learned-model runs, but the remaining failures are now dominated primarily by CodeV errors for the successful 250k branches.
 
 \subsection{Effect Of Tuned Optical Representation}
 
 The second experiment isolates the effect of the model-facing representation. The dataset is fixed to patent-plus-synthetic 250k, NRTE post-processing is enabled, and the comparison is restricted to model families with matched tuned and untuned returned runs. This keeps the intended variable as the optical representation rather than dataset size or post-processing.
 
-Table~\ref{tab:tuned_untuned_results} shows that the tuned representation has little effect on the SMOTE-style reference but a large effect on TabSyn. For SMOTE, both representations submit nearly all generated rows to CodeV/LLESP and return nearly all submitted rows successfully, giving only a 0.36 percentage-point feasible-yield change. For TabSyn, the tuned and untuned branches submit nearly the same fraction of rows, 85.77\% versus 86.06\%, but their CodeV success rates among submitted rows differ sharply: 90.33\% for tuned versus 59.12\% for untuned. The resulting simulation-verified feasible fraction increases from 50.88\% to 77.48\%, a 26.60 percentage-point gain. This indicates that the tuned representation primarily improves the quality of reconstructed optical prescriptions that reach simulation, not merely the number of rows that pass the pre-CodeV gate.
+Table~\ref{tab:tuned_untuned_results} shows that the tuned representation has little effect on the SMOTE-style reference but a large effect on TabSyn. For SMOTE, both representations submit nearly all generated rows to CodeV/LLESP and return nearly all submitted rows successfully, giving no meaningful feasible-yield change. For TabSyn, the tuned branch improves both CodeV-input acceptance and success among submitted rows: acceptance rises from 84.66\% to 98.69\%, and success among submitted rows rises from 55.92\% to 85.73\%. The resulting simulation-verified feasible fraction increases from 47.34\% to 84.61\%, a 37.27 percentage-point gain. This indicates that the tuned representation improves both pre-simulation prescription validity and downstream CodeV robustness.
 
 \begin{center}
 \begin{minipage}{0.98\linewidth}
 \centering
 \scriptsize
 \setlength{\tabcolsep}{3pt}
-\captionof{table}{\textbf{Tuned versus untuned representation comparison on patent-plus-synthetic 250k runs.} All entries use NRTE post-processing and the same 10,000-sample denominator. Deltas are tuned minus untuned in percentage points.}
+\captionof{table}{\textbf{Tuned versus untuned representation comparison on patent-plus-synthetic 250k runs.} Values are mean \ensuremath{\pm} sample standard deviation across four sampling seeds. All entries use NRTE post-processing and the same 10{,}000-sample denominator per seed. Deltas are tuned minus untuned in percentage points.}
 \label{tab:tuned_untuned_results}
 \begin{tabular}{lrrrrrrr}
 \toprule
@@ -77,8 +85,8 @@ Table~\ref{tab:tuned_untuned_results} shows that the tuned representation has li
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
  & \textbf{Tuned} & \textbf{Untuned} & \textbf{Tuned} & \textbf{Untuned} & \textbf{Tuned} & \textbf{Untuned} & \textbf{(pp)} \\
 \midrule
-SMOTE-style reference & 99.76 & 99.82 & 98.67 & 98.25 & 98.43 & 98.07 & +0.36 \\
-TabSyn & 85.77 & 86.06 & 90.33 & 59.12 & 77.48 & 50.88 & +26.60 \\
+SMOTE-style reference & 99.82 \ensuremath{\pm} 0.05 & 99.78 \ensuremath{\pm} 0.02 & 98.34 \ensuremath{\pm} 0.17 & 98.41 \ensuremath{\pm} 0.14 & 98.16 \ensuremath{\pm} 0.20 & 98.20 \ensuremath{\pm} 0.16 & -0.04 \ensuremath{\pm} 0.13 \\
+TabSyn & 98.69 \ensuremath{\pm} 0.07 & 84.66 \ensuremath{\pm} 0.31 & 85.73 \ensuremath{\pm} 0.69 & 55.92 \ensuremath{\pm} 0.59 & 84.61 \ensuremath{\pm} 0.71 & 47.34 \ensuremath{\pm} 0.55 & +37.27 \ensuremath{\pm} 0.73 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
@@ -88,23 +96,23 @@ TabSyn & 85.77 & 86.06 & 90.33 & 59.12 & 77.48 & 50.88 & +26.60 \\
 
 To isolate dataset scale from the representation ablation, Table~\ref{tab:dataset_scale_results} fixes the generator to TabSyn, the parameterization to the tuned representation, and the post-processing branch to NRTE. Since the paper-level question is how dataset scale changes the final usable sample population, the table reports the end-to-end feasible yield and a mutually exclusive breakdown of infeasible rows rather than intermediate pipeline gates.
 
-The patent-only row is retained only as the low-data anchor. The main dataset effect is the transition from patent-only to patent-plus-synthetic training, where the feasible yield rises from 0.57\% to 77.48\%. Beyond 250k synthetic-expanded training rows, however, this fixed TabSyn configuration does not improve monotonically: the 500k run is comparable to 250k, while the full-dataset run falls to 67.15\%. The full-dataset run has higher material-only, material-plus-geometry, and CodeV-error fractions than the 250k run, so the drop is visible directly in the final infeasibility composition. Thus, the million-scale dataset is best interpreted as a released scaling endpoint and resource for higher-capacity or retuned models, not as a guarantee that the same off-the-shelf TabSyn configuration will be optimal at the largest scale.
+The patent-only row is retained only as the low-data anchor. The main dataset effect is the transition from patent-only to patent-plus-synthetic training, where the feasible yield rises from 26.57\% to 84.61\%. Beyond 250k synthetic-expanded training rows, this fixed TabSyn configuration does not improve monotonically: the 500k and full-dataset runs remain high, but are slightly below the 250k run. The additional infeasibility in the larger variants is primarily CodeV error rather than material or geometry rejection. Thus, the million-scale dataset is best interpreted as a released scaling endpoint and resource for higher-capacity or retuned models, not as a guarantee that the same off-the-shelf TabSyn configuration will be optimal at the largest scale.
 
 \begin{center}
 \begin{minipage}{0.98\linewidth}
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4.5pt}
-\captionof{table}{Dataset-scale comparison for TabSyn with tuned representation and NRTE post-processing. Percentages are computed over 10{,}000 generated rows. Infeasibility categories are mutually exclusive and sum to the any-infeasible column.}
+\captionof{table}{Dataset-scale comparison for TabSyn with tuned representation and NRTE post-processing. Values are mean \ensuremath{\pm} sample standard deviation across four sampling seeds. Percentages are computed over 10{,}000 generated rows per seed. Infeasibility categories are mutually exclusive and sum to the any-infeasible column.}
 \label{tab:dataset_scale_results}
 \begin{tabular}{lrrrrrr}
 \toprule
 \textbf{Training data} & \shortstack{\textbf{Feasible}\\\textbf{yield $\uparrow$}} & \shortstack{\textbf{Any}\\\textbf{infeasible $\downarrow$}} & \shortstack{\textbf{Material}\\\textbf{only $\downarrow$}} & \shortstack{\textbf{Geometry}\\\textbf{only $\downarrow$}} & \shortstack{\textbf{Material}\\\textbf{+ geom. $\downarrow$}} & \shortstack{\textbf{CodeV}\\\textbf{error $\downarrow$}} \\
 \midrule
-Patent only & 0.57 & 99.43 & 35.00 & 0.01 & 59.72 & 4.70 \\
-Patent+synth 250k & 77.48 & 22.52 & 11.75 & 0.00 & 2.48 & 8.29 \\
-Patent+synth 500k & 75.97 & 24.03 & 11.22 & 0.00 & 2.76 & 10.05 \\
-Patent+synth full & 67.15 & 32.85 & 15.75 & 0.00 & 4.59 & 12.51 \\
+Patent only & 26.57 \ensuremath{\pm} 0.26 & 73.43 \ensuremath{\pm} 0.26 & 0.96 \ensuremath{\pm} 0.04 & 0.04 \ensuremath{\pm} 0.02 & 1.62 \ensuremath{\pm} 0.08 & 70.80 \ensuremath{\pm} 0.29 \\
+Patent+synth 250k & 84.61 \ensuremath{\pm} 0.71 & 15.39 \ensuremath{\pm} 0.71 & 1.02 \ensuremath{\pm} 0.07 & 0.01 \ensuremath{\pm} 0.01 & 0.29 \ensuremath{\pm} 0.03 & 14.08 \ensuremath{\pm} 0.67 \\
+Patent+synth 500k & 82.29 \ensuremath{\pm} 0.23 & 17.71 \ensuremath{\pm} 0.23 & 1.04 \ensuremath{\pm} 0.09 & 0.00 \ensuremath{\pm} 0.00 & 0.27 \ensuremath{\pm} 0.06 & 16.39 \ensuremath{\pm} 0.25 \\
+Patent+synth full & 81.24 \ensuremath{\pm} 0.37 & 18.76 \ensuremath{\pm} 0.37 & 0.95 \ensuremath{\pm} 0.09 & 0.01 \ensuremath{\pm} 0.01 & 0.32 \ensuremath{\pm} 0.05 & 17.48 \ensuremath{\pm} 0.31 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
@@ -115,52 +123,52 @@ Patent+synth full & 67.15 & 32.85 & 15.75 & 0.00 & 4.59 & 12.51 \\
 
 The final ablation evaluates the optional ray-tracing based post-processing layer. The generator, representation, and training data are fixed to TabSyn with the tuned representation on the patent-plus-synthetic 250k training variant. The only intended variable is whether generated prescriptions pass directly to CodeV/LLESP preparation or first pass through NRTE.
 
-NRTE increases the end-to-end feasible yield from 66.52\% to 77.48\%, a gain of 10.96 percentage points under the same 10{,}000-sample denominator (Table~\ref{tab:raytrace_postproc_benefit}). The success rate among rows submitted to CodeV/LLESP is nearly unchanged, so the gain comes primarily from moving more generated prescriptions into the simulation-ready set rather than from changing the downstream solver success rate.
+NRTE increases the end-to-end feasible yield from 67.41\% to 84.61\%, a gain of 17.20 percentage points under the same 10{,}000-sample denominator (Table~\ref{tab:raytrace_postproc_benefit}). The success rate among rows submitted to CodeV/LLESP is nearly unchanged, so the gain comes primarily from moving more generated prescriptions into the simulation-ready set rather than from changing the downstream solver success rate.
 
 \begin{center}
 \begin{minipage}{0.98\linewidth}
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
-\captionof{table}{\textbf{Effect of physics based post-processing on TabSyn tuned 250k generated samples.} Both branches use the same 10{,}000 generated-row denominator. Success among submitted is computed only over rows that passed preparation and were submitted to CodeV/LLESP.}
+\captionof{table}{\textbf{Effect of physics based post-processing on TabSyn tuned 250k generated samples.} Values are mean \ensuremath{\pm} sample standard deviation across four sampling seeds. Both branches use the same 10{,}000 generated-row denominator per seed. Success among submitted is computed only over rows that passed preparation and were submitted to CodeV/LLESP.}
 \label{tab:raytrace_postproc_benefit}
 \begin{tabular}{lrrrrr}
 \toprule
 \textbf{Condition} & \textbf{Generated rows} & \textbf{Submitted} & \textbf{Successful} & \textbf{Feasible $\uparrow$ (\%)} & \textbf{Success among submitted $\uparrow$ (\%)} \\
 \midrule
-No NRTE & 10{,}000 & 7{,}366 & 6{,}652 & 66.52 & 90.31 \\
-NRTE & 10{,}000 & 8{,}577 & 7{,}748 & 77.48 & 90.33 \\
+No NRTE & 10{,}000 & 7{,}934 \ensuremath{\pm} 43 & 6{,}741 \ensuremath{\pm} 58 & 67.41 \ensuremath{\pm} 0.58 & 84.96 \ensuremath{\pm} 0.45 \\
+NRTE & 10{,}000 & 9{,}868 \ensuremath{\pm} 7 & 8{,}461 \ensuremath{\pm} 71 & 84.61 \ensuremath{\pm} 0.71 & 85.73 \ensuremath{\pm} 0.69 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
 \end{center}
 
-Feasibility alone does not show whether the correction damages optical quality. Figure~\ref{fig:results_nrte_metric_reduction_heatmap_250k} therefore compares paired optical metrics on common rows that were submitted in both branches and returned successfully in both CodeV runs. Each cell reports the median paired percent reduction after NRTE for a metric-field combination. Positive values indicate lower metric values after NRTE. Spot-size and encircled-energy metrics are normalized by the corresponding Airy diameter before comparison, while the nominal performance metric is left in its returned units. This paired comparison is a within-sample post-processing diagnostic rather than a ranking of unrelated generated designs.
+Feasibility alone does not show whether the correction damages optical quality. Figure~\ref{fig:results_nrte_metric_reduction_heatmap_250k} therefore compares paired optical metrics on common rows that were submitted in both branches and returned successfully in both CodeV runs. Each cell reports the per-seed median paired percent reduction after NRTE, averaged across the four sampling seeds, for a metric-field combination. Positive values indicate lower metric values after NRTE. Spot-size and encircled-energy metrics are normalized by the corresponding Airy diameter before comparison, while the nominal performance metric is left in its returned units. This paired comparison is a within-sample post-processing diagnostic rather than a ranking of unrelated generated designs.
 
 \begin{center}
-    \includegraphics[width=0.94\linewidth]{figures/section_6_4_nrte_ablation_and_training_quality_250k_20260524/section_6_4_nrte_paired_metric_reduction_heatmap_250k.pdf}
-    \captionof{figure}{\textbf{Field-resolved paired optical-metric reductions after NRTE for TabSyn tuned 250k generations.} Each cell reports the median value of $100 \times (\mathrm{no\ NRTE} - \mathrm{NRTE})/\mathrm{no\ NRTE}$ over valid paired observations for the corresponding metric and field. Positive values indicate lower metric values after NRTE. SPO67, SPO100, EE50, and EE90 are normalized by the Airy diameter; nominal performance is not Airy-normalized.}
+    \includegraphics[width=0.94\linewidth]{figures/section_6_4_nrte_ablation_and_training_quality_250k_20260611/section_6_4_nrte_paired_metric_reduction_heatmap_250k_seeded.pdf}
+    \captionof{figure}{\textbf{Field-resolved paired optical-metric reductions after NRTE for TabSyn tuned 250k generations.} Each cell reports the per-seed median value of $100 \times (\mathrm{no\ NRTE} - \mathrm{NRTE})/\mathrm{no\ NRTE}$, averaged across four sampling seeds, over valid paired observations for the corresponding metric and field. Positive values indicate lower metric values after NRTE. SPO67, SPO100, EE50, and EE90 are normalized by the Airy diameter; nominal performance is not Airy-normalized.}
     \label{fig:results_nrte_metric_reduction_heatmap_250k}
 \end{center}
 
-Table~\ref{tab:raytrace_postproc_quality_250k} reports the corresponding median values and paired improvement fractions. NRTE reduces the median normalized SPO67 from 168.24 to 22.95, normalized SPO100 from 285.18 to 57.59, and nominal performance from 11.76 to 2.73. The median reductions for EE50 and EE90 are smaller but remain positive, and 73.2--75.9\% of valid field-metric observations improve. Appendix~\ref{app:raytrace_metric_delta_details} provides the full distribution-shape diagnostics and compares the final NRTE feasible samples with the 250k training-reference performance distribution.
+Table~\ref{tab:raytrace_postproc_quality_250k} reports the corresponding median values and paired improvement fractions. Across the four sampling seeds, NRTE reduces the median normalized SPO67 from 192.59 to 24.12, normalized SPO100 from 326.17 to 61.65, and nominal performance from 11.13 to 2.73. The median reductions for EE50 and EE90 are smaller but remain positive, and 73.2--75.7\% of valid field-metric observations improve. Appendix~\ref{app:raytrace_metric_delta_details} records the source and scope of the seed-averaged NRTE metric update.
 
 \begin{center}
 \begin{minipage}{0.98\linewidth}
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
-\captionof{table}{\textbf{Paired optical-quality summary for TabSyn tuned 250k samples with and without NRTE.} $N$ is the number of valid paired field-metric observations after requiring common rows, successful CodeV/LLESP returns in both branches, and positive finite metric values. Percent reduction is $100 \times (\mathrm{no\ NRTE} - \mathrm{NRTE})/\mathrm{no\ NRTE}$ computed per paired observation and then summarized by the median.}
+\captionof{table}{\textbf{Paired optical-quality summary for TabSyn tuned 250k samples with and without NRTE.} Values are mean \ensuremath{\pm} sample standard deviation across four sampling seeds. $N$ is the number of valid paired field-metric observations after requiring common rows, successful CodeV/LLESP returns in both branches, and positive finite metric values. Percent reduction is $100 \times (\mathrm{no\ NRTE} - \mathrm{NRTE})/\mathrm{no\ NRTE}$ computed per paired observation and then summarized by the median.}
 \label{tab:raytrace_postproc_quality_250k}
 \begin{tabular}{lrrrrr}
 \toprule
 \textbf{Metric} & \textbf{$N$} & \textbf{Median no NRTE} & \textbf{Median NRTE} & \textbf{Median reduction $\uparrow$ (\%)} & \textbf{Improved rows $\uparrow$ (\%)} \\
 \midrule
-SPO67 / Airy diameter & 30{,}415 & 168.24 & 22.95 & 81.1 & 89.7 \\
-SPO100 / Airy diameter & 30{,}415 & 285.18 & 57.59 & 71.8 & 85.5 \\
-EE50 / Airy diameter & 30{,}412 & 15.64 & 11.50 & 31.0 & 75.9 \\
-EE90 / Airy diameter & 30{,}408 & 22.37 & 20.08 & 23.8 & 73.2 \\
-Nominal performance & 31{,}776 & 11.76 & 2.73 & 70.9 & 81.6 \\
+SPO67 / Airy diameter & 29{,}540 \ensuremath{\pm} 283 & 192.59 \ensuremath{\pm} 4.24 & 24.12 \ensuremath{\pm} 1.40 & 82.3 \ensuremath{\pm} 0.4 & 90.2 \ensuremath{\pm} 0.3 \\
+SPO100 / Airy diameter & 29{,}540 \ensuremath{\pm} 283 & 326.17 \ensuremath{\pm} 11.59 & 61.65 \ensuremath{\pm} 4.04 & 73.4 \ensuremath{\pm} 0.5 & 86.1 \ensuremath{\pm} 0.3 \\
+EE50 / Airy diameter & 29{,}539 \ensuremath{\pm} 283 & 15.87 \ensuremath{\pm} 0.10 & 11.19 \ensuremath{\pm} 0.32 & 34.0 \ensuremath{\pm} 0.5 & 75.7 \ensuremath{\pm} 0.3 \\
+EE90 / Airy diameter & 29{,}532 \ensuremath{\pm} 284 & 22.80 \ensuremath{\pm} 0.12 & 19.79 \ensuremath{\pm} 0.22 & 27.0 \ensuremath{\pm} 0.3 & 73.2 \ensuremath{\pm} 0.2 \\
+Nominal performance & 31{,}370 \ensuremath{\pm} 323 & 11.13 \ensuremath{\pm} 0.47 & 2.73 \ensuremath{\pm} 0.12 & 71.8 \ensuremath{\pm} 0.4 & 81.3 \ensuremath{\pm} 0.1 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
