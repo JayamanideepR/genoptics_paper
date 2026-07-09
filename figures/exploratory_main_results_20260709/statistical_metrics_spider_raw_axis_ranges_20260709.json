@@ -1,0 +1,38 @@
+[
+  {
+    "column": "surfcount_tvd_mean",
+    "label": "Surface-count\nTVD",
+    "short": "Surfcount TVD",
+    "direction": "lower",
+    "best": 0.0,
+    "worst": 0.15,
+    "tick_format": "{:.2f}"
+  },
+  {
+    "column": "conditional_marginal_discrepancy_reference_weighted_mean",
+    "label": "Marginal\ndiscrepancy",
+    "short": "Marginal discrepancy",
+    "direction": "lower",
+    "best": 0.0,
+    "worst": 0.2,
+    "tick_format": "{:.2f}"
+  },
+  {
+    "column": "generated_output_nn_distance_median_mean",
+    "label": "Local\ndiversity",
+    "short": "Local diversity",
+    "direction": "higher",
+    "best": 4.0,
+    "worst": 1.0,
+    "tick_format": "{:.1f}"
+  },
+  {
+    "column": "dcr_train_closer_excess_mean",
+    "label": "DCR\nexcess",
+    "short": "DCR excess",
+    "direction": "lower",
+    "best": 0.0,
+    "worst": 0.1,
+    "tick_format": "{:.3f}"
+  }
+]

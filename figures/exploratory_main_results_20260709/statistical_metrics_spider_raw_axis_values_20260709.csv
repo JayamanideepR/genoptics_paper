@@ -1,0 +1,17 @@
+model,model_label,metric,raw_value,radial_position,axis_best_outer,axis_worst_inner,direction
+codi,CoDi,Surfcount TVD,0.1381394485844305,0.07907034277046329,0.0,0.15,lower
+codi,CoDi,Marginal discrepancy,0.2010986456308565,0.0,0.0,0.2,lower
+codi,CoDi,Local diversity,3.522101983916376,0.8407006613054587,4.0,1.0,higher
+codi,CoDi,DCR excess,0.0511613663302599,0.488386336697401,0.0,0.1,lower
+smote,SMOTE,Surfcount TVD,0.0233228684332799,0.8445142104448006,0.0,0.15,lower
+smote,SMOTE,Marginal discrepancy,0.0373819257109568,0.813090371445216,0.0,0.2,lower
+smote,SMOTE,Local diversity,1.0804357561233693,0.02681191870778976,4.0,1.0,higher
+smote,SMOTE,DCR excess,0.0979876860483034,0.02012313951696612,0.0,0.1,lower
+stasy,STaSY,Surfcount TVD,0.1460877303093349,0.026081797937767364,0.0,0.15,lower
+stasy,STaSY,Marginal discrepancy,0.1343982472102832,0.328008763948584,0.0,0.2,lower
+stasy,STaSY,Local diversity,3.940675329105336,0.9802251097017787,4.0,1.0,higher
+stasy,STaSY,DCR excess,0.0505218804463499,0.494781195536501,0.0,0.1,lower
+tabsyn_lr3e4,TabSyn,Surfcount TVD,0.0275234973231487,0.8165100178456753,0.0,0.15,lower
+tabsyn_lr3e4,TabSyn,Marginal discrepancy,0.070871900826368,0.64564049586816,0.0,0.2,lower
+tabsyn_lr3e4,TabSyn,Local diversity,3.40275969866471,0.8009198995549034,4.0,1.0,higher
+tabsyn_lr3e4,TabSyn,DCR excess,0.0517826947461044,0.48217305253895604,0.0,0.1,lower

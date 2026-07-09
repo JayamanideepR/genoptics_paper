@@ -47,7 +47,7 @@ The common representation layer also preserves row identity and split informatio
 
 \subsection{Model-Specific Formatting and Normalization}
 
-The common representation layer stops before model-specific numerical formatting. This is important for fair benchmarking: TabSyn, TabDDPM, STaSy, CoDi, and other baselines can use the normalization, imputation, and mixed-type encodings required by their own training code, while starting from the same untuned or tuned optical representation. For example, quantile normalization is not part of the common representation definition; it is applied only when required by a particular benchmark implementation. This separation prevents model-specific preprocessing from being mistaken for an optical representation change.
+The common representation layer stops before model-specific numerical formatting. This is important for fair benchmarking: TabSyn, STaSY, CoDi, and other baselines can use the normalization, imputation, and mixed-type encodings required by their own training code, while starting from the same untuned or tuned optical representation. For example, quantile normalization is not part of the common representation definition; it is applied only when required by a particular benchmark implementation. This separation prevents model-specific preprocessing from being mistaken for an optical representation change.
 
 \subsection{Generated-Sample Inverse Processing}
 

@@ -1,10 +1,11 @@
 \section{Benchmark Models And Evaluation Framework}
+\label{sec:benchmark_models_evaluation}
 
 This section defines the benchmark protocol used to evaluate whether optical prescription data can be modeled by modern generative methods and whether optics-aware processing improves generated design quality. We evaluate unconditional generation because it isolates distribution learning: the model must generate plausible lens prescriptions and design specifications without being given a target condition at sampling time.
 
 \subsection{Benchmark Models}\label{subsec:off_shelf_uncond_gen}
 
-The benchmark suite uses mixed-type tabular generative models as the primary unconditional baselines, including TabDDPM, STaSy, CoDi, and TabSyn \cite{Kotelnikov2023TabDDPM,Kim2023STaSy,Lee2023CoDi,Zhang2024TabSyn}. These methods are appropriate baselines because the model-facing lens representations are stored as mixed numerical and categorical tables. At the same time, they do not natively encode optical surface ordering, variable surface count, aperture-stop structure, or ray-trace validity constraints. This makes them useful for testing how much benefit comes from the proposed data representation and post-processing pipeline.
+The benchmark suite uses mixed-type tabular generative models as the primary unconditional baselines, including STaSY, CoDi, and TabSyn \cite{Kim2023STaSy,Lee2023CoDi,Zhang2024TabSyn}. These methods are appropriate baselines because the model-facing lens representations are stored as mixed numerical and categorical tables. At the same time, they do not natively encode optical surface ordering, variable surface count, aperture-stop structure, or ray-trace validity constraints. This makes them useful for testing how much benefit comes from the proposed data representation and post-processing pipeline.
 
 For each model family, experiments are organized across the dataset variants in Table~\ref{tab:dataset_variants_splits} and across the untuned and tuned model-facing representations. Model-specific processors are allowed to perform required formatting, imputation, and normalization, but these steps are recorded separately from the common representation layer. This separation is important because the common data representation is intended to define the optical variables, while model-specific processors define the input format required by a particular generative model implementation.
 
@@ -18,9 +19,9 @@ For each model family, experiments are organized across the dataset variants in 
 \textbf{Variant} & \textbf{Training rows} & \textbf{Held-out test rows} & \textbf{Total rows} \\
 \midrule
 Patent-only & 1,128 & 125 & 1,253 \\
-Patent+synth-250k & 362,114 & 112,642 & 474,756 \\
-Patent+synth-500k & 612,114 & 112,642 & 724,756 \\
-Patent+synth-full & 1,013,691 & 112,642 & 1,126,333 \\
+Patent+Synth-250k & 362,114 & 112,642 & 474,756 \\
+Patent+Synth-500k & 612,114 & 112,642 & 724,756 \\
+Patent+Synth-full & 1,013,691 & 112,642 & 1,126,333 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -34,8 +35,7 @@ Patent+synth-full & 1,013,691 & 112,642 & 1,126,333 \\
 % \toprule
 % \textbf{Model} & \textbf{Representation(s)} & \textbf{Dataset variant(s)} & \textbf{Role} \\
 % \midrule
-% TabSyn & Tuned, untuned & Patent-only, 250k, 500k, full & Main latent-diffusion tabular baseline \\
-% TabDDPM & Tuned, untuned & Planned benchmark variants & Diffusion tabular baseline \\
+% TabSyn & Tuned, untuned & Patent-only, Patent+Synth-250k, Patent+Synth-500k, Patent+Synth-full & Main latent-diffusion tabular baseline \\
 % STaSy & Tuned, untuned & Planned benchmark variants & Score-based tabular baseline \\
 % CoDi & Tuned, untuned & Planned benchmark variants & Mixed-type contrastive diffusion baseline \\
 % SMOTE-style interpolation & Tuned or untuned reference & Selected variants & Non-neural diversity/memorization reference \\
@@ -70,7 +70,7 @@ Duplicate and leakage checks & Exact or rounded duplicate rates, generated rows 
 Prescription validity & Active-surface masks, material no-match rate, geometric intersections, semi-diameter sanity, and LLESP-readiness & Post-processing / pre-CodeV & Fraction of generated prescriptions usable before simulation \\
 CodeV/LLESP outcomes & Submitted rows, returned rows, \texttt{!error} rate, and simulation success/failure categories & CodeV-dependent & Simulation robustness of generated prescriptions \\
 Optical performance & SPO67, SPO100, EE50, EE90, and axial nominal performance across evaluated fields & CodeV-dependent & Optical quality after simulation \\
-Ray-tracing correction benefit & Paired NRTE/no-NRTE feasible fraction and optical-performance changes & CodeV-dependent paired ablation & Effect of physics-based post-processing \\
+Ray-tracing correction benefit & Paired feasible-fraction and optical-performance changes with and without physics-based post-processing & CodeV-dependent paired ablation & Effect of physics-based post-processing \\
 \bottomrule
 \end{tabular}
 \end{table}
