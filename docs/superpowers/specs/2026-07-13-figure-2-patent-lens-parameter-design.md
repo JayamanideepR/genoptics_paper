@@ -111,7 +111,7 @@ No fallback row or approximate hand-drawn geometry is permitted.
 
 Implementation is accepted only after all of the following checks pass:
 
-1. Run the generator in the existing `optics_ar_gen` environment without installing or updating dependencies.
+1. Run the generator with `/home/manideep/miniforge3/envs/rayoptics/bin/python`, as required by the optics repository, without installing or updating dependencies.
 2. Confirm the manifest identifies `patent_000972`, `patent_reference_00973.seq`, 9 surfaces, 4 elements, `i=0`, and `j=7`.
 3. Regenerate twice and verify that the visual file hashes are identical after excluding timestamp-only manifest content.
 4. Render the generated PDF and SVG to PNG and visually inspect all three outputs for clipping, overlaps, broken glyphs, weak contrast, or unreadable callouts.
