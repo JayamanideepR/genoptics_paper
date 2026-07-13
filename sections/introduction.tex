@@ -13,4 +13,13 @@ These prior efforts suggest that generative modeling has the potential to suppor
 
 Building on these observations, this work makes four contributions toward generative optical lens design. First, we compile a large-scale dataset of patented and synthetically expanded optical systems with associated performance metrics. Second, we introduce a parametric representation of lens assemblies designed to improve generative modeling over direct raw prescription tables. Third, we benchmark off-the-shelf unconditional generative models for lens prescription generation. Fourth, we incorporate a ray-tracing-based post-processing pipeline for improving the physical feasibility, simulation readiness, and optical performance of generated samples.
 
+Figure~\ref{fig:lensgen_overview} summarizes how these contributions connect traceable optical data, model-facing representations, physics-based prescription recovery, and simulation-verified evaluation.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/main_publication_figure_dense_v2_20260710.pdf}
+    \caption{\textbf{LensGen framework overview.} The framework combines (A) traceable patent-derived and synthetically expanded optical data, (B) an optics-aware representation for variable-topology prescriptions, (C) physics-based recovery of generated prescriptions, and (D) simulation-verified benchmarking of generated lens assemblies.}
+    \label{fig:lensgen_overview}
+\end{figure}
+
 The remainder of this paper is organized as follows. We first review related work in optical design automation and generative modeling for engineering design. We then describe the patent-derived and synthetic lens datasets, followed by the proposed representation and post-processing pipeline. Next, we present the benchmark models, evaluation framework, and experimental results. We conclude with discussion of limitations and directions for future work.

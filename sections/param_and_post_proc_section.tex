@@ -4,8 +4,8 @@ Figure~\ref{fig:model_training_pipeline} summarizes the processing path used to 
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.85\linewidth]{figures/gen_model_training_pipeline.png}
-    \caption{\textbf{Model-facing data and post-processing pipeline.} Canonical patent-derived and synthetic prescriptions are converted into untuned and tuned model-facing representations, processed by model-specific training code, inverted after generation, optionally corrected using ray tracing, and prepared for CodeV/LLESP evaluation.}
+    \includegraphics[width=\linewidth]{figures/model_processing_pipeline_tikz.pdf}
+    \caption{\textbf{Model-facing data and post-processing pipeline.} Canonical prescriptions pass through train/test splitting, representation-specific preprocessing, and model-specific formatting before model training and sampling. Generated rows are inverted to canonical prescriptions, corrected by physics-based post-processing, and evaluated in CodeV. Colors distinguish data artifacts, deterministic transformations, learned operations, and physics/CodeV stages.}
     \label{fig:model_training_pipeline}
 \end{figure}
 
@@ -37,7 +37,7 @@ Generated-sample inverse & Reapplies export defaults and structural masks to phy
 }
 \end{table}
 
-For both representations, the material labels used for CodeV/LLESP export are reconstructed after generation from the generated material variables. If a surface is marked as air, the air indicator takes priority over generated $N_d$ and $V_d$ values. Otherwise, generated material properties are projected to the nearest available catalog material. This keeps material generation continuous during modeling while returning to discrete material labels for optical simulation.
+For both representations, the material labels used for CodeV export are reconstructed after generation from the generated material variables. If a surface is marked as air, the air indicator takes priority over generated $N_d$ and $V_d$ values. Otherwise, generated material properties are projected to the nearest available catalog material. This keeps material generation continuous during modeling while returning to discrete material labels for optical simulation.
 
 \subsection{Variable Surface Count and Structural Missingness}
 
@@ -53,9 +53,9 @@ The common representation layer stops before model-specific numerical formatting
 
 Generated samples are mapped back to canonical-style prescription tables before simulation. The inverse processor applies the paired inverse of the representation transform, restores deterministic field and wavelength defaults used by the canonical schema, reconstructs material labels from generated material variables, and re-applies the structural surface mask implied by the generated surface count. For generated rows, provenance sidecars from the training data are not copied row-by-row; only deterministic schema defaults and values inferable from the generated prescription are restored. This distinction is necessary because a generated batch does not share the row identity of the original training table.
 
-\subsection{Optional Ray-Tracing-Based Post-Processing}
+\subsection{Physics-Based Post-Processing}
 
-After inverse processing, generated prescriptions can be passed through an optional ray-tracing-based correction layer before CodeV/LLESP evaluation. This layer is intended to make local optical corrections to the generated prescription rather than to define the training representation. In the current pipeline, the correction attempts the following stages:
+After inverse processing, generated prescriptions in the finalized pipeline pass through a ray-tracing-based correction layer before CodeV evaluation. This layer makes local optical corrections to the generated prescription rather than defining the training representation. The controlled ablation in Section~\ref{sec:results_raytrace_postproc} evaluates the same generated rows without this layer to isolate its contribution. The correction attempts the following stages:
 
 \begin{enumerate}
     \item \textbf{Material and geometry precheck}: verify that active surfaces have valid material and geometry information before ray tracing is attempted.
@@ -66,6 +66,6 @@ After inverse processing, generated prescriptions can be passed through an optio
 
 The correction is applied stage by stage: a successful earlier correction can be retained even if a later correction is not available for a particular sample. Stage outcomes are recorded so that evaluation can compare generated prescriptions before and after ray-tracing correction using a common denominator.
 
-\subsection{CodeV/LLESP Preparation}
+\subsection{CodeV Preparation}
 
-The final post-processed table is prepared as a CodeV/LLESP-ready prescription table with canonical field, wavelength, material, surface, and image-plane columns. Sequence-file generation and CodeV execution are handled by the downstream simulation pipeline. This keeps the generative-model pipeline responsible for producing simulation-ready prescription tables, while the optical simulation pipeline remains responsible for generating sequence files, running CodeV, and returning optical-performance results.
+The final post-processed table is prepared as a CodeV-ready prescription table with canonical field, wavelength, material, surface, and image-plane columns. Sequence-file generation and CodeV execution are handled by the downstream simulation pipeline. This keeps the generative-model pipeline responsible for producing simulation-ready prescription tables, while the optical simulation pipeline remains responsible for generating sequence files, running CodeV, and returning optical-performance results.
