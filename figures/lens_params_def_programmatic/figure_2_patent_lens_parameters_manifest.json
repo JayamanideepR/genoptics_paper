@@ -9,13 +9,13 @@
     "surface_count": 9
   },
   "figure": "Figure 2 patent lens parameter diagram",
-  "generated_at_utc": "2026-07-13T18:12:28.219164+00:00",
+  "generated_at_utc": "2026-07-13T18:24:52.725419+00:00",
   "implementation": {
     "generator": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/experiment_scripts/2026_07_13/make_patent_lens_parameter_figure.py",
-    "generator_sha256": "b9274ad8f6fc2a53b7418101ab690397bf0c055616afe9284db51178a9b33970",
+    "generator_sha256": "282402f8d06bb802a9f718709bd26d2bcc24a2d27d37ada4e24793172357b82f",
     "matplotlib_version": "3.9.2",
     "numpy_version": "1.26.4",
-    "optics_repo_git_revision": "268a5b37045905fd8cb18f3d293dbe466ec61ffd",
+    "optics_repo_git_revision": "48dddd497668a08f67ee680be224dd8974b44bc4",
     "pandas_version": "2.2.3",
     "python_executable": "/home/manideep/miniforge3/envs/rayoptics/bin/python",
     "python_version": "3.11.10",
@@ -37,9 +37,9 @@
     "Labels are symbolic and do not report the selected patent row's numerical parameter values."
   ],
   "output_sha256": {
-    "pdf": "38d76db70b7c863d4e4ecc410cd601870232dc32a49d0122731f613a28033d19",
-    "png": "72452ea3939e7f592946e46d2b1c833a096c467281322e35524463714312bade",
-    "svg": "7c1f67adddc4255918ae6a02915eff82aada1924f147dcb45b079a99aa1b55e6"
+    "pdf": "4513cef94217d893263c1e1167e33f8210b8219243f278df2ecd97e3ab8095a7",
+    "png": "c31ed397465dd89da43c2f0ccb2124b5bf94303ecba9e217ab5e08cf29cdd585",
+    "svg": "8129e1d611d838176d2687b69e6a83e03677badafe69cb660c0fbb021896771c"
   },
   "outputs": {
     "pdf": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/.codex-worktrees/paper_v4-figure2/figures/lens_params_def_programmatic/figure_2_patent_lens_parameters.pdf",
