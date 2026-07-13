@@ -76,8 +76,8 @@ Figure~\ref{fig:synth_data_pipe} summarizes this synthetic dataset construction 
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.85\linewidth]{figures/synth_data_building_pipe.png}
-    \caption{\small\textbf{Synthetic dataset construction pipeline.} Schematic showing patent-derived seed designs, perturbation generation, optical checks, CodeV/LLESP evaluation, and canonical dataset assembly.}
+    \includegraphics[width=\linewidth]{figures/synthetic_dataset_pipeline_tikz.pdf}
+    \caption{\small\textbf{Synthetic dataset construction pipeline.} Patent-derived designs are standardized and shortlisted, perturbed with parent and perturbation lineage retained, reconstructed and filtered using optical checks, evaluated in CodeV, and assembled into the Patent-only, 250k, 500k, and full study datasets. Colors denote data artifacts (teal), controlled perturbation (purple), physics reconstruction (orange), and CodeV evaluation (green); arrows indicate forward data flow.}
     \label{fig:synth_data_pipe}
 \end{figure}
 

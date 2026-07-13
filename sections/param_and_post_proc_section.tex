@@ -4,8 +4,8 @@ Figure~\ref{fig:model_training_pipeline} summarizes the processing path used to 
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\linewidth]{figures/model_processing_pipeline_tikz.pdf}
-    \caption{\textbf{Model-facing data and post-processing pipeline.} Canonical prescriptions pass through train/test splitting, representation-specific preprocessing, and model-specific formatting before model training and sampling. Generated rows are inverted to canonical prescriptions, corrected by physics-based post-processing, and evaluated in CodeV. Colors distinguish data artifacts, deterministic transformations, learned operations, and physics/CodeV stages.}
+    \includegraphics[width=\linewidth]{figures/model_processing_pipeline_filled_tikz.pdf}
+    \caption{\textbf{Model-facing data and post-processing pipeline.} Optical prescriptions are partitioned, mapped into the tuned parameterization, formatted for model input, generated, and decoded. The inverse transform restores physical parameters before physics correction. Material or geometric failures are rejected before CodeV evaluation; successful ray traces provide optical metrics. Colors denote input data (teal), reversible deterministic transformations (purple), learned generation (orange), and optical correction and evaluation (green); arrows indicate forward data flow.}
     \label{fig:model_training_pipeline}
 \end{figure}
 
