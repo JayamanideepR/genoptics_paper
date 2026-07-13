@@ -1,6 +1,6 @@
 \section{Results}
 
-This section evaluates whether generated tabular lens rows can be converted into usable optical prescriptions. The results address two questions. First, we benchmark generative models under the final Patent+Synth-full, tuned-representation, physics-based post-processing pipeline. Second, we isolate the contribution of the main pipeline components introduced in this work. Section~\ref{sec:results_synthetic_expansion} compares Patent-only and Patent+Synth-full training across the evaluated generators and reports full-data statistical diagnostics. Section~\ref{sec:results_tuned_representation} isolates the optics-aware tuned representation, Section~\ref{sec:results_dataset_scale} studies synthetic dataset scale for TabSyn, and Section~\ref{sec:results_raytrace_postproc} isolates physics-based post-processing.
+This section evaluates whether generated tabular lens rows can be converted into usable optical prescriptions. The results address two questions. First, we benchmark generative models under the final Patent+Synth-full, tuned-representation, physics-based post-processing pipeline. Second, we isolate the contribution of the main pipeline components introduced in this work. Section~\ref{sec:results_synthetic_expansion} compares Patent-only and Patent+Synth-full training across the evaluated generators and reports full-data statistical diagnostics. Section~\ref{sec:results_tuned_representation} isolates the optics-aware tuned representation, Section~\ref{sec:results_dataset_scale} studies synthetic dataset scale for TabSyn, and Section~\ref{sec:results_raytrace_postproc} isolates physics-based post-processing. Finally, Section~\ref{sec:results_representative_designs} places representative generated assemblies in their optical-performance context.
 
 Unless otherwise stated, we use the following defaults:
 \begin{enumerate}
@@ -182,4 +182,15 @@ Nominal performance & 12.61 \ensuremath{\pm} 0.85 & 3.54 \ensuremath{\pm} 0.40 &
 \bottomrule
 \end{tabular}
 \end{minipage}
+\end{center}
+
+\subsection{Representative Condition-Matched Lens Assemblies}
+\label{sec:results_representative_designs}
+
+The aggregate comparisons above quantify feasibility, fidelity, diversity, and optical improvement across the generated populations. To complement these population-level results, Figure~\ref{fig:results_condition_matched_designs} shows representative TabSyn assemblies under three operating-condition regimes alongside condition-matched patent references. Selection was automatic: successful complete-metric candidates within 10\% of the reference F-number and entrance-pupil diameter were ordered by global optical-quality rank, then accepted until three distinct surface counts and glass--air topologies were obtained. Candidates were required to have positive finite active thicknesses and at least one air interval; no visual screening was used. The resulting examples demonstrate the existence of optically competitive assemblies across different structural configurations, while their population-level prevalence is addressed by the aggregate evaluations above.
+
+\begin{center}
+    \includegraphics[width=0.98\linewidth]{figures/condition_matched_tabsyn_designs_deterministic_10pct_with_image_planes_20260712.pdf}
+    \captionof{figure}{\textbf{Condition-matched generated lens assemblies and optical-performance context.} Panels A and B compare axial and maximum-field SPO67 and EE90 after normalization by each design's Airy diameter; lower-left values are better. Panel C compares absolute distortion magnitude, with lower values preferred. Colored symbols identify the three operating-condition regimes, and marker shape links each highlighted point to its assembly in Panel D. Each row in Panel D shows a patent reference and three automatically selected TabSyn designs matched within 10\% in both F-number and entrance-pupil diameter; red and blue lines denote aperture stops and image planes, respectively.}
+    \label{fig:results_condition_matched_designs}
 \end{center}
