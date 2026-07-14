@@ -1,0 +1,612 @@
+{
+  "schema_version": "lensgen_main_publication_figure_dense_2x2_curated_v47",
+  "purpose": "Curated dense 2x2 main publication figure with the finalized four-stage narrative and optical-performance Pareto evidence.",
+  "evidence": {
+    "dataset": {
+      "collected_patent_designs": 2572,
+      "canonical_patent_rows": 1253,
+      "synthetic_rows": 1125080,
+      "canonical_rows": 1126333,
+      "scale_feasible_pct": {
+        "patent_only": 18.615000000000002,
+        "250k": 74.205,
+        "500k": 80.245,
+        "full": 83.72
+      }
+    },
+    "representation": {
+      "untuned_feasible_pct": 49.5075,
+      "tuned_feasible_pct": 83.72,
+      "feasible_delta_pp": 34.21,
+      "tuned_material_issue_pct": 1.55,
+      "tuned_geometry_issue_pct": 0.42,
+      "tuned_ray_error_pct": 14.73,
+      "untuned_material_issue_pct": 15.93,
+      "untuned_geometry_issue_pct": 10.4,
+      "untuned_ray_error_pct": 34.53
+    },
+    "postprocessing": {
+      "without_feasible_pct": 67.29499999999999,
+      "with_feasible_pct": 83.72,
+      "feasible_delta_pp": 16.43
+    },
+    "benchmark": {
+      "model_count": 4,
+      "sampling_seed_count": 4,
+      "samples_per_seed": 10000,
+      "tabsyn_feasible_pct": 83.72,
+      "model_feasible_pct": {
+        "codi": 56.57,
+        "smote": 98.3,
+        "stasy": 76.5,
+        "tabsyn_lr3e4": 83.72
+      }
+    },
+    "source_files": [
+      "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_1/section_6_1_patent_vs_full_summary.csv",
+      "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_2/section_6_2_summary.csv",
+      "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_3/section_6_3_summary.csv",
+      "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_4/section_6_4_condition_summary.csv",
+      "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/tabsyn_full_tuned_lr3e4_patent_condition_anchors_20260710/selection_manifest.json",
+      "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/processed_and_llesp/submission_manifests/codev_llesp_submit_publication_tabsyn_lr3e4_seed0_nrte_no_nrte_20260707/manifest.csv",
+      "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/processed_and_llesp/submission_manifests/codev_llesp_submit_tabsyn_lr3e4_seeded_remaining_nrte_no_nrte_20260704/manifest.csv",
+      "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_2/section_6_2_per_run.csv"
+    ]
+  },
+  "panel_a_pareto": {
+    "metric_definitions": {
+      "airy_diameter_mm": "2.44 * wl00_01[nm] * fno / 1e6",
+      "median_spo67_per_airy_diameter": "Per-row median across spo67_00 through spo67_04 after each field value is divided by the row's Airy diameter.",
+      "absolute_distortion": "abs(diy)",
+      "median_ee90_per_airy_diameter": "Per-row median across ee90_00 through ee90_04 after each field value is divided by the row's Airy diameter.",
+      "pareto_direction": "Both metrics are minimized; lower-left is better."
+    },
+    "evaluation_scope": {
+      "row_cap_or_subsampling": "none",
+      "field_aggregation": "median across all five CodeV field positions",
+      "invalid_row_policy": "Rows with nonpositive or nonfinite Airy diameter, nonpositive or nonfinite normalized SPO67 or EE90, or nonfinite distortion are rejected."
+    },
+    "display": {
+      "x_limits": [
+        0.005309548636868593,
+        964.5261410534994
+      ],
+      "y_limits": [
+        0.1794547213399545,
+        42.18908378764084
+      ],
+      "density_bins": [
+        180,
+        120
+      ],
+      "density_nonzero_bins": 5573,
+      "visible_rows": {
+        "patent": {
+          "total_rows": 1003,
+          "visible_rows": 1003
+        },
+        "synthetic": {
+          "total_rows": 900044,
+          "visible_rows": 897292
+        }
+      },
+      "x_axis": "logarithmic; raw median SPO67/Airy-diameter ratios",
+      "y_axis": "logarithmic; raw median EE90/Airy-diameter ratios",
+      "synthetic_rendering": "Filled contours of log(1 + exact two-dimensional histogram count).",
+      "patent_rendering": "All visible patent rows are shown as scatter points.",
+      "pareto_rendering": "Exact empirical lower-left fronts computed from all valid rows before display limits.",
+      "front_counts": {
+        "patent": 6,
+        "synthetic": 22
+      }
+    },
+    "patent_scatter_rows": 1003,
+    "synthetic_front_rows": 22,
+    "patent_front_rows": 6,
+    "density_colorbar": "logarithmic color mapping labeled with raw synthetic sample counts per 2D histogram bin"
+  },
+  "panel_typography": {
+    "roles": {
+      "panel_title_or_key_value": 12.5,
+      "major_callout": 10.0,
+      "heading_or_body": 9.0,
+      "annotation_tick_or_legend": 8.0
+    },
+    "used_sizes": [
+      8.0,
+      9.0,
+      10.0,
+      12.5
+    ],
+    "global_figure_text_present": false,
+    "pre_normalization_body_scale": 1.4,
+    "pre_normalization_plot_scale": 1.2
+  },
+  "displayed_generated_designs": [
+    {
+      "figure_selection_index": 7,
+      "surfcount": 7
+    },
+    {
+      "figure_selection_index": 9,
+      "surfcount": 8
+    },
+    {
+      "figure_selection_index": 2,
+      "surfcount": 14
+    }
+  ],
+  "panel_c": {
+    "ray_visualization": {
+      "engine": "new_raytracing_engine.src.ray_tracing_3.trace_bundle",
+      "meridional_field_source_column": "fldy_reqcond",
+      "z_launch_mm": -0.1,
+      "image_plane_z_mm": 41.679111548984,
+      "bundle_records": [
+        {
+          "field_angle_deg": 0.0,
+          "launched_ray_count": 9,
+          "displayed_image_plane_ray_count": 7,
+          "chief_ray_launch_y_mm": 0.0
+        },
+        {
+          "field_angle_deg": 21.0,
+          "launched_ray_count": 9,
+          "displayed_image_plane_ray_count": 9,
+          "chief_ray_launch_y_mm": -5.511037597844691
+        }
+      ],
+      "display_rule": "Only paths whose final recorded point is on the computed image plane are shown."
+    },
+    "paired_reduction_heatmap": {
+      "metrics": [
+        "spo67",
+        "spo100",
+        "ee50",
+        "ee90",
+        "nomperf"
+      ],
+      "fields": [
+        "00",
+        "01",
+        "02",
+        "03",
+        "04"
+      ],
+      "n_runs": 4,
+      "value": "mean across runs of the within-run median paired percent reduction",
+      "matrix": [
+        [
+          91.67023137568174,
+          87.68871080923086,
+          82.91030176045794,
+          76.35720733489761,
+          60.719923384488936
+        ],
+        [
+          85.50611050733303,
+          79.93943978947992,
+          74.03939218598933,
+          66.73466727679262,
+          51.68848328267934
+        ],
+        [
+          42.903662831791166,
+          36.5104744754756,
+          31.948287635450253,
+          27.45502203495085,
+          21.21836480653346
+        ],
+        [
+          33.81284428485383,
+          29.52230492820303,
+          25.157731637949052,
+          21.41842582300497,
+          16.56237638935644
+        ],
+        [
+          85.36907944774889,
+          77.94707240300335,
+          69.11011600327069,
+          59.87256180333941,
+          44.9957075052
+        ]
+      ]
+    }
+  },
+  "panel_d": {
+    "condition": "Low F/#, high EPD",
+    "patent_anchor_id": "patent_000835",
+    "generated_candidate_ids": [
+      "seed_003:row_03765",
+      "seed_001:row_01378",
+      "seed_001:row_09603"
+    ],
+    "condition_tolerance_pct": 10.0,
+    "radar_axes": [
+      {
+        "key": "feasible_fraction_pct",
+        "label": "Feasible yield",
+        "direction": "higher",
+        "worst": 50.0,
+        "best": 100.0,
+        "range_label": "50 -> 100\\%"
+      },
+      {
+        "key": "surfcount_tvd_mean",
+        "label": "Surface TVD",
+        "direction": "lower",
+        "worst": 0.15,
+        "best": 0.0,
+        "range_label": "0.15 -> 0"
+      },
+      {
+        "key": "conditional_marginal_discrepancy_reference_weighted_mean",
+        "label": "Marginal error",
+        "direction": "lower",
+        "worst": 0.21,
+        "best": 0.0,
+        "range_label": "0.21 -> 0"
+      },
+      {
+        "key": "generated_output_nn_distance_median_mean",
+        "label": "Local diversity",
+        "direction": "higher",
+        "worst": 1.0,
+        "best": 4.0,
+        "range_label": "1 -> 4"
+      },
+      {
+        "key": "dcr_train_closer_excess_mean",
+        "label": "DCR excess",
+        "direction": "lower",
+        "worst": 0.1,
+        "best": 0.0,
+        "range_label": "0.10 -> 0"
+      }
+    ],
+    "radar_models": [
+      {
+        "model": "codi",
+        "label": "CoDi",
+        "raw_values": {
+          "feasible_fraction_pct": 56.57,
+          "surfcount_tvd_mean": 0.1381394485844305,
+          "conditional_marginal_discrepancy_reference_weighted_mean": 0.2010986456308565,
+          "generated_output_nn_distance_median_mean": 3.522101983916376,
+          "dcr_train_closer_excess_mean": 0.0511613663302599
+        },
+        "radial_values": [
+          0.13140000000000002,
+          0.07907034277046329,
+          0.04238740175782616,
+          0.8407006613054587,
+          0.488386336697401
+        ]
+      },
+      {
+        "model": "smote",
+        "label": "SMOTE",
+        "raw_values": {
+          "feasible_fraction_pct": 98.3,
+          "surfcount_tvd_mean": 0.0233228684332799,
+          "conditional_marginal_discrepancy_reference_weighted_mean": 0.0373819257109568,
+          "generated_output_nn_distance_median_mean": 1.0804357561233693,
+          "dcr_train_closer_excess_mean": 0.0979876860483034
+        },
+        "radial_values": [
+          0.966,
+          0.8445142104448006,
+          0.8219908299478247,
+          0.02681191870778976,
+          0.02012313951696612
+        ]
+      },
+      {
+        "model": "stasy",
+        "label": "STaSY",
+        "raw_values": {
+          "feasible_fraction_pct": 76.5,
+          "surfcount_tvd_mean": 0.1460877303093349,
+          "conditional_marginal_discrepancy_reference_weighted_mean": 0.1343982472102832,
+          "generated_output_nn_distance_median_mean": 3.940675329105336,
+          "dcr_train_closer_excess_mean": 0.0505218804463499
+        },
+        "radial_values": [
+          0.53,
+          0.026081797937767364,
+          0.360008346617699,
+          0.9802251097017787,
+          0.494781195536501
+        ]
+      },
+      {
+        "model": "tabsyn_lr3e4",
+        "label": "TabSyn",
+        "raw_values": {
+          "feasible_fraction_pct": 83.72,
+          "surfcount_tvd_mean": 0.0275234973231487,
+          "conditional_marginal_discrepancy_reference_weighted_mean": 0.070871900826368,
+          "generated_output_nn_distance_median_mean": 3.40275969866471,
+          "dcr_train_closer_excess_mean": 0.0517826947461044
+        },
+        "radial_values": [
+          0.6744,
+          0.8165100178456753,
+          0.6625147579696762,
+          0.8009198995549034,
+          0.48217305253895604
+        ]
+      }
+    ],
+    "performance_metric_log_bounds": {
+      "axial_spo67_per_airy_diameter": {
+        "lower": 26.897042123519235,
+        "upper": 65.58684726468454
+      },
+      "axial_ee90_per_airy_diameter": {
+        "lower": 17.850154985959232,
+        "upper": 25.70087741961721
+      },
+      "full_field_spo67_per_airy_diameter": {
+        "lower": 103.7321921381991,
+        "upper": 542.0428109396518
+      },
+      "full_field_ee90_per_airy_diameter": {
+        "lower": 20.778163659848627,
+        "upper": 26.582158870656798
+      },
+      "absolute_diy": {
+        "lower": 0.5685740961219621,
+        "upper": 3.3325551753369265
+      }
+    },
+    "performance_layout": "expanded metric-label and log-range column beneath the patent card; dumbbells aligned beneath generated design columns",
+    "performance_direction": "lower is better for all five dumbbell metrics",
+    "patent_performance_values": {
+      "axial_spo67_per_airy_diameter": 59.13120850040978,
+      "axial_ee90_per_airy_diameter": 23.171169292675547,
+      "full_field_spo67_per_airy_diameter": 452.3652234163086,
+      "full_field_ee90_per_airy_diameter": 23.965707213040336,
+      "absolute_diy": 2.26266449531
+    },
+    "generated_designs": [
+      {
+        "slot": "A",
+        "candidate_id": "seed_003:row_03765",
+        "surfcount": 14,
+        "element_count": 7,
+        "performance_values": {
+          "axial_spo67_per_airy_diameter": 33.00730591433739,
+          "axial_ee90_per_airy_diameter": 22.43045451919018,
+          "full_field_spo67_per_airy_diameter": 124.29622371694973,
+          "full_field_ee90_per_airy_diameter": 23.046615838904533,
+          "absolute_diy": 2.746492464365
+        }
+      },
+      {
+        "slot": "B",
+        "candidate_id": "seed_001:row_01378",
+        "surfcount": 12,
+        "element_count": 6,
+        "performance_values": {
+          "axial_spo67_per_airy_diameter": 29.833521728459463,
+          "axial_ee90_per_airy_diameter": 19.798942358956563,
+          "full_field_spo67_per_airy_diameter": 334.8410596405251,
+          "full_field_ee90_per_airy_diameter": 23.492846434715187,
+          "absolute_diy": 1.83660636495
+        }
+      },
+      {
+        "slot": "C",
+        "candidate_id": "seed_001:row_09603",
+        "surfcount": 13,
+        "element_count": 7,
+        "performance_values": {
+          "axial_spo67_per_airy_diameter": 35.6838577560432,
+          "axial_ee90_per_airy_diameter": 22.96868742339272,
+          "full_field_spo67_per_airy_diameter": 314.3159296664705,
+          "full_field_ee90_per_airy_diameter": 23.406323311058134,
+          "absolute_diy": 0.689899779875
+        }
+      }
+    ]
+  },
+  "input_files": [
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/tabsyn_full_tuned_lr3e4_conditional_diversity_and_novelty_figures_20260711/conditional_diversity/conditional_diversity_generated_physical_rows.csv",
+      "bytes": 15657,
+      "sha256": "bf5a036c9968ce2cb857dc4c52156f45cb61fa82b925a8cb4112d04fd3067268"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/paper_v4/analysis/dataset_section_support_20260513/tables/surface_count_distribution.csv",
+      "bytes": 208,
+      "sha256": "38e92255018cc035beaef950e5aef90a680ef4921985d6ae1752cadbbe0b96cc"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_4/section_6_4_paired_field_summary.csv",
+      "bytes": 2082,
+      "sha256": "6ae46fea46ee8cef8dec9789f2df657acd03b58ac5dfd34fa0557a71305045a2"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/patent_vs_full_synthetic_median_spo67_distortion_pareto_20260713/synthetic_spo67_ee90_density_grid.npz",
+      "bytes": 14029,
+      "sha256": "1c0edb3b033d64cb68d7e63f9eaf837d520da1ac0631aac1ebbb5e8a49845a3c"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/patent_vs_full_synthetic_median_spo67_distortion_pareto_20260713/patent_scatter.csv",
+      "bytes": 65922,
+      "sha256": "f14642b69d326e12792c9f0f7e7a2245008ea8ba22dd6f126f6166180fb69e12"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/patent_vs_full_synthetic_median_spo67_distortion_pareto_20260713/synthetic_spo67_ee90_pareto_front.csv",
+      "bytes": 2003,
+      "sha256": "567c488e188d9ea6413fc66c697044444f45fd2135f88083575aba984367a591"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/patent_vs_full_synthetic_median_spo67_distortion_pareto_20260713/patent_spo67_ee90_pareto_front.csv",
+      "bytes": 506,
+      "sha256": "9707bd46af13702dfce4bf43ac7529fee808ed79f935b580ce1f3c7ae8df4748"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/patent_vs_full_synthetic_median_spo67_distortion_pareto_20260713/manifest.json",
+      "bytes": 8752,
+      "sha256": "6fece86813057ce49f1fe3f03488a43825553f62de297a6598ab42c2f3a72156"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/new_raytracing_engine/src/lens_structure.py",
+      "bytes": 6564,
+      "sha256": "033dc5ef88534a5134c379ab4fd978c1117aa43feddb0918673659ed1af56ce2"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/new_raytracing_engine/src/ray_tracing_3.py",
+      "bytes": 14861,
+      "sha256": "ff738fe0be56df187f59a7133a3776cec86801977133f21599aa2365a2e98887"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/new_raytracing_engine/src/ray_based_evals_v4.py",
+      "bytes": 39700,
+      "sha256": "b1deaa301bb8809677516531cb379663a150be5df8b943c91532748cbe55e8fc"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_1/section_6_1_patent_vs_full_summary.csv",
+      "bytes": 3157,
+      "sha256": "0518648f11f98b6b5a5e3a627d3b777dd3b9d7d7a32702d4f4b4284987410775"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_2/section_6_2_summary.csv",
+      "bytes": 1143,
+      "sha256": "7f66d914d9667c8a9e4ba8cf252653105fe101b7e791b0e616cdc1fd9e6668ac"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_3/section_6_3_summary.csv",
+      "bytes": 1801,
+      "sha256": "1c5b30f31c0074d0e4d9d581bdfa1482e10ca1ca60ec5bd3fd31d961aefd2ff0"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_4/section_6_4_condition_summary.csv",
+      "bytes": 607,
+      "sha256": "cc061d318a25f3cb8da8030258b530bae81aa31efb47542ff6080897b055b047"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/tabsyn_full_tuned_lr3e4_patent_condition_anchors_20260710/selection_manifest.json",
+      "bytes": 7891,
+      "sha256": "7d7d29d2975dcbde4c02d8b2fbd50878d40956f1334139fbd684256702164f1f"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/processed_and_llesp/submission_manifests/codev_llesp_submit_publication_tabsyn_lr3e4_seed0_nrte_no_nrte_20260707/manifest.csv",
+      "bytes": 15719,
+      "sha256": "40a24712a881ba63612f43b46c99e0dca5f8d1cd12a45e50f30434fe2a9eee5a"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/processed_and_llesp/submission_manifests/codev_llesp_submit_tabsyn_lr3e4_seeded_remaining_nrte_no_nrte_20260704/manifest.csv",
+      "bytes": 47470,
+      "sha256": "8b9b7b99a2bd16daa6dc45d2a640a8f16de88c15f7019e41ec3f0e23a667dac5"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_2/section_6_2_per_run.csv",
+      "bytes": 2922,
+      "sha256": "f1c915f4bc9ad67c86d101cefdbc0287889ed419220444577dcb9e0d67109bea"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/tabsyn_full_tuned_lr3e4_physical_optical_performance_landscape_20260712/deterministic_condition_matched_selection_10pct.csv",
+      "bytes": 2710,
+      "sha256": "97399cbb97da4d215fc36ef4af3ee98b2f2b3e4fda6fca5da63de848919cfae8"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/tabsyn_full_tuned_lr3e4_physical_optical_performance_landscape_20260712/deterministic_condition_matched_selection_10pct_manifest.json",
+      "bytes": 11553,
+      "sha256": "2a6b665a3257985a9a83e6ce9129883de2659d611c60c243539ecadfcc592fb7"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/tabsyn_full_tuned_lr3e4_physical_optical_performance_landscape_20260712/displayed_generated_physical_metrics.csv",
+      "bytes": 2111,
+      "sha256": "db3bdc055a075a365d20fc524a2215decbba4844de7aa4c1c9a0b0bac2b81356"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/tabsyn_full_tuned_lr3e4_physical_optical_performance_landscape_20260712/displayed_patent_anchor_physical_metrics.csv",
+      "bytes": 788,
+      "sha256": "eb865d7dc9883f398038134926fd5af4d147a5d78f4ec4446a05fff221bd2392"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/tabsyn_full_tuned_lr3e4_patent_condition_anchors_20260710/selected_patent_anchor_physical_rows.csv",
+      "bytes": 5979,
+      "sha256": "6c295d0411f359043c248d0764f462489806c7e4b554d4d36b8515faf65c1537"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/paper_metric_outputs/section_6_1_statistical_diversity_novelty/section_6_1_statistical_diversity_novelty_summary_by_model.csv",
+      "bytes": 4053,
+      "sha256": "747a53bf9820d3da5589f576db38dc76afbfd0aa09ee85bee1005ee1768f016d"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/processed_and_llesp/by_sample/optics_patent_plus_synth_full_tuned_v3/tabsyn_lr3e4/seed_001/nrte/submitted_csv.csv",
+      "bytes": 14113869,
+      "sha256": "9418af0e09107023d350a99b4dfb3949851b562eb1d3442c86c11a870faa650a"
+    },
+    {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/processed_and_llesp/by_sample/optics_patent_plus_synth_full_tuned_v3/tabsyn_lr3e4/seed_003/nrte/submitted_csv.csv",
+      "bytes": 14152749,
+      "sha256": "ccd4d30884d2a5bb911a9783f44aa5f9d540ed932e0d7d81aeb65e3b197300e3"
+    }
+  ],
+  "outputs": {
+    "svg": {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/paper_v4/figures/main_publication_figure.svg",
+      "bytes": 973271,
+      "sha256": "2734f271c51f95e1d88b4f30a03ecc59ac6ff6ab60caf5de405bcba46363e8e9"
+    },
+    "pdf": {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/paper_v4/figures/main_publication_figure.pdf",
+      "bytes": 287535,
+      "sha256": "e81fe99fc2c3271bd842fe3ea53754665bf87c517ebd6ee0503df36dea41b3c6"
+    },
+    "png": {
+      "path": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/paper_v4/figures/main_publication_figure.png",
+      "bytes": 784460,
+      "sha256": "e87872db9d3e740e5ae84fe097d6912db9481b6ee8d90464d79b5d0f9c098d37"
+    }
+  },
+  "notes": [
+    "The stable output path replaces the superseded dense-v2 main figure in the manuscript.",
+    "Panel headers and evidence regions are edge-to-edge tinted bands clipped to the rounded panel boundary and separated from the body by straight divider lines.",
+    "Framed subplot and module headers use the same edge-to-edge clipped fill, with dividers drawn to the outward-padded frame extents.",
+    "Panel C uses four uniformly sized and spaced post-processing boxes with centered labels and no step numbers.",
+    "The first Panel C box identifies the sampled design prescription entering post-processing.",
+    "Panel headers omit stage labels and render each panel title in its accent color.",
+    "The exported figure contains only the four panels; the global title, subtitle, and generation badge are omitted.",
+    "Panel header and footer text is set to 12.5 pt and positioned at the geometric center of each colored band.",
+    "Panels B-D align footer values to the panel-badge left edge and footer descriptions to the mirrored right inset.",
+    "Subplot and framed-module titles use the existing 9 pt major typography level.",
+    "Panel B representation mappings use 9 pt single-line text with left-shifted arrows and a wider transformed-value column.",
+    "Panel B right-side benefit and issue-reduction rows use the same 9 pt typography as the representation mappings.",
+    "The standardized typography hierarchy is 12.5 pt panel bands, 10 pt titles and emphasized rows, 9 pt body text, and 8 pt annotations.",
+    "Panel A shows light major grid lines for surface-count shares and a labeled colorbar for the synthetic performance-density field.",
+    "Panels A and C align the outer edges of their paired evidence modules with the flow-chart bounds while preserving the existing center gap.",
+    "Panel A centers the performance axes and density colorbar as one visual group within the right evidence module.",
+    "Panel A density colors use log(1 + count), while the colorbar reports raw synthetic sample counts per bin at 1, 10, 100, and 1,000.",
+    "Panels B and C use the LaTeX right-arrow glyph for feasibility transitions in their evidence strips.",
+    "Panel B uses the same LaTeX right-arrow glyph for representation mappings and issue-rate reductions.",
+    "Panel A recenters the performance group after accounting for the full raw-count colorbar label width.",
+    "Panel C derives its lower-module outer bounds from the flow-chart bounds so both rows align exactly at each edge.",
+    "All plot legends use the standardized 8 pt regular Times text in the shared muted-gray color.",
+    "Panel C increases horizontal spacing between the three ray-tracing legend entries while retaining their centered layout.",
+    "Panel B presents each issue-rate reduction in a separate bordered green card with visible inter-card spacing.",
+    "The SVG export is normalized to remove generated trailing whitespace before output hashes are recorded.",
+    "Panel D patent and generated lens assemblies are rendered from recorded physical prescription rows.",
+    "Panel A reads the saved all-row density grid and exact empirical fronts; it does not recompute or subsample Pareto metrics.",
+    "Panel C rays are traced by the production ray engine and terminate at its computed image plane.",
+    "Panel C heatmap reads the finalized four-run paired field summary and reports mean within-run median percent reductions.",
+    "Panel B material and geometry issue rates are non-exclusive four-seed means from the publication submission manifests.",
+    "Panel B ray-tracing error rates are CodeV error rows divided by generated rows in the finalized Section 6.2 per-run table.",
+    "Panel D radar values use the finalized all-row four-seed statistical summary and full-data feasible fractions; each axis retains its documented raw range and is oriented so outward is better.",
+    "Panel D condition-matched examples use the deterministic 10% F-number and EPD selection with no visual screening.",
+    "Panel D dumbbells use metric-specific logarithmic axes beneath the generated design columns; the widened space beneath the patent card contains complete metric names and log ranges. Green and red segments indicate lower and higher generated values relative to the patent reference.",
+    "Panel D uses a visual legend with colored blocks for improved-versus-patent and degraded-versus-patent values and the plotted orange star for the patent reference.",
+    "The patent-reference star is enlarged consistently in the design card, dumbbells, and visual key for manuscript-scale visibility.",
+    "All panel text is normalized to four documented font sizes; the global figure title remains outside this panel hierarchy.",
+    "All figure text is rendered by LaTeX using the manuscript's PSNFSS Times family; text positions are unchanged from the standardized-typography source.",
+    "All text in panel header bands and bottom evidence strips is set to 11 pt; interior panel typography is unchanged.",
+    "Panel B and Panel C evidence labels use the shared 'Feasibility improvement through ...' construction; Panel D omits the redundant secondary metric-summary line.",
+    "No model training, sampling, metric recomputation, or candidate reselection is performed."
+  ]
+}
