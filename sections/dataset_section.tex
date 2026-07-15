@@ -1,8 +1,9 @@
 \section{Dataset}
 
-We construct a large-scale optical prescription dataset for generative modeling by combining patent-derived lens designs with synthetic designs generated through controlled perturbation and post-processing of those patents. Each design is retained in two linked forms: an individual CodeV sequence artifact for optical simulation and a common tabular prescription row for data analysis and downstream model training. The tabular representation stores the design parameters, design conditions, material assignments, optical-performance annotations, and provenance fields needed to connect each row back to its source design. The patent-derived designs provide realistic reference families across surface counts, optical configurations, apertures, field angles, and material choices, while the synthetic expansion increases coverage around those families in the same tabular prescription format. The remainder of this section describes these dataset components, assumptions, and construction steps in more detail.
+We construct a large-scale optical prescription dataset for generative modeling by combining patent-derived lens designs with synthetic designs generated through controlled perturbation and post-processing of those patents. Each design is retained in two linked forms: an individual CodeV sequence file artifact for optical simulation and a common tabular prescription row for data analysis and downstream model training. The tabular representation stores the design parameters, design conditions, material assignments, optical-performance annotations, and provenance fields needed to connect each row back to its patent source design. The patent-derived designs provide realistic reference families across surface counts, optical configurations, apertures, field angles, and material choices, while the synthetic expansion increases coverage around those families in the same tabular prescription format. The remainder of this section is organized as follows. Section~\ref{sec:dataset_patent_reference} introduces the patent-derived reference corpus and its optical prescription representation. Section~\ref{sec:dataset_patent_shortlisting} describes the standardization and shortlisting procedure, and Section~\ref{sec:dataset_synthetic_expansion} presents the traceable synthetic expansion workflow and resulting dataset.
 
 \subsection{Patent-Derived Reference Designs}
+\label{sec:dataset_patent_reference}
 
 The collected patent-derived corpus contains 2,572 optical system designs formalized from patent records. These designs provide the source pool for the modeling-ready patent subset and for the later synthetic expansion. For each design, the available prescription data are represented in tabular form with surface geometry, material labels, operating conditions, and evaluated optical metrics. The corresponding CodeV sequence files are retained as reference source artifacts.
 
@@ -43,6 +44,7 @@ For the collected patent-derived corpus, field specifications follow the values 
 Unless otherwise specified, distances are reported in millimeters, angles in degrees, and wavelengths in nanometers.
 
 \subsection{Patent Dataset Shortlisting}
+\label{sec:dataset_patent_shortlisting}
 
 To formulate a standardized starting point for generative modeling and synthetic dataset generation, we select and process designs from the collected patent corpus according to the following standardization and filtering criteria:
 \begin{enumerate}
@@ -63,6 +65,7 @@ Applying these criteria gives a canonical patent subset of 1,253 designs selecte
 {\color{red}Detailed shortlisting counts from the collected patent corpus to the canonical patent subset need to be added after the source audit is finalized.}
 
 \subsection{Synthetic Expansion}
+\label{sec:dataset_synthetic_expansion}
 
 The synthetic dataset is generated from the canonical patent subset using perturbations that preserve the tabular prescription format described above. This expansion is intended to increase the number and coverage of available optical prescriptions while keeping each synthetic row traceable to a realistic patent-derived design family. At a high level, the synthetic construction process is:
 \begin{enumerate}
