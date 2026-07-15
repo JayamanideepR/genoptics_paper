@@ -170,12 +170,12 @@ The main Section~\ref{sec:results_synthetic_expansion} reports feasible sample f
 \midrule
 CoDi & Patent-only & 10.82 & 82.09 & 7.09 \\
 CoDi & Patent+Synth-full & 4.69 & 38.74 & 56.57 \\
-SMOTE-style reference & Patent-only & 0.00 & 13.17 & 86.83 \\
+SMOTE-style reference & Patent-only & 0.00 & 13.16 & 86.84 \\
 SMOTE-style reference & Patent+Synth-full & 0.18 & 1.52 & 98.30 \\
 STaSY & Patent-only & 31.27 & 68.20 & 0.54 \\
 STaSY & Patent+Synth-full & 6.84 & 16.66 & 76.50 \\
-TabSyn ($3\times10^{-4}$) & Patent-only & 6.06 & 73.19 & 20.75 \\
-TabSyn ($3\times10^{-4}$) & Patent+Synth-full & 1.58 & 14.71 & 83.71 \\
+TabSyn ($3\times10^{-4}$) & Patent-only & 7.07 & 74.31 & 18.62 \\
+TabSyn ($3\times10^{-4}$) & Patent+Synth-full & 1.55 & 14.73 & 83.72 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -183,4 +183,4 @@ TabSyn ($3\times10^{-4}$) & Patent+Synth-full & 1.58 & 14.71 & 83.71 \\
 \subsection{Ray-Tracing Post-Processing Metric Details}
 \label{app:raytrace_metric_delta_details}
 
-Section~\ref{sec:results_raytrace_postproc} reports the controlled ablation with and without physics-based post-processing using the seed-averaged paired heatmap and aggregate summary table. All distributions use the Patent+Synth-full TabSyn tuned run with diffusion learning rate $3\times10^{-4}$. Across the four sampling seeds, the branch without post-processing has 6{,}714 \ensuremath{\pm} 63 feasible rows and the branch with post-processing has 8{,}371 \ensuremath{\pm} 28 feasible rows out of the same 10{,}000 generated-row denominator. SPO and encircled-energy metrics are normalized by Airy diameter; nominal performance is left in its returned units.
+Section~\ref{sec:results_raytrace_postproc} reports the controlled ablation with and without physics-based post-processing using the seed-averaged paired heatmap and aggregate summary table. All distributions use the Patent+Synth-full TabSyn tuned run with diffusion learning rate $3\times10^{-4}$. Across the four sampling seeds, the branch without post-processing has 6{,}730 \ensuremath{\pm} 47 feasible rows and the branch with post-processing has 8{,}372 \ensuremath{\pm} 28 feasible rows out of the same 10{,}000 generated-row denominator. SPO and encircled-energy metrics are normalized by Airy diameter; nominal performance is left in its returned units.
