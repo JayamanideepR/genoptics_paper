@@ -7,10 +7,6 @@ We construct a large-scale optical prescription dataset for generative modeling 
 
 The collected patent-derived corpus contains 2,572 optical system designs formalized from patent records. These designs provide the source pool for the modeling-ready patent subset and for the later synthetic expansion. For each design, the available prescription data are represented in tabular form with surface geometry, material labels, operating conditions, and evaluated optical metrics. The corresponding CodeV sequence files are retained as reference source artifacts.
 
-{\color{red}
-Note: Chris provided write-up on the patent dataset curation process. Working on going through it and adding any relevant details here.
-}
-
 Each optical system is represented as a sequence of surfaces with associated geometric and material parameters. Figure \ref{fig:lens_param} illustrates the lens assembly and the parameters used to define the design space. For each active surface $j$, the table records:
 \begin{enumerate}
     \item \textbf{Radius of curvature $R_j$}: signed radius of curvature of surface $j$;
