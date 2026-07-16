@@ -1,11 +1,15 @@
 \section{Dataset}
 
-We construct a large-scale optical prescription dataset for generative modeling by combining patent-derived lens designs with synthetic designs generated through controlled perturbation and post-processing of those patents. Each design is retained in two linked forms: an individual CodeV sequence file artifact for optical simulation and a common tabular prescription row for data analysis and downstream model training. The tabular representation stores the design parameters, design conditions, material assignments, optical-performance annotations, and provenance fields needed to connect each row back to its patent source design. The patent-derived designs provide realistic reference families across surface counts, optical configurations, apertures, field angles, and material choices, while the synthetic expansion increases coverage around those families in the same tabular prescription format. The remainder of this section is organized as follows. Section~\ref{sec:dataset_patent_reference} introduces the patent-derived reference corpus and its optical prescription representation. Section~\ref{sec:dataset_patent_shortlisting} describes the standardization and shortlisting procedure, and Section~\ref{sec:dataset_synthetic_expansion} presents the traceable synthetic expansion workflow and resulting dataset.
+We construct a large-scale optical prescription dataset for generative modeling by combining patent-derived lens designs with synthetic designs generated through controlled perturbation and post-processing of those patents. Each design is retained in two linked forms: an individual CodeV sequence file for optical simulation and a common tabular prescription row for data analysis and downstream model training. The tabular representation stores the design parameters, design conditions, material assignments, optical-performance annotations, and provenance fields needed to connect each row back to its patent source design. The patent-derived designs provide realistic reference families across surface counts, optical configurations, apertures, field angles, and material choices, while the synthetic expansion increases coverage around those families in the same tabular prescription format. The remainder of this section further expands on the details of the dataset in the following order: Section~\ref{sec:dataset_patent_reference} introduces the patent-derived reference corpus and its optical prescription representation. Section~\ref{sec:dataset_patent_shortlisting} describes the standardization and shortlisting procedure, and Section~\ref{sec:dataset_synthetic_expansion} presents the traceable synthetic expansion workflow and resulting dataset.
 
 \subsection{Patent-Derived Reference Designs}
 \label{sec:dataset_patent_reference}
 
-The collected patent-derived corpus contains 2,572 optical system designs formalized from patent records. These designs provide the source pool for the modeling-ready patent subset and for the later synthetic expansion. For each design, the available prescription data are represented in tabular form with surface geometry, material labels, operating conditions, and evaluated optical metrics. The corresponding CodeV sequence files are retained as reference source artifacts.
+The collected patent-derived reference corpus contains 2,572 optical system designs assembled from the CodeV patent library, the Zemax Zebase library, and a public file exchange for lens designs~\cite{codev,zemax_opticstudio,reiley_lens_design_exchange}. Source attribution is recorded through patent identifiers, publication citations, or the best available source record. These designs form the source pool from which the modeling-ready patent subset is selected and later synthetically expanded.
+
+Because the source files use different optical-design formats and glass definitions, the collected prescriptions were converted to CodeV \texttt{.seq} files, including conversion of Zemax formats. Generic glass codes and obsolete or discontinued glasses were replaced with available catalog materials using the CodeV GLASSFIT procedure. LLIMAS supplied a refocusing optimization to CodeV, which adjusted the image-plane position to minimize residual defocus introduced by the material substitutions~\cite{Doyle2017LLIMAS,codev}. The design wavelengths were then normalized to the Fraunhofer F, d, and C lines (486.1, 587.56, and 656.3~nm, respectively), followed by a second CodeV refocusing operation. Each curated prescription retains its source attribution and corresponding sequence-file artifact.
+
+{\color{red}Detailed field-condition conventions across the full 2,572-design patent-derived reference corpus will be added after the source audit is completed.}
 
 Each optical system is represented as a sequence of surfaces with associated geometric and material parameters. Figure \ref{fig:lens_param} illustrates the lens assembly and the parameters used to define the design space. For each active surface $j$, the table records:
 \begin{enumerate}
@@ -31,18 +35,20 @@ Along with design parameters, each optical system is associated with operating c
     \item \textbf{Total length}: axial distance from the first surface to the image plane.
 \end{enumerate}
 
-For the collected patent-derived corpus, field specifications follow the values reported in the source patent descriptions. The dataset records three groups of optical-performance annotations:
+The dataset also retains optical-performance annotations. The annotations used in this study include:
 \begin{enumerate}
     \item \textbf{Spot-size metrics}: field-dependent spot-size measures such as SPO67 and SPO100;
     \item \textbf{Encircled-energy metrics}: field-dependent energy-concentration measures such as EE50 and EE90;
-    \item \textbf{Axial nominal performance}: A measure of on-axis Root Mean Square (RMS) wavefront error.
+    \item \textbf{Axial nominal performance}: on-axis root-mean-square (RMS) wavefront error.
 \end{enumerate}
+Additional performance and sensitivity annotations are retained in the canonical dataset.\\
+{\color{red}A complete inventory of the retained performance and sensitivity annotations will be added after the metric audit is completed.}
 Unless otherwise specified, distances are reported in millimeters, angles in degrees, and wavelengths in nanometers.
 
 \subsection{Patent Dataset Shortlisting}
 \label{sec:dataset_patent_shortlisting}
 
-To formulate a standardized starting point for generative modeling and synthetic dataset generation, we select and process designs from the collected patent corpus according to the following standardization and filtering criteria:
+To formulate a standardized starting point for generative modeling and synthetic dataset generation, we select and process designs from the collected reference corpus according to the following standardization and filtering criteria:
 \begin{enumerate}
     \item Designs are specified for object distance of infinity.
     \item Materials are selected from existing optical material catalogues.
@@ -57,7 +63,7 @@ To formulate a standardized starting point for generative modeling and synthetic
     \item The material between the last surface and image plane is air, and the penultimate material is glass.
 \end{enumerate}
 
-Applying these criteria gives a canonical patent subset of 1,253 designs selected from the 2,572 collected patent-derived designs. The retained rows keep the same tabular optical-prescription schema as the original patent dataset: non-applicable or structurally irrelevant cells are left empty, while fields affected by the standardization criteria are updated to the canonical form used for synthetic generation and modeling.\\
+Applying these criteria gives a canonical subset of 1,253 confirmed patent designs selected from the broader 2,572-design patent-derived reference corpus. The retained rows keep the same tabular optical-prescription schema as the curated source corpus: non-applicable or structurally irrelevant cells are left empty, while fields affected by the standardization criteria are updated to the canonical form used for synthetic generation and modeling.\\
 {\color{red}Detailed shortlisting counts from the collected patent corpus to the canonical patent subset need to be added after the source audit is finalized.}
 
 \subsection{Synthetic Expansion}
