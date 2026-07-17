@@ -5,9 +5,16 @@ We construct a large-scale optical prescription dataset for generative modeling 
 \subsection{Patent-Derived Reference Designs}
 \label{sec:dataset_patent_reference}
 
-The collected patent-derived reference corpus contains 2,572 optical system designs assembled from the CodeV patent library, the Zemax Zebase library, and a public file exchange for lens designs~\cite{codev,zemax_opticstudio,reiley_lens_design_exchange}. Source attribution is recorded through patent identifiers, publication citations, or the best available source record. These designs form the source pool from which the modeling-ready patent subset is selected and later synthetically expanded.
+The collected patent-derived reference corpus contains 2,572 optical system designs assembled from the CodeV patent library ~\cite{codev}, which primarily consists of Japanese and Russian patents; Zemax Zebase library ~\cite{zemax_opticstudio}, predominantly featuring United States patents; and a public file exchange site for lens designs ~\cite{reiley_lens_design_exchange}, which contains designs from diverse sources submitted by the community. Each sequence file in the curated database records proper source attribution through one of: patent identifiers, textbook or journal publication citations, or the best available source record. 
 
-Because the source files use different optical-design formats and glass definitions, the collected prescriptions were converted to CodeV \texttt{.seq} files, including conversion of Zemax formats. Generic glass codes and obsolete or discontinued glasses were replaced with available catalog materials using the CodeV GLASSFIT procedure. LLIMAS supplied a refocusing optimization to CodeV, which adjusted the image-plane position to minimize residual defocus introduced by the material substitutions~\cite{Doyle2017LLIMAS,codev}. The design wavelengths were then normalized to the Fraunhofer F, d, and C lines (486.1, 587.56, and 656.3~nm, respectively), followed by a second CodeV refocusing operation. Each curated prescription retains its source attribution and corresponding sequence-file artifact.
+Since the data points and files collected from all these different sources have different file formats, we standardize them to CodeV's digital lens file, known as a \texttt{.seq} file. These design files are then updated to handle any residual issues in the source artifact itself or that occur during the standardization process.
+Furthermore, many of the source files contained generic glass codes or obsolete material labels rather than a real glass material from existing material catalogues. This necessitates at first the usage of CodeV \texttt{GLASSFIT} procedure to adjust the material labels and then re-optimization of the image plane location, to adjust for the updated materials. Once the design parameters of all the curated designs are finalized using the aforementioned steps, each design was analyzed for the following performance metrics:
+
+{\color{red} Details of all the performance metrics to be included here}
+
+All these design modifications and evaluation runs are conducted on LLIMAS ~\cite{Doyle2017LLIMAS} compute system using CodeV scripting.
+
+Finally, each curated prescription retains its source attribution and corresponding sequence-file artifact.
 
 {\color{red}Detailed field-condition conventions across the full 2,572-design patent-derived reference corpus will be added after the source audit is completed.}
 
