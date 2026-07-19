@@ -5,20 +5,11 @@ We construct a large-scale optical prescription dataset for generative modeling 
 \subsection{Patent-Derived Reference Designs}
 \label{sec:dataset_patent_reference}
 
-The collected patent-derived reference corpus contains 2,572 optical system designs assembled from the CodeV patent library ~\cite{codev}, which primarily consists of Japanese and Russian patents; Zemax Zebase library ~\cite{zemax_opticstudio}, predominantly featuring United States patents; and a public file exchange site for lens designs ~\cite{reiley_lens_design_exchange}, which contains designs from diverse sources submitted by the community. Each sequence file in the curated database records proper source attribution through one of: patent identifiers, textbook or journal publication citations, or the best available source record. 
+The collected patent-derived reference corpus comprises 2,572 optical system designs assembled from three sources: the CodeV patent library~\cite{codev}, which primarily consists of Japanese and Russian patents; the Zemax Zebase library~\cite{zemax_opticstudio}, which predominantly features United States patents; and a public file exchange for lens designs~\cite{reiley_lens_design_exchange}, which contains community-submitted designs from diverse sources. Each collected design retains its corresponding sequence-file artifact and the best available source attribution, including a patent identifier, a textbook or journal citation, or another available source record.
 
-Since the data points and files collected from all these different sources have different file formats, we standardize them to CodeV's digital lens file, known as a \texttt{.seq} file. These design files are then updated to handle any residual issues in the source artifact itself or that occur during the standardization process.
-Furthermore, many of the source files contained generic glass codes or obsolete material labels rather than a real glass material from existing material catalogues. This necessitates at first the usage of CodeV \texttt{GLASSFIT} procedure to adjust the material labels and then re-optimization of the image plane location, to adjust for the updated materials. Once the design parameters of all the curated designs are finalized using the aforementioned steps, each design was analyzed for the following performance metrics:
+Because the source artifacts use heterogeneous file formats, each design is converted to CodeV's digital lens format, represented by a \texttt{.seq} file, and corrected for residual source- or conversion-related issues. Many source files also contain generic glass codes or obsolete material labels rather than materials from available optical catalogs. We therefore use the CodeV \texttt{GLASSFIT} procedure to update the material assignments and then re-optimize the image-plane location to account for those material changes. These preparation steps and the subsequent evaluation runs are automated through CodeV scripts executed on the LLIMAS compute system~\cite{Doyle2017LLIMAS}.
 
-{\color{red} Details of all the performance metrics to be included here}
-
-All these design modifications and evaluation runs are conducted on LLIMAS ~\cite{Doyle2017LLIMAS} compute system using CodeV scripting.
-
-Finally, each curated prescription retains its source attribution and corresponding sequence-file artifact.
-
-{\color{red}Detailed field-condition conventions across the full 2,572-design patent-derived reference corpus will be added after the source audit is completed.}
-
-Each optical system is represented as a sequence of surfaces with associated geometric and material parameters. Figure \ref{fig:lens_param} illustrates the lens assembly and the parameters used to define the design space. For each active surface $j$, the table records:
+Each prepared optical system is retained in two linked forms: the standardized sequence-file artifact and a tabular prescription row. Within the tabular prescription, the optical system is represented as a sequence of surfaces with associated geometric and material parameters. Figure~\ref{fig:lens_param} illustrates the lens assembly and the parameters used to define this representation. For each active surface $j$, the table records:
 \begin{enumerate}
     \item \textbf{Radius of curvature $R_j$}: signed radius of curvature of surface $j$;
     \item \textbf{Thickness $t_j$}: axial distance between surfaces $j$ and $j+1$;
@@ -42,15 +33,21 @@ Along with design parameters, each optical system is associated with operating c
     \item \textbf{Total length}: axial distance from the first surface to the image plane.
 \end{enumerate}
 
-The dataset also retains optical-performance annotations. The annotations used in this study include:
+The collected corpus retains the source-specific operating conditions available for each design, whereas the common field-sampling conventions used to form the canonical subset are introduced in Section~\ref{sec:dataset_patent_shortlisting}.
+
+{\color{red}Detailed field-condition conventions across the full 2,572-design patent-derived reference corpus will be added after the source audit is completed.}
+
+The tabular prescription also retains optical-performance annotations generated during evaluation. The annotations used in this study include:
 \begin{enumerate}
     \item \textbf{Spot-size metrics}: field-dependent spot-size measures such as SPO67 and SPO100;
     \item \textbf{Encircled-energy metrics}: field-dependent energy-concentration measures such as EE50 and EE90;
     \item \textbf{Axial nominal performance}: on-axis root-mean-square (RMS) wavefront error.
 \end{enumerate}
-Additional performance and sensitivity annotations are retained in the canonical dataset.\\
+The schema additionally retains the performance and sensitivity annotations used in the canonical dataset.\\
 {\color{red}A complete inventory of the retained performance and sensitivity annotations will be added after the metric audit is completed.}
 Unless otherwise specified, distances are reported in millimeters, angles in degrees, and wavelengths in nanometers.
+
+Together, the linked source attribution, standardized sequence-file artifact, tabular prescription, operating conditions, and optical-performance annotations define the collected reference corpus. The following subsection describes the eligibility and standardization criteria used to derive the canonical patent subset for synthetic expansion and generative modeling.
 
 \subsection{Patent Dataset Shortlisting}
 \label{sec:dataset_patent_shortlisting}
