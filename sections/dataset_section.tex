@@ -25,27 +25,25 @@ Each prepared optical system is retained in two linked forms: the standardized s
     \label{fig:lens_param}
 \end{figure}
 
-Along with design parameters, each optical system is associated with operating conditions that define its intended use:
+Beyond the surface-level prescription, each optical system is associated with system-level conditions and sampling definitions that characterize its intended use:
 \begin{enumerate}
-    \item \textbf{Maximum field angle}: largest field angle to be accommodated by the system;
-    \item \textbf{Effective focal length (EFL)}: target effective focal length;
-    \item \textbf{Entrance pupil diameter (EPD)}: intended entrance pupil diameter;
-    \item \textbf{Total length}: axial distance from the first surface to the image plane.
+    \item \textbf{First-order optical specifications}: effective focal length (EFL), entrance pupil diameter (EPD), f-number, object distance, and back focal length;
+    \item \textbf{Packaging and image-plane quantities}: lens-to-image distance, overall length, total lens-track length, and minimum lens separation;
+    \item \textbf{Field definition and sampling}: indexed x- and y-field coordinates together with the available angular, object-space, image-space, and ray-intercept coordinate representations;
+    \item \textbf{Spectral sampling}: indexed wavelengths and their corresponding relative weights;
+    \item \textbf{Structural descriptors}: aspheric-surface, element, and cemented-lens counts together with the aperture-stop designation, including whether the stop lies within the lens assembly.
 \end{enumerate}
 
-The collected corpus retains the source-specific operating conditions available for each design, whereas the common field-sampling conventions used to form the canonical subset are introduced in Section~\ref{sec:dataset_patent_shortlisting}.
+The collected corpus retains the source-specific values available for these quantities. The common field and wavelength conventions used to form the canonical subset are introduced in Section~\ref{sec:dataset_patent_shortlisting}.
 
-{\color{red}Detailed field-condition conventions across the full 2,572-design patent-derived reference corpus will be added after the source audit is completed.}
-
-The tabular prescription also retains optical-performance annotations generated during evaluation. The annotations used in this study include:
+The tabular prescription also retains optical-performance and sensitivity annotations generated during CodeV evaluation. The annotation families used in this study include:
 \begin{enumerate}
-    \item \textbf{Spot-size metrics}: field-dependent spot-size measures such as SPO67 and SPO100;
-    \item \textbf{Encircled-energy metrics}: field-dependent energy-concentration measures such as EE50 and EE90;
-    \item \textbf{Axial nominal performance}: on-axis root-mean-square (RMS) wavefront error.
+    \item \textbf{Spot-size metrics}: field-indexed SPO67 and SPO100 measures;
+    \item \textbf{Encircled-energy metrics}: field-indexed EE50 and EE90 measures;
+    \item \textbf{Nominal performance}: root-mean-square (RMS) wavefront-error measures evaluated across the available field positions;
+    \item \textbf{Sensitivity metrics}: field-indexed performance and tolerance sensitivities together with nominal alignment sensitivity.
 \end{enumerate}
-The schema additionally retains the performance and sensitivity annotations used in the canonical dataset.\\
-{\color{red}A complete inventory of the retained performance and sensitivity annotations will be added after the metric audit is completed.}
-Unless otherwise specified, distances are reported in millimeters, angles in degrees, and wavelengths in nanometers.
+Unless otherwise specified, distances are reported in millimeters, angles in degrees, and wavelengths in nanometers. Additional column-level schema and distribution details are provided in Appendix~\ref{app:dataset_details}.
 
 Together, the linked source attribution, standardized sequence-file artifact, tabular prescription, operating conditions, and optical-performance annotations define the collected reference corpus. The following subsection describes the eligibility and standardization criteria used to derive the canonical patent subset for synthetic expansion and generative modeling.
 
