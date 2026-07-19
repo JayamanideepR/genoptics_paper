@@ -5,7 +5,7 @@ We construct a large-scale optical prescription dataset for generative modeling 
 \subsection{Patent-Derived Reference Designs}
 \label{sec:dataset_patent_reference}
 
-The collected patent-derived reference corpus comprises 2,572 optical system designs assembled from three sources: the CodeV patent library~\cite{codev}, which primarily consists of Japanese and Russian patents; the Zemax Zebase library~\cite{zemax_opticstudio}, which predominantly features United States patents; and a public file exchange for lens designs~\cite{reiley_lens_design_exchange}, which contains community-submitted designs from diverse sources. Each collected design retains its corresponding sequence-file artifact and the best available source attribution, including a patent identifier, a textbook or journal citation, or another available source record.
+The collected patent-derived reference corpus comprises 2,571 optical system designs assembled from three sources: the CodeV patent library~\cite{codev}, which primarily consists of Japanese and Russian patents; the Zemax Zebase library~\cite{zemax_opticstudio}, which predominantly features United States patents; and a public file exchange for lens designs~\cite{reiley_lens_design_exchange}, which contains community-submitted designs from diverse sources. Each collected design retains its corresponding sequence-file artifact and the best available source attribution, including a patent identifier, a textbook or journal citation, or another available source record.
 
 Because the source artifacts use heterogeneous file formats, each design is converted to CodeV's digital lens format, represented by a \texttt{.seq} file, and corrected for residual source- or conversion-related issues. Many source files also contain generic glass codes or obsolete material labels rather than materials from available optical catalogs. We therefore use the CodeV \texttt{GLASSFIT} procedure to update the material assignments and then re-optimize the image-plane location to account for those material changes. These preparation steps and the subsequent evaluation runs are automated through CodeV scripts executed on the LLIMAS compute system~\cite{Doyle2017LLIMAS}.
 
@@ -65,7 +65,7 @@ To formulate a standardized starting point for generative modeling and synthetic
     \item The material between the last surface and image plane is air, and the penultimate material is glass.
 \end{enumerate}
 
-Applying these criteria gives a canonical subset of 1,253 confirmed patent designs selected from the broader 2,572-design patent-derived reference corpus. The retained rows keep the same tabular optical-prescription schema as the curated source corpus: non-applicable or structurally irrelevant cells are left empty, while fields affected by the standardization criteria are updated to the canonical form used for synthetic generation and modeling.\\
+Applying these criteria gives a canonical subset of 1,253 confirmed patent designs selected from the broader 2,571-design patent-derived reference corpus. The retained rows keep the same tabular optical-prescription schema as the curated source corpus: non-applicable or structurally irrelevant cells are left empty, while fields affected by the standardization criteria are updated to the canonical form used for synthetic generation and modeling.\\
 {\color{red}Detailed shortlisting counts from the collected patent corpus to the canonical patent subset need to be added after the source audit is finalized.}
 
 \subsection{Synthetic Expansion}
