@@ -47,19 +47,19 @@ The broad reference corpus intentionally preserves the heterogeneous operating c
     \item re-evaluates image-plane placement and dependent CodeV annotations where required.
 \end{enumerate}
 
-The design filters retain 1,253 designs and exclude 1,318 of the 2,571 collected designs. Although more constrained, the retained subset preserves substantial variation in topology and operating scale: it spans the full allowed range of 3--17 active surfaces and broad distributions of effective focal length, entrance-pupil diameter, and maximum field angle (Appendix~\ref{app:dataset_characteristics}). Because a source design can violate more than one filter condition, the exclusions do not form an additive per-filter funnel. The subsequent processing steps do not change the retained design count. Non-applicable surface slots remain empty, and the finalized subset contains one tabular row and one associated sequence file per retained design.
+The design filters retain 1,253 designs and exclude 1,318 of the 2,571 collected designs. Although more constrained, the retained subset preserves substantial variation in topology and operating scale: it spans the full allowed range of 3--17 active surfaces and broad distributions of effective focal length, entrance-pupil diameter, and maximum field angle (Appendix~\ref{app:dataset_characteristics}). 
 
 \subsection{Synthetic Expansion}
 \label{sec:dataset_synthetic_expansion}
 
-The canonical patent subset is expanded through controlled perturbations that preserve the same tabular prescription format and parent-patent provenance for every generated row. Figures~\ref{fig:synth_data_pipe} and~\ref{fig:patent_synth_comp} summarize the construction workflow and the resulting patent--synthetic comparison, respectively. For each synthetic candidate, the pipeline:
-\begin{enumerate}
-    \item samples a parent from the 1,253-design canonical patent subset;
-    \item perturbs curvature, thickness, material, or a combination of these quantities;
-    \item reconstructs dependent geometry by matching the target effective focal length, evaluating semi-diameters, and placing the image plane;
-    \item screens candidates for material and geometric validity, evaluates the remaining prescriptions in CodeV, and rejects failed ray traces or results outside the patent-referenced performance envelope; and
-    \item retains the accepted rows together with parent-design and perturbation lineage.
-\end{enumerate}
+The processed and shortlisted patent dataset is expanded through controlled perturbations that preserve the same tabular prescription and CodeV sequence-file formats. This perturbation pipeline is outlined in figure~\ref{fig:synth_data_pipe}. It involves sampling few patent designs and then stochastically perturbing curvature, axial thickness, material labels or a combination of these across all the surfaces and finally post processing and filtering them to match the design conditions and remove any infeasible designs. Finally, all required metrics of generated designs are evaluated using CodeV ray-tracing evaluations.
+
+Through this synthetic dataset generation process 1,125,080 designs are generated and evaluated from the shortlised 1253 designs. The accepted synthetic rows cover all seven non-empty combinations of curvature, thickness, and material perturbation.A detailed accounting of perturbation counts and traceability fields are reported in Appendix~\ref{app:synthetic_lineage_details}.
+
+% The full canonical dataset contains 1,126,333 rows: 1,253 patent-derived and 1,125,080 synthetic designs. The accepted synthetic rows cover all seven non-empty combinations of curvature, thickness, and material perturbation. They retain the same prescription and evaluation schema as the patent rows, together with source-folder, parent-patent, and perturbation metadata.
+
+[Start talking that synthetic dataset is not just a simple clone of the patent dataset and it contains wide variations in designs and performance metrics compared to original patent design. Use the main paper \ref{fig:patent_synth_comp} figure and appendix figures that mentioned in the next paragraph to state and support any remaining claims. Rewamp rest of this subsection like that]
+Figure~\ref{fig:patent_synth_comp} compares the resulting patent-derived and synthetic designs.
 
 \begin{figure}[ht]
     \centering
@@ -68,7 +68,6 @@ The canonical patent subset is expanded through controlled perturbations that pr
     \label{fig:synth_data_pipe}
 \end{figure}
 
-The full canonical dataset contains 1,126,333 rows: 1,253 patent-derived and 1,125,080 synthetic designs. The accepted synthetic rows cover all seven non-empty combinations of curvature, thickness, and material perturbation. They retain the same prescription and evaluation schema as the patent rows, together with source-folder, parent-patent, and perturbation metadata. The benchmark variants formed from these data are listed in Table~\ref{tab:dataset_variants_splits}; detailed perturbation counts and traceability fields are reported in Appendix~\ref{app:synthetic_lineage_details}.
 
 \begin{figure}[t]
     \centering
