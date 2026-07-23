@@ -52,22 +52,18 @@ The design filters retain 1,253 designs and exclude 1,318 of the 2,571 collected
 \subsection{Synthetic Expansion}
 \label{sec:dataset_synthetic_expansion}
 
-The processed and shortlisted patent dataset is expanded through controlled perturbations that preserve the same tabular prescription and CodeV sequence-file formats. This perturbation pipeline is outlined in figure~\ref{fig:synth_data_pipe}. It involves sampling few patent designs and then stochastically perturbing curvature, axial thickness, material labels or a combination of these across all the surfaces and finally post processing and filtering them to match the design conditions and remove any infeasible designs. Finally, all required metrics of generated designs are evaluated using CodeV ray-tracing evaluations.
-
-Through this synthetic dataset generation process 1,125,080 designs are generated and evaluated from the shortlised 1253 designs. The accepted synthetic rows cover all seven non-empty combinations of curvature, thickness, and material perturbation.A detailed accounting of perturbation counts and traceability fields are reported in Appendix~\ref{app:synthetic_lineage_details}.
-
-% The full canonical dataset contains 1,126,333 rows: 1,253 patent-derived and 1,125,080 synthetic designs. The accepted synthetic rows cover all seven non-empty combinations of curvature, thickness, and material perturbation. They retain the same prescription and evaluation schema as the patent rows, together with source-folder, parent-patent, and perturbation metadata.
-
-[Start talking that synthetic dataset is not just a simple clone of the patent dataset and it contains wide variations in designs and performance metrics compared to original patent design. Use the main paper \ref{fig:patent_synth_comp} figure and appendix figures that mentioned in the next paragraph to state and support any remaining claims. Rewamp rest of this subsection like that]
-Figure~\ref{fig:patent_synth_comp} compares the resulting patent-derived and synthetic designs.
+The processed and shortlisted patent dataset is expanded through controlled perturbations while preserving the same tabular prescription and CodeV sequence-file formats. As summarized in Figure~\ref{fig:synth_data_pipe}, a parent is sampled from the 1,253-design patent subset, and curvature, axial thickness, material assignment, or a combination of these quantities is stochastically perturbed across all eligible active surfaces. Then optical post-processing reconstructs dependent geometry and enforces the target design conditions, after which candidates are screened for material and geometric validity and evaluated in CodeV. Designs that fail ray tracing or fall outside the patent-referenced performance envelope are rejected.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{figures/synthetic_dataset_pipeline_tikz.pdf}
-    \caption{\textbf{Synthetic-data construction.} Canonical patent designs are perturbed with parent and perturbation lineage retained, reconstructed using optical constraints, screened for material and geometric validity, and evaluated in CodeV. Failed ray traces and designs outside the patent-referenced performance envelope are removed before the accepted rows are assembled into the Patent-only, 250k, 500k, and full dataset variants.}
+    \caption{\textbf{Synthetic-data construction.} A sampled patent parent is perturbed while its parent and perturbation lineage is retained. Dependent geometry and design conditions are reconstructed, and candidates are screened for material and geometric validity before CodeV evaluation. Failed ray traces and designs outside the patent-referenced performance envelope are removed before the accepted rows are assembled into the Patent-only, 250k, 500k, and full dataset variants.}
     \label{fig:synth_data_pipe}
 \end{figure}
 
+This construction process yields 1,125,080 accepted synthetic designs derived from the 1,253 shortlisted patent designs. The accepted rows span all seven non-empty combinations of curvature, thickness, and material perturbation and retain the same prescription and evaluation schema as the patent rows, with additional parent-design and perturbation metadata. Detailed perturbation counts and traceability fields are reported in Appendix~\ref{app:synthetic_lineage_details}.
+
+The synthetic expansion transforms these patent references into a dense population of physically evaluated designs, substantially broadening coverage of prescription geometry, material combinations, and optical performance while preserving the patent subset's 3--17-surface range and broadly following its effective-focal-length, entrance-pupil-diameter, and field-angle ranges. Figure~\ref{fig:patent_synth_comp} illustrates this expanded coverage in the prescription representation and axial performance space, while Appendix~\ref{app:dataset_characteristics} provides the corresponding surface-count, design-condition, and remaining-field performance summaries.
 
 \begin{figure}[t]
     \centering
@@ -87,5 +83,3 @@ Figure~\ref{fig:patent_synth_comp} compares the resulting patent-derived and syn
     \caption{\textbf{Patent-derived and synthetic designs.} (a) Patent designs are overlaid on a smoothed density of synthetic designs in a topology-aware UMAP of the tuned prescription representation. This projection is qualitative and is not used as a coverage or novelty metric. (b) Axial EE50 and SPO67 are normalized by the Airy diameter and shown on logarithmic axes; patent designs are overlaid on the synthetic-design density.}
     \label{fig:patent_synth_comp}
 \end{figure}
-
-The synthetic expansion preserves the patent subset's 3--17-surface range and broadly follows its effective-focal-length, entrance-pupil-diameter, and field-angle ranges. Appendix~\ref{app:dataset_characteristics} provides the corresponding surface-count, design-condition, and remaining-field performance summaries. These diagnostics characterize the released data; quantitative fidelity and novelty tests for generated model samples are reported separately in Section~\ref{sec:results_synthetic_expansion}.
