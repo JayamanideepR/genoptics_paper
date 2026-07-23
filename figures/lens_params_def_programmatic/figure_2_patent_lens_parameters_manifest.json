@@ -1,21 +1,22 @@
 {
   "design": {
-    "dataset_row_id": "patent_000972",
+    "aspheric_surface": 8,
     "element_count": 4,
-    "example_surface": 7,
-    "parent_patent_id": "patent_000972",
-    "sequence_file": "patent_reference_00973.seq",
+    "example_surface": 1,
+    "sequence_file": "US05986816-1.seq",
+    "source_row_number_one_based": 1965,
+    "source_title": "",
     "stop_index": 0,
     "surface_count": 9
   },
   "figure": "Figure 2 patent lens parameter diagram",
-  "generated_at_utc": "2026-07-13T18:39:39.537415+00:00",
+  "generated_at_utc": "2026-07-21T12:13:56.511447+00:00",
   "implementation": {
     "generator": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/experiment_scripts/2026_07_13/make_patent_lens_parameter_figure.py",
-    "generator_sha256": "949794358f4c157a56154d4ef0ce2a6a06e28856f563f8ab9c54774c549c68d4",
+    "generator_sha256": "362a0624bb3e108588a4623250ea7062efe335ea2b9d0dc25bf25bd681348a5a",
     "matplotlib_version": "3.9.2",
     "numpy_version": "1.26.4",
-    "optics_repo_git_revision": "1824b0a8211d911d569fbb582abaa747ec522846",
+    "optics_repo_git_revision": "8fce1f3f406cad1868a04b533fef53543590098d",
     "pandas_version": "2.2.3",
     "python_executable": "/home/manideep/miniforge3/envs/rayoptics/bin/python",
     "python_version": "3.11.10",
@@ -27,27 +28,27 @@
     "material_transform": "missing active material values are interpreted as air for rendering",
     "rows_selected": 1,
     "sampling_or_cap": null,
-    "selection_rule": "dataset_row_id == 'patent_000972'",
-    "source_csv": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder_2/data/inbox/from_LLESP_publication_ready/optics_publication_artifacts_20260707/selected_designs/tabsyn_full_tuned_lr3e4_patent_condition_anchors_20260710/selected_patent_anchor_physical_rows.csv",
-    "source_csv_sha256": "6c295d0411f359043c248d0764f462489806c7e4b554d4d36b8515faf65c1537",
-    "source_rows": 9
+    "selection_rule": "normalized Seq File basename == 'US05986816-1.seq'",
+    "source_csv": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/code/optics_data_modder/data/inbox/original_patent_datasets/param_121724.csv",
+    "source_csv_sha256": "d15294e1e74e321d0df9f76988b816162b4d42d2ade0346a73ae5c1891168390",
+    "source_rows": 2571
   },
   "limitations": [
     "The diagram is a geometric prescription visualization; it does not include ray traces or performance data.",
     "Labels are symbolic and do not report the selected patent row's numerical parameter values."
   ],
   "output_sha256": {
-    "pdf": "a42b520cd07258c49c22d8171093e29eeabf7c713c08840134ab25fbce29563b",
-    "png": "3af686fa4502f2e5dca7bc742b4ced6e56ff778414e23472694ac4183ea4fa40",
-    "svg": "83bc574fc20d4fa9a6ef90c59957c6d98c66b3631f6d4fa335828589c0d2a0a9"
+    "pdf": "10796593a09f438e722822ad740c2ab12d0f57910f43e9af8c5399d3a308f5ce",
+    "png": "4ad43e92a750fc86f4de210978eebaec7ad5eaf6ff03350fd3158f2c6b1e1e25",
+    "svg": "6070d54f045116defbe70ee81f48bcaa967193ddcc9f1b28e7055218ae978a7f"
   },
   "outputs": {
-    "pdf": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/.codex-worktrees/paper_v4-figure2/figures/lens_params_def_programmatic/figure_2_patent_lens_parameters.pdf",
-    "png": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/.codex-worktrees/paper_v4-figure2/figures/lens_params_def_programmatic/figure_2_patent_lens_parameters.png",
-    "svg": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/.codex-worktrees/paper_v4-figure2/figures/lens_params_def_programmatic/figure_2_patent_lens_parameters.svg"
+    "pdf": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/paper_v4/figures/lens_params_def_programmatic/figure_2_patent_lens_parameters.pdf",
+    "png": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/paper_v4/figures/lens_params_def_programmatic/figure_2_patent_lens_parameters.png",
+    "svg": "/home/manideep/PARA/PARA/1_projects/lens_data_revive/reports_and_papers/lensgen_paper/paper_v4/figures/lens_params_def_programmatic/figure_2_patent_lens_parameters.svg"
   },
   "png_dimensions_pixels": {
-    "height": 1560,
-    "width": 3300
+    "height": 1680,
+    "width": 3540
   }
 }

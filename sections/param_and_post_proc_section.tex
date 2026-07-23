@@ -10,32 +10,11 @@ Figure~\ref{fig:model_training_pipeline} summarizes the processing path used to 
 \end{figure}
 
 \subsection{Canonical Table and Model-Facing Representations}
+\label{sec:canonical_model_representations}
 
 The canonical table stores each optical prescription in the common tabular schema introduced in the dataset section and detailed in Appendix~\ref{app:dataset_details}: surface geometry, material assignment, topology, design conditions, field and wavelength setup, optical-performance annotations, and provenance. Model-facing data are derived from this canonical table after separating prescription and design-condition variables from provenance columns, filtering flags, and optical-performance columns. The generative models are therefore trained on optical prescriptions and design conditions, not on the measured performance values that are reserved for evaluation.
 
-We use two representation families. The \emph{untuned} representation keeps prescription variables close to their canonical physical form and serves as the direct tabular baseline. The \emph{tuned} representation applies optics-aware transformations intended to reduce scale variation and expose structure that is implicit in the raw table. Table~\ref{tab:tuned_untuned_representation} summarizes the current distinction.
-
-\begin{table}[t]
-\centering
-\footnotesize
-\caption{\textbf{Untuned and tuned model-facing representations.} Both representations are derived from the same canonical rows and preserve the same row order and split labels.}
-\label{tab:tuned_untuned_representation}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{lll}
-\toprule
-\textbf{Quantity} & \textbf{Untuned representation} & \textbf{Tuned representation} \\
-\midrule
-Material & Material labels converted to $N_d$, $V_d$, and categorical air indicators & Same $N_d$, $V_d$, and air-indicator representation \\
-Surface curvature/radius & Canonical physical surface variables in original scale & Signed curvature scaled by total system length \\
-Inter-surface thickness & Physical thickness values in millimeters & Valid inter-surface thickness fractions plus explicit system-length and image-gap terms \\
-Semi-diameter & Physical semi-diameter values in millimeters & Semi-diameter normalized by entrance pupil diameter \\
-Aperture stop & Raw stop surface index treated as categorical topology & Stop index normalized by surface count and treated as numeric topology \\
-Inactive surface slots & Structural missing values outside the active surface count & Same structural missingness policy \\
-Generated-sample inverse & Reapplies export defaults and structural masks to physical-scale samples & Inverts thickness, curvature, semi-diameter, and stop transforms before export \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
+We use two representation families. The \emph{untuned} representation keeps curvature, thickness, semi-diameter, and stop variables close to their canonical physical form and serves as the direct tabular baseline. The \emph{tuned} representation expresses curvature relative to system length, valid thicknesses as axial fractions with explicit system-length terms, semi-diameter relative to entrance-pupil diameter, and stop location relative to surface count. Both representations use continuous material-property coordinates with an explicit air indicator, preserve the same row order and split labels, and apply the same structural missingness mask. Appendix Table~\ref{tab:tuned_untuned_representation} provides the complete variable-by-variable comparison and inverse-processing rules.
 
 For both representations, the material labels used for CodeV export are reconstructed after generation from the generated material variables. If a surface is marked as air, the air indicator takes priority over generated $N_d$ and $V_d$ values. Otherwise, generated material properties are projected to the nearest available catalog material. This keeps material generation continuous during modeling while returning to discrete material labels for optical simulation.
 
